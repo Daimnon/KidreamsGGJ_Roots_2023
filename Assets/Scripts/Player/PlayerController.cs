@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
+    [SerializeField] private EntityData _playerData;
     [SerializeField] private float _moveSpeed = 100;
 
     //[Header("World Data")]
