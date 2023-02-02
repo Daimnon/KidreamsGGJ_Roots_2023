@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        MoveHorizontally();
+        Move();
     }
     private void OnDisable()
     {
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region FixedUpdate Methods
-    private void MoveHorizontally()
+    private void Move()
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
         _rb.velocity = _moveSpeed * Time.fixedDeltaTime * direction;
