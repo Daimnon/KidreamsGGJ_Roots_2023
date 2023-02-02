@@ -46,7 +46,6 @@ public class PlayerController : MonoBehaviour
     {
         _move.Disable();
         _bite.Disable();
-        _jump.Disable();
     }
     #endregion
 
