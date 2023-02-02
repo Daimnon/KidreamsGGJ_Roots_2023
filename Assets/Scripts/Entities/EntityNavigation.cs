@@ -12,10 +12,11 @@ public class EntityNavigation : MonoBehaviour
     }
     private EntityData _data;
 
-    public NavigationState NavMode { get; set; }
+    public NavigationState NavMode { get; private set; }
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
     private NavMeshAgent agent;
+    private Transform _playerTransform;
     [SerializeField]
     private float distanceToNextTarget;
     public void SetState(Transform playerTransform, NavigationState navState)
@@ -24,7 +25,10 @@ public class EntityNavigation : MonoBehaviour
         {
             Debug.LogError("Player is null");
         }
+        NavMode = navState;
+        _playerTransform = playerTransform;
     }
+
     private void Awake()
     {
         NavMode = NavigationState.Idle;
@@ -40,14 +44,9 @@ public class EntityNavigation : MonoBehaviour
                 MoveRandom();
                 break;
             case (NavigationState.MoveToPlayer):
-            //    MoveToPlayer();
+                Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
                 break;
         }
-    }
-
-    private void MoveToPlayer(Transform playerTransform)
-    {
-        agent.SetDestination(playerTransform.position);
     }
 
     private void MoveRandom()
