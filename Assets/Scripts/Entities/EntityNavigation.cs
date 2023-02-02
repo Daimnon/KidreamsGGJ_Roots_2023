@@ -1,5 +1,6 @@
+using System;
 using UnityEngine;
-
+[RequireComponent(typeof(EntityDataHolder))]
 public class EntityNavigation : MonoBehaviour
 {
     public enum NavigationState
@@ -8,34 +9,47 @@ public class EntityNavigation : MonoBehaviour
         MoveRandomly,
         MoveToPlayer,
     }
-<<<<<<< HEAD:Assets/Scripts/EntityNavigation.cs
-    private EntityData entity;
-    public NavigationState NavState { get; set; }
-    public void SetState(Transform playerTransform , NavigationState navState)
+    private EntityData _data;
+
+    public NavigationState NavMode { get; set; }
+    private Vector2 XrandomOffset;
+    private Vector2 YrandomOffset;
+    public void SetState(Transform playerTransform, NavigationState navState)
     {
         if (playerTransform == null && navState == NavigationState.MoveToPlayer)
         {
             Debug.LogError("Player is null");
         }
-        else
-            Vector2.MoveTowards(transform.position, playerTransform.position, 1);
-=======
-
-    [SerializeField] private NavigationMode startMode;
-    private EntityData _data;
-    public NavigationMode NavMode { get; set; }
-
+    }
     private void Awake()
     {
-        NavMode = startMode;
+        NavMode = NavigationState.Idle;
         var dataHolder = GetComponent<EntityDataHolder>();
-        if (dataHolder == null)
+        Debug.LogError($"No EntityData found on Entity {name}", gameObject);
+        return;
+    }
+    private void Update()
+    {
+        switch(NavMode)
         {
-            Debug.LogError($"No EntityData found on Entity {name}", gameObject);
-            return;
+            case (NavigationState.MoveRandomly):
+                MoveRandom();
+                break;
+            case (NavigationState.MoveToPlayer):
+                MoveRandom();
+                break;
         }
-        
-        _data = dataHolder.Data;
->>>>>>> main:Assets/Scripts/Entities/EntityNavigation.cs
+    }
+
+    private void MoveRandom()
+    {
+    }
+
+    private Vector2 GetRandomPositions()
+    {
+        float newX = transform.position.x + XrandomOffset.x;
+        float newY = transform.position.y + XrandomOffset.y;
+
+        return new Vector2(newX, newY); 
     }
 }
