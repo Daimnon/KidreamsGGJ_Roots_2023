@@ -48,7 +48,7 @@ public class EntityNavigation : MonoBehaviour
     private Vector2 GetRandomPositions()
     {
         float newX = transform.position.x + XrandomOffset.x;
-        float newY = transform.position.y + XrandomOffset.y;
+        float newY = transform.position.y + YrandomOffset.y;
 
         return new Vector2(newX, newY); 
     }
