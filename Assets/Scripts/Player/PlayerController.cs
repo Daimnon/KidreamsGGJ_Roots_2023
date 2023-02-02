@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private EntityData _playerData;
-    [SerializeField] private float _speedModifier = 100;
 
     //[Header("World Data")]
     
@@ -55,11 +54,11 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
-        _rb.velocity = _playerData.Speed * _speedModifier * Time.fixedDeltaTime * direction;
+        _rb.velocity = _playerData.CalculatedSpeed * Time.fixedDeltaTime * direction;
     }
     #endregion
 
-    private void Bite(InputAction.CallbackContext fireContext)
+    private void Bite(InputAction.CallbackContext biteContext)
     {
         Debug.Log($"player {name} fired");
     }

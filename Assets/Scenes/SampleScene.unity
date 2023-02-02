@@ -379,7 +379,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 870752192}
   m_BodyType: 0
-  m_Simulated: 1
+  m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -405,7 +405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bodyCollider: {fileID: 1518469191}
   _rb: {fileID: 870752193}
-  _moveSpeed: 100
+  _playerData: {fileID: 11400000, guid: bd41121fc7b06bb45bd382189ad10c0c, type: 2}
 --- !u!4 &870752195
 Transform:
   m_ObjectHideFlags: 0
