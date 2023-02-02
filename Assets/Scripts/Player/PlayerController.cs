@@ -4,6 +4,8 @@ using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.InputSystem;
 
+public enum PlayerStates { Idle, Moving, Biting }
+
 public class PlayerController : MonoBehaviour
 {
     [Header("Player Components")]
@@ -21,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveInput;
     private InputAction _move, _bite;
 
+    private delegate void State();
+    private State _state;
+
     #region Monobehaviour Callbacks
     private void OnEnable()
     {
@@ -33,10 +38,12 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
+        _state = Idle;
         _playerControls = new PlayerControls();
     }
     private void Update()
     {
+        _state.Invoke();
         _moveInput = _move.ReadValue<Vector2>();
     }
     private void FixedUpdate()
@@ -55,11 +62,47 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
         _rb.velocity = _playerData.CalculatedSpeed * Time.fixedDeltaTime * direction;
+
+        if (_moveInput.x < 0)
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        else if (_moveInput.x > 0)
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
     }
     #endregion
 
     private void Bite(InputAction.CallbackContext biteContext)
     {
         Debug.Log($"player {name} fired");
+    }
+
+    #region States
+    private void Idle()
+    {
+
+    }
+    private void Moving()
+    {
+
+    }
+    private void Biting()
+    {
+
+    }
+    #endregion
+
+    public void ChangeState(PlayerStates newState)
+    {
+        switch (newState)
+        {
+            case PlayerStates.Idle:
+                _state = Idle;
+                break;
+            case PlayerStates.Moving:
+                _state = Moving;
+                break;
+            case PlayerStates.Biting:
+                _state = Biting;
+                break;
+        }
     }
 }
