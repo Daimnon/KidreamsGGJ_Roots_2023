@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -12,8 +13,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
-    [SerializeField] private EntityData _playerData;
-    [SerializeField] private float _moveSpeed = 100;
+    [SerializeField, Expandable] private EntityData _playerData;
+    [SerializeField] private float _speedModifier = 100;
 
     //[Header("World Data")]
     
@@ -54,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
-        _rb.velocity = _moveSpeed * Time.fixedDeltaTime * direction;
+        _rb.velocity = _playerData.Speed * _speedModifier * Time.fixedDeltaTime * direction;
     }
     #endregion
 
