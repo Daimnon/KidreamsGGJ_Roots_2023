@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     
 
     private Vector2 _moveInput;
-    private InputAction _move, _bite, _jump;
+    private InputAction _move, _bite;
 
     #region Monobehaviour Callbacks
     private void OnEnable()
