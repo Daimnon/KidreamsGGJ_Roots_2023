@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 [RequireComponent(typeof(EntityDataHolder))]
 public class EntityNavigation : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class EntityNavigation : MonoBehaviour
     public NavigationState NavMode { get; set; }
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
+    private NavMeshAgent agent;
+    [SerializeField]
+    private float distanceToNextTarget;
     public void SetState(Transform playerTransform, NavigationState navState)
     {
         if (playerTransform == null && navState == NavigationState.MoveToPlayer)
@@ -36,20 +40,36 @@ public class EntityNavigation : MonoBehaviour
                 MoveRandom();
                 break;
             case (NavigationState.MoveToPlayer):
-                MoveRandom();
+            //    MoveToPlayer();
                 break;
         }
     }
 
-    private void MoveRandom()
+    private void MoveToPlayer(Transform playerTransform)
     {
+        agent.SetDestination(playerTransform.position);
     }
 
-    private Vector2 GetRandomPositions()
+    private void MoveRandom()
+    {
+        if(agent.remainingDistance <= 2)
+        {
+            Vector2 newPos = GetNewRandomPositions();
+            agent.SetDestination(newPos);
+        }
+    }
+
+    private Vector2 GetNewRandomPositions()
     {
         float newX = transform.position.x + XrandomOffset.x;
         float newY = transform.position.y + YrandomOffset.y;
 
         return new Vector2(newX, newY); 
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Debug.DrawLine(transform.position, transform.up * distanceToNextTarget,Color.red);
+    }
+#endif
 }
