@@ -16,12 +16,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private EntityData _playerData;
+    [SerializeField] private float _biteDistance;
 
-    //[Header("World Data")]
-    
+    [Header("World Data")]
+    [SerializeField] private LayerMask _biteLayer;
 
     private Vector2 _moveInput;
     private InputAction _move, _bite;
+    private bool _isLookingRight = true;
 
     private delegate void State();
     private State _state;
@@ -64,15 +66,26 @@ public class PlayerController : MonoBehaviour
         _rb.velocity = _playerData.CalculatedSpeed * Time.fixedDeltaTime * direction;
 
         if (_moveInput.x < 0)
+        {
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            _isLookingRight = false;
+        }
         else if (_moveInput.x > 0)
+        {
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            _isLookingRight = true;
+        }
     }
     #endregion
 
     private void Bite(InputAction.CallbackContext biteContext)
     {
-        Debug.Log($"player {name} fired");
+        Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
+
+        if (Physics2D.Raycast(transform.position, direction, _biteDistance, _biteLayer))
+        {
+            Debug.Log($"player {name} bite");
+        }
     }
 
     #region States
