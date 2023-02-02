@@ -11,14 +11,14 @@ public class EntityNavigation : MonoBehaviour
 <<<<<<< HEAD:Assets/Scripts/EntityNavigation.cs
     private EntityData entity;
     public NavigationState NavState { get; set; }
-    public void SetState(Transform playerPos , NavigationState navState)
+    public void SetState(Transform playerTransform , NavigationState navState)
     {
-        if(playerPos == null && navState == NavigationState.MoveToPlayer)
+        if (playerTransform == null && navState == NavigationState.MoveToPlayer)
         {
             Debug.LogError("Player is null");
         }
         else
-            Vector2.MoveTowards(playerPos , )
+            Vector2.MoveTowards(transform.position, playerTransform.position, 1);
 =======
 
     [SerializeField] private NavigationMode startMode;
