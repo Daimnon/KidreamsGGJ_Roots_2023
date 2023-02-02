@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
         _bite = _playerControls.Player.Bite;
         _bite.Enable();
-        _bite.performed += Bite;
+        _bite.started += Bite;
     }
     private void Awake()
     {
