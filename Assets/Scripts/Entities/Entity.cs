@@ -21,8 +21,9 @@ public class Entity : MonoBehaviour
     private EntityNavigation _navigation;
     private EntityData _data;
 
-    private RaycastHit2D[] _raycastResultsCache;
-    private PlayerDummy _lastFoundPlayer;
+    private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
+    private PlayerDummy _cachedPlayer;
+    private bool _playerInSight;
 
     private void Awake()
     {
@@ -43,8 +44,33 @@ public class Entity : MonoBehaviour
 
     private void Update()
     {
+        UpdatePlayerInSight();
+    }
+
+    private void UpdatePlayerInSight()
+    {
         var player = RayCastForPlayer(_testFovDegrees, _testRayDistance, _testNumRays);
-        
+        var foundPlayer = player != null;
+        if (foundPlayer && !_playerInSight)
+        {
+            OnPlayerFound();
+        }
+        else if (!foundPlayer && _playerInSight)
+        {
+            OnPlayerLost();
+        }
+
+        _playerInSight = foundPlayer;
+    }
+
+    private void OnPlayerFound()
+    {
+        Debug.Log(LogStr("Found player!!!!"));
+    }
+
+    private void OnPlayerLost()
+    {
+        Debug.Log(LogStr("Where player???!!"));
     }
 
     private PlayerDummy RayCastForPlayer(float fovAngleDeg, float rayDistance, int numRays)
@@ -67,8 +93,8 @@ public class Entity : MonoBehaviour
         return results
             .Select(res =>
             {
-                if (_lastFoundPlayer && _lastFoundPlayer.gameObject == res.transform.gameObject)
-                    return _lastFoundPlayer;
+                if (_cachedPlayer && _cachedPlayer.gameObject == res.transform.gameObject)
+                    return _cachedPlayer;
                 return res.transform.GetComponent<PlayerDummy>();
             })
             .FirstOrDefault();
@@ -85,4 +111,6 @@ public class Entity : MonoBehaviour
             curVec = deltaRot * curVec;
         }
     }
+
+    private string LogStr(string msg) => $"{nameof(Entity)}: {msg}";
 }
