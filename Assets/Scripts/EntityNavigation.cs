@@ -2,18 +2,17 @@ using UnityEngine;
 
 public class EntityNavigation : MonoBehaviour
 {
-    public enum NavigationMode
+    public enum NavigationState
     {
         Idle,
         MoveRandomly,
         MoveToPlayer,
     }
 
-    [SerializeField] private NavigationMode startMode;
-    public NavigationMode NavMode { get; set; }
+    public NavigationState NavState { get; set; }
 
-    private void Awake()
+    private void MoveTowardPlayer()
     {
-        NavMode = startMode;
+
     }
 }
