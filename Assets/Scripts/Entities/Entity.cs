@@ -28,7 +28,6 @@ public class Entity : MonoBehaviour
     {
         _data = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
-        _navigation.NavMode = _startNavMode;
     }
 
     private void OnDrawGizmos()

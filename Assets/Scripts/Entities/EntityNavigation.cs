@@ -4,7 +4,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(EntityDataHolder))]
 public class EntityNavigation : MonoBehaviour
 {
-    public enum NavigationState
+    public enum NavigationMode
     {
         Idle,
         MoveRandomly,
@@ -12,16 +12,16 @@ public class EntityNavigation : MonoBehaviour
     }
     private EntityData _data;
 
-    public NavigationState NavMode { get; private set; }
+    public NavigationMode NavMode { get; private set; }
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
     private NavMeshAgent agent;
     private Transform _playerTransform;
     [SerializeField]
     private float distanceToNextTarget;
-    public void SetState(Transform playerTransform, NavigationState navState)
+    public void SetState(Transform playerTransform, NavigationMode navState)
     {
-        if (playerTransform == null && navState == NavigationState.MoveToPlayer)
+        if (playerTransform == null && navState == NavigationMode.MoveToPlayer)
         {
             Debug.LogError("Player is null");
         }
@@ -31,7 +31,7 @@ public class EntityNavigation : MonoBehaviour
 
     private void Awake()
     {
-        NavMode = NavigationState.Idle;
+        NavMode = NavigationMode.Idle;
         var dataHolder = GetComponent<EntityDataHolder>();
         Debug.LogError($"No EntityData found on Entity {name}", gameObject);
         return;
@@ -40,11 +40,11 @@ public class EntityNavigation : MonoBehaviour
     {
         switch(NavMode)
         {
-            case (NavigationState.MoveRandomly):
+            case (NavigationMode.MoveRandomly):
                 MoveRandom();
                 break;
-            case (NavigationState.MoveToPlayer):
-                Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
+            case (NavigationMode.MoveToPlayer):
+                MoveToPlayer();
                 break;
         }
     }
@@ -57,7 +57,7 @@ public class EntityNavigation : MonoBehaviour
             agent.SetDestination(newPos);
         }
     }
-
+    private void MoveToPlayer() => Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
     private Vector2 GetNewRandomPositions()
     {
         float newX = transform.position.x + XrandomOffset.x;
