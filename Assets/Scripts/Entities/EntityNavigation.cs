@@ -87,6 +87,7 @@ public class EntityNavigation : MonoBehaviour
                 }
                 break;
             case NavigationMode.MoveToPlayer:
+                SetAgentDestination(GetDestination(_playerTransform));
                 // Need something here?
                 break;
         }

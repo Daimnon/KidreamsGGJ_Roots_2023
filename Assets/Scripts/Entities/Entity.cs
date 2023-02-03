@@ -29,7 +29,6 @@ public partial class Entity : MonoBehaviour
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
     [SerializeField] private SpriteDirection _spriteDir;
-    [SerializeField] private bool _canAttack;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
@@ -48,7 +47,7 @@ public partial class Entity : MonoBehaviour
     private Transform CachedPlayerTransform => _cachedPlayer ? _cachedPlayer.transform : null;
     
     private EntityState PlayerSeenState =>
-        _canAttack
+        Data.Damage > 0
             ? EntityState.ChasingPlayer
             : EntityState.RunningFromPlayer;
 
