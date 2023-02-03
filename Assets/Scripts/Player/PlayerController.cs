@@ -15,14 +15,21 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] protected PlayerControls _playerControls;
     [SerializeField] protected SpriteRenderer _playerGraphics;
+    [SerializeField] private SpriteDirection _spriteDir;
     [SerializeField] protected Rigidbody2D _rb;
     [SerializeField] private bool _debugPlayerState;
-    [SerializeField] private SpriteDirection _spriteDir;
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
     public PlayerData Data { get => _data; set => value = _data; }
+
+    [SerializeField] private int _hp, _damage, _speed, _vision, _engravedAmount;
+    public int Hp { get => _hp; set => value = _hp; }
+    public int Damage { get => _damage; set => value = _damage; }
+    public int Speed { get => _speed; set => value = _speed; }
+    public int Vision { get => _vision; set => value = _vision; }
+    public int EngravedAmount { get => _engravedAmount; set => value = _engravedAmount; }
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -42,8 +49,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
-        _playerControls = new PlayerControls();
-        _playerState = Idle;
+        Initialize();
     }
     private void Start()
     {
@@ -53,9 +59,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _playerState.Invoke();
-
-        if (_data.Hp <= 0)
-            Kill();
     }
     private void FixedUpdate()
     {
@@ -67,6 +70,16 @@ public class PlayerController : MonoBehaviour
         _bite.Disable();
     }
     #endregion
+
+    private void Initialize()
+    {
+        _playerControls = new PlayerControls();
+        _hp = _data.Hp;
+        _damage = _data.Damage;
+        _speed = _data.Speed;
+        _vision = _data.Vision;
+        _playerState = Idle;
+    }
 
     #region FixedUpdate Methods
     protected void Move()
@@ -172,6 +185,24 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
         Destroy(gameObject);
+    }
+
+    public bool TakeDamage(int damage)
+    {
+        bool isAlive;
+
+        _hp = _data.Hp;
+
+        if (_hp == 0)
+        {
+            isAlive = true;
+            Kill();
+            return isAlive;
+        }
+
+        isAlive = false;
+
+        return isAlive;
     }
 
     private void OnDrawGizmos()
