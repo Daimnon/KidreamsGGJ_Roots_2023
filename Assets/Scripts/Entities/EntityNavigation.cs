@@ -42,6 +42,7 @@ public class EntityNavigation : MonoBehaviour
         NavMode = NavigationMode.MoveRandomly;
         _data = GetComponent<EntityDataHolder>().Data;
     }
+    
     private void Start()
     {
         InitAgent();
