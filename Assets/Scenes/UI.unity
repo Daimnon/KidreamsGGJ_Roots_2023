@@ -2618,13 +2618,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3085492}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 3085495}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Kill
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2914,15 +2914,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: _speed
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: _damage
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: _vision
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: _engravedAmount
