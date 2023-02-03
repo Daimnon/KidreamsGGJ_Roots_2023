@@ -10,13 +10,18 @@ public class MapManager : MonoBehaviour
         get => _instance ??= FindObjectOfType<MapManager>();
         private set => _instance = value;
     }
+    
     [SerializeField] private Transform _randomPlacesParent;
+    [SerializeField] private Transform _villagerSpawnParent;
 
     private Transform[] _randomPlaces;
+    private Transform[] _villagerSpawns;
 
     private Transform[] RandomPlaces => _randomPlaces ??= _randomPlacesParent.Cast<Transform>().ToArray();
+    private Transform[] VillagerSpawnPoints => _villagerSpawns ??= _villagerSpawnParent.Cast<Transform>().ToArray();
     
     public Transform GetRandomPlaceTransform() => RandomPlaces.GetRandom();
+    public Vector3 GetRandomVillagerSpawnPosition() => VillagerSpawnPoints.GetRandom().position;
 
     private void Awake()
     {
