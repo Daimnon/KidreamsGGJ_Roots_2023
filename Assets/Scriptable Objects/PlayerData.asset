@@ -26,7 +26,7 @@ MonoBehaviour:
   _moveToTargetDurationWhileWeak: 1.25
   _moveBackFromTargetDurationWhileWeak: 1
   _biteSpeedWhileStrong: 1
-  _biteSpeedWhileWeak: 0.5
+  _biteSpeedWhileWeak: 0.75
   _biteTime: 0.5
   _moveToTargetCurve:
     serializedVersion: 2
