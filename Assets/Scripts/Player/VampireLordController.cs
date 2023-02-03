@@ -19,12 +19,12 @@ public class VampireLordController : PlayerController
     }
     private void Awake()
     {
-        _state = Idle;
+        _playerState = Idle;
         _playerControls = new PlayerControls();
     }
     private void Update()
     {
-        _state.Invoke();
+        _playerState.Invoke();
     }
     private void FixedUpdate()
     {

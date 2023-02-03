@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     protected InputAction _move, _bite;
     protected bool _isLookingRight = true;
 
-    protected delegate void State();
-    protected State _state;
+    protected delegate void PlayerState();
+    protected PlayerState _playerState;
 
     #region Monobehaviour Callbacks
     private void OnEnable()
@@ -41,12 +41,15 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
-        _state = Idle;
+        _playerState = Idle;
         _playerControls = new PlayerControls();
     }
     private void Update()
     {
-        _state.Invoke();
+        _playerState.Invoke();
+
+        if (_data.Hp <= 0)
+            Kill();
     }
     private void FixedUpdate()
     {
@@ -122,15 +125,20 @@ public class PlayerController : MonoBehaviour
         switch (newState)
         {
             case PlayerStates.Idle:
-                _state = Idle;
+                _playerState = Idle;
                 break;
             case PlayerStates.Moving:
-                _state = Moving;
+                _playerState = Moving;
                 break;
             case PlayerStates.Biting:
-                _state = Biting;
+                _playerState = Biting;
                 break;
         }
+    }
+
+    private void Kill()
+    {
+
     }
 
     private void OnDrawGizmos()
