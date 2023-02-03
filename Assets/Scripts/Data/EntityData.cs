@@ -1,12 +1,18 @@
 using NaughtyAttributes;
 using UnityEngine;
 
+public enum EntityType
+{
+    Animal,
+    Human,
+}
+    
 [CreateAssetMenu(fileName = "New Entity", menuName = "ScriptableObject/Data/Entity Data", order = 21)]
 public class EntityData : ScriptableObject
 {
     [ValidateInput(nameof(ValidateNotNull))]
     [SerializeField, Expandable] private CommonEntityData commonData;
-
+    
     [field: SerializeField] public string Name { get; set; }
     [field: SerializeField] public int Hp { get; set; }
     [field: SerializeField] public int Speed { get; set; }
@@ -19,6 +25,7 @@ public class EntityData : ScriptableObject
     {
         get
         {
+            
             if (Vision == 0) return 0;
             return commonData.BaseViewDistance + Vision * commonData.ViewDistancePerVisionPoint;
         }

@@ -39,6 +39,7 @@ public class EntityNavigation : MonoBehaviour
         NavMode = NavigationMode.MoveRandomly;
         var dataHolder = GetComponent<EntityDataHolder>();
     }
+    
     private void Start()
     {
         curTarget = GetNextTarget();
