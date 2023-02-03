@@ -43,6 +43,7 @@ public partial class Entity : MonoBehaviour
 
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
+    private Transform CachedPlayerTransform => _cachedPlayer ? _cachedPlayer.transform : null;
 
 
     private void Awake()
@@ -82,8 +83,9 @@ public partial class Entity : MonoBehaviour
             _cachedPlayer = FindObjectOfType<PlayerController>();
         }
 
-        var playerTrans = _cachedPlayer != null ? _cachedPlayer.transform : null;
-        _navigation.SetState(playerTrans, _startNavMode);
+        _navigation.SetState(CachedPlayerTransform, _startNavMode);
+        
+        TransitionToIdle(EntityState.Idle);
     }
 
     private void OnDrawGizmos()

@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] protected PlayerControls _playerControls;
     [SerializeField] protected SpriteRenderer _playerGraphics;
     [SerializeField] protected Rigidbody2D _rb;
-    
+    [SerializeField] private bool _debugPlayerState;
+    [SerializeField] private SpriteDirection _spriteDir;
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
@@ -28,7 +29,6 @@ public class PlayerController : MonoBehaviour
 
     protected Vector2 _moveInput;
     protected InputAction _move, _bite;
-    protected bool _isLookingRight = true;
 
     #region Monobehaviour Callbacks
     private void OnEnable()
@@ -79,7 +79,8 @@ public class PlayerController : MonoBehaviour
 
     protected void Bite(InputAction.CallbackContext biteContext)
     {
-        Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
+        Vector2 direction = _spriteDir.Vector;
+        bool isWeak = _playerGraphics.sprite == _data.WeakSprite;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _data.BiteDistance, _biteLayer);
         if (hit)
@@ -88,8 +89,8 @@ public class PlayerController : MonoBehaviour
             Vector2 originalPos = transform.position;
             Vector2 targetPos = new (transform.position.x + _data.BiteDistance - _data.BiteOffset, hit.transform.position.y);
 
-            float moveToTarget = _playerGraphics == _data.WeakSprite ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
-            float moveBackFromTarget = _playerGraphics == _data.WeakSprite ?_data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
+            float moveToTarget = isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
+            float moveBackFromTarget = isWeak ?_data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
 
             DOTween.Sequence().
                 Append(transform.DOMove(targetPos, moveToTarget).SetEase(_data.MoveToTargetCurveBiteSuccess)).
@@ -102,10 +103,11 @@ public class PlayerController : MonoBehaviour
         {
             ChangeState(PlayerStates.FailedBiting);
             Vector2 originalPos = transform.position;
-            float targetPosX = transform.position.x + _data.BiteDistance;
-
-            float moveToTarget = _playerGraphics == _data.WeakSprite ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
-            float moveBackFromTarget = _playerGraphics == _data.WeakSprite ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
+            Vector2 pos = (Vector2) transform.position + direction * _data.BiteDistance;
+            float targetPosX = pos.x;
+            
+            float moveToTarget = isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
+            float moveBackFromTarget = isWeak ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
 
             DOTween.Sequence().
                 Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
@@ -119,7 +121,7 @@ public class PlayerController : MonoBehaviour
     #region States
     protected void Idle()
     {
-        Debug.Log($"player state is Idle");
+        if (_debugPlayerState) Debug.Log($"player state is Idle");
 
         _moveInput = _move.ReadValue<Vector2>();
 
@@ -128,7 +130,7 @@ public class PlayerController : MonoBehaviour
     }
     protected void Moving()
     {
-        Debug.Log($"player state is Moving");
+        if (_debugPlayerState) Debug.Log($"player state is Moving");
 
         _moveInput = _move.ReadValue<Vector2>();
 
@@ -138,12 +140,12 @@ public class PlayerController : MonoBehaviour
     protected void Biting()
     {
         _moveInput = Vector2.zero;
-        Debug.Log($"player state is Biting");
+        if (_debugPlayerState) Debug.Log($"player state is Biting");
     }
     protected void FailedBiting()
     {
         _moveInput = Vector2.zero;
-        Debug.Log($"player state tried to Bite and failed");
+        if (_debugPlayerState) Debug.Log($"player state tried to Bite and failed");
     }
     #endregion
 

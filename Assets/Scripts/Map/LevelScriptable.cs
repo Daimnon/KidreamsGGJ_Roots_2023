@@ -6,17 +6,17 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName ="TilemapData/LevelData")]
     public class LevelScriptable : ScriptableObject
     {
-    public List<obstacleData> obstaclesToGenerate;
+    public List<tileData> tilesToGenerate;
     }
 
 [System.Serializable]
-public struct obstacleData
+public struct tileData
 {
-    public Vector3Int _obstaclePos;
+    public Vector3Int _tilePos;
     public Tile _tile;
-    public obstacleData(Vector3Int obstaclePos, Tile tile)
+    public tileData(Vector3Int _tilePos, Tile tile)
     {
-        _obstaclePos = obstaclePos;
+        this._tilePos = _tilePos;
         _tile = tile;
     }
     }
