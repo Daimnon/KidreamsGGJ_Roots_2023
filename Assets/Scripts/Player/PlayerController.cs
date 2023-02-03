@@ -82,8 +82,8 @@ public class PlayerController : MonoBehaviour
             Vector2 originalPos = transform.position;
 
             DOTween.Sequence().
-                Append(transform.DOMoveX(transform.position.x + _data.BiteDistance - _data.BiteOffset, _data.MoveToTargetDurationWhileStrong).SetEase(_data.MoveToTargetCurve)).
-                Append(transform.DOMoveX(originalPos.x, _data.MoveBackFromTargetDurationWhileStrong).SetEase(_data.MoveBackFromTargetCurve).SetDelay(_data.BiteTime)).
+                Append(transform.DOMove(new Vector2(transform.position.x + _data.BiteDistance - _data.BiteOffset, hit.transform.position.y), _data.MoveToTargetDurationWhileStrong).SetEase(_data.MoveToTargetCurve)).
+                Append(transform.DOMove(new Vector2(originalPos.x, originalPos.y), _data.MoveBackFromTargetDurationWhileStrong).SetEase(_data.MoveBackFromTargetCurve).SetDelay(_data.BiteTime)).
                 OnComplete(() => ChangeState(PlayerStates.Idle));
             
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
@@ -111,6 +111,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Biting()
     {
+        _moveInput = Vector2.zero;
         Debug.Log($"player state is Biting");
     }
     #endregion
