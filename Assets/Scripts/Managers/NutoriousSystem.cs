@@ -17,7 +17,7 @@ public class NutoriousSystem : MonoBehaviour
     private void Start()
     {
         CheckSpawnMilestone();
-        curSpawnMilestone == spawnMilestones[0];
+     //   curSpawnMilestone == spawnMilestones[0];
     }
     private void OnEnable()
     {
