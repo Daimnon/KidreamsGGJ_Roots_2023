@@ -10,9 +10,9 @@ public enum PlayerStates { Idle, Moving, Biting }
 public class PlayerController : MonoBehaviour
 {
     [Header("Player Components")]
-    [SerializeField] private PlayerControls _playerControls;
-    [SerializeField] private SpriteRenderer _playerGraphics;
-    [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] protected PlayerControls _playerControls;
+    [SerializeField] protected SpriteRenderer _playerGraphics;
+    [SerializeField] protected Rigidbody2D _rb;
     
     public Rigidbody2D Rb => _rb;
 
@@ -23,14 +23,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
-    [SerializeField] private GameObject _body;
 
-    private Vector2 _moveInput;
-    private InputAction _move, _bite;
-    private bool _isLookingRight = true;
+    protected Vector2 _moveInput;
+    protected InputAction _move, _bite;
+    protected bool _isLookingRight = true;
 
-    private delegate void State();
-    private State _state;
+    protected delegate void State();
+    protected State _state;
 
     #region Monobehaviour Callbacks
     private void OnEnable()
@@ -95,7 +94,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #region States
-    private void Idle()
+    protected void Idle()
     {
         Debug.Log($"player state is Idle");
 
@@ -104,7 +103,7 @@ public class PlayerController : MonoBehaviour
         if (_moveInput != Vector2.zero)
             ChangeState(PlayerStates.Moving);
     }
-    private void Moving()
+    protected void Moving()
     {
         Debug.Log($"player state is Moving");
 
@@ -113,7 +112,7 @@ public class PlayerController : MonoBehaviour
         if (_moveInput == Vector2.zero)
             ChangeState(PlayerStates.Idle);
     }
-    private void Biting()
+    protected void Biting()
     {
         _moveInput = Vector2.zero;
         Debug.Log($"player state is Biting");
