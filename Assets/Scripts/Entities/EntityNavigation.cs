@@ -80,7 +80,7 @@ public class EntityNavigation : MonoBehaviour
         {
             case NavigationMode.MoveRandomly:
             case NavigationMode.RunFromPlayer:
-                if (agent.remainingDistance <= Mathf.Max(1f, Speed))
+                if (IsAgentCloseToTarget())
                 {
                     var dest = GetDestination(_playerTransform);
                     SetAgentDestination(dest);
@@ -93,6 +93,11 @@ public class EntityNavigation : MonoBehaviour
         }
     }
 
+    private bool IsAgentCloseToTarget()
+    {
+        return agent.remainingDistance <= 0.1f;
+    }
+
     private void InitAgent()
     {
         agent.updateRotation = false;
@@ -103,18 +108,12 @@ public class EntityNavigation : MonoBehaviour
     {
         agent.SetDestination(new Vector3(destination.x, destination.y, transform.position.z));
     }
-
-    private Vector3 GetNextTarget()
-    {
-        var trans =  MapManager.Instance.GetRandomPlaceTransform();
-        return trans.position;
-    }
-
+    
     private Vector3 GetDestination(Transform playerTransform)
     {
         return NavMode switch
         {
-            NavigationMode.MoveRandomly => GetNextTarget(),
+            NavigationMode.MoveRandomly => MapManager.Instance.GetRandomPlaceTransform().position,
             NavigationMode.MoveToPlayer => playerTransform.position,
             NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position),
             _ => throw new ArgumentOutOfRangeException()
