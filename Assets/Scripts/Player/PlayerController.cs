@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine.InputSystem;
 
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
-    [SerializeField] private float _biteDistance = 3f;
+    [SerializeField] private float _biteDistance = 3f, _biteSpeed = 1f;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -72,13 +73,13 @@ public class PlayerController : MonoBehaviour
 
     private void Bite(InputAction.CallbackContext biteContext)
     {
-        _playerGraphics.sprite = _data.WeakSprite ? _data.StrongSprite : _data.WeakSprite;
         Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
 
-        if (Physics2D.Raycast(transform.position, direction, _biteDistance, _biteLayer))
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _biteDistance, _biteLayer);
+        if (hit)
         {
-            
-            Debug.Log($"player {name} bite");
+            transform.DOMoveX(transform.position.x + _biteDistance, _biteSpeed);
+            Debug.Log($"player {name} bite {hit.collider.name}");
         }
     }
 
