@@ -15,12 +15,14 @@ public class EntityData : ScriptableObject
     [SerializeField, Expandable] private CommonEntityData commonData;
 
     [SerializeField] private int _maxHp;
+    [SerializeField] private int _damage;
     [SerializeField] private int _speed;
     [SerializeField] private int _vision;
     [SerializeField] private float _attackRange;
     
     [field: SerializeField] public string Name { get; private set; }
     public int Hp => _maxHp;
+    public int Damage => _damage;
     public int Speed => _speed;
     public int Vision => _vision;
     public float AttackRange => _attackRange;

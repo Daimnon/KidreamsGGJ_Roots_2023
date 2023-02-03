@@ -21,11 +21,14 @@ public class EntityNavigation : MonoBehaviour
     
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
-    [SerializeField]
-    private Transform _playerTransform;
+    [SerializeField] private Transform _playerTransform;
     [Header("RandomRoaming")]
     private float distanceToNextTarget;
     private Vector3 nextRandomTargetPos;
+
+    [Header("Debug")]
+    [SerializeField] private bool _showGizmos;
+    [SerializeField] private Color _gizmoColor;
 
     public float Speed
     {
@@ -36,6 +39,7 @@ public class EntityNavigation : MonoBehaviour
     
     public void SetState(Transform playerTransform, NavigationMode navState)
     {
+        Debug.Log($"EntityNavigation ({name}) SetState: {navState} (player: {playerTransform})", gameObject);
         if (playerTransform == null && navState == NavigationMode.MoveToPlayer)
         {
             Debug.LogError("Player is null");
@@ -55,13 +59,21 @@ public class EntityNavigation : MonoBehaviour
     {
         InitAgent();
     }
+
+    private void OnDrawGizmos()
+    {
+        if(!_showGizmos || !Application.isPlaying) return;
+        Gizmos.color = _gizmoColor;
+        Gizmos.DrawSphere(agent.destination, 0.5f);
+    }
+
     private void Update()
     {
 
         switch (NavMode)
         {
             case (NavigationMode.MoveRandomly):
-                if (agent.remainingDistance <= 3)
+                if (agent.remainingDistance <= 0.5f)
                     MoveToNextRandomLocation();
                 break;
             case (NavigationMode.MoveToPlayer):

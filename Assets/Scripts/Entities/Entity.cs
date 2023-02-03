@@ -108,6 +108,7 @@ public partial class Entity : MonoBehaviour
     {
         var player = RayCastForPlayer();
         var foundPlayer = player != null;
+        if (player) _cachedPlayer = player;
         if (foundPlayer && !_playerInSight)
         {
             OnPlayerFound();

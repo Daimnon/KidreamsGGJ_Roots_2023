@@ -35,13 +35,16 @@ public partial class Entity
 
     private void TransitionToIdle(EntityState prevState)
     {
+        Debug.Log(LogStr(nameof(TransitionToIdle)));
         _anim.SetTrigger(AnimTrigger_Idle);
-        moveStaggerAnim.enabled = false;
-        _navigation.SetState(_cachedPlayer.transform, EntityNavigation.NavigationMode.MoveRandomly);
+        moveStaggerAnim.enabled = true;
+        _navigation.SetState(
+            _cachedPlayer.transform, EntityNavigation.NavigationMode.MoveRandomly);
     }
 
     private void TransitionToChasing(EntityState prevState)
     {
+        Debug.Log(LogStr(nameof(TransitionToChasing)));
         _anim.SetTrigger(AnimTrigger_ChasingPlayer);
         moveStaggerAnim.enabled = true;
         _navigation.SetState(_cachedPlayer.transform, EntityNavigation.NavigationMode.MoveToPlayer);
@@ -49,13 +52,23 @@ public partial class Entity
 
     private void TransitionToRunning(EntityState prevState)
     {
+        Debug.Log(LogStr(nameof(TransitionToRunning)));
         moveStaggerAnim.enabled = true;
         _anim.SetTrigger(AnimTrigger_RunningFromPlayer);
     }
 
     private void TransitionToAttacking(EntityState prevState)
     {
+        Debug.Log(LogStr(nameof(TransitionToAttacking)));
+        moveStaggerAnim.enabled = false;
         _anim.SetTrigger(AnimTrigger_Attack);
+        
+        Stub_AttackPlayer(_entityData.Damage);
+    }
+
+    private void Stub_AttackPlayer(int damage)
+    {
+        Debug.Log($"Stub-- damaging player ({damage}) points!");
     }
 
     private void UpdateIdleState()

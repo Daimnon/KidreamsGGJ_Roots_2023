@@ -167,7 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f151e132465c4a05874709a6e7241990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
   _playerTransform: {fileID: 0}
+  _showGizmos: 1
+  _gizmoColor: {r: 0, g: 0.14433026, b: 1, a: 1}
 --- !u!195 &655535319
 NavMeshAgent:
   m_ObjectHideFlags: 0
