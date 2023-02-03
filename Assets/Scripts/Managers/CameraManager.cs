@@ -30,7 +30,7 @@ public class CameraManager : MonoBehaviour
     }
     private void FollowPlayer()
     {
-        //_mainCamTransform = 
+        _mainCamTransform.position = GameManager.Instance.PlayerPrefab.transform.position;
     }
     private void FollowVampireLord()
     {

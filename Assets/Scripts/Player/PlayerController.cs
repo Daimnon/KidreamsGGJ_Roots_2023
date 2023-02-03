@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerControls = new PlayerControls();
         GameManager.Instance.CurrentPlayer = gameObject;
+        GameManager.Instance.PlayerController = this;
         _playerState = Idle;
     }
     private void Update()
