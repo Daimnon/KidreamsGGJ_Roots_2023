@@ -15,7 +15,7 @@ MonoBehaviour:
   commonData: {fileID: 11400000, guid: 48531bcafa595164eab40db7ff4760f8, type: 2}
   _maxHp: 3
   _damage: 10
-  _speed: 1
+  _speed: 2
   _vision: 1
   _attackRange: 3
   <Name>k__BackingField: Player
@@ -23,9 +23,9 @@ MonoBehaviour:
   _strongSprite: {fileID: 3286163911610860551, guid: bd6f80194f7c7db45b8ce0c077f1f5e2, type: 3}
   _biteDistance: 3
   _biteOffset: 1
-  _moveToTargetDurationWhileStrong: 1
+  _moveToTargetDurationWhileStrong: 1.25
   _moveBackFromTargetDurationWhileStrong: 0.5
-  _moveToTargetDurationWhileWeak: 1.25
+  _moveToTargetDurationWhileWeak: 3
   _moveBackFromTargetDurationWhileWeak: 1
   _biteSpeedWhileStrong: 1
   _biteSpeedWhileWeak: 0.75

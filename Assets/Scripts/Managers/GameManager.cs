@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _playerPrefab, _currentPlayer;
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private Transform _playerSpawn, _vampireLordSpawn;
+    [SerializeField] private bool _debugPlayerLoop;
 
     public PlayerData NewPlayerData => _newPlayerData;
     public PlayerData NextPlayerData { get => _nextPlayerData; set => value = _nextPlayerData; }
@@ -41,11 +42,11 @@ public class GameManager : MonoBehaviour
 
     private void PlayerLoop()
     {
-        Debug.Log($"GameState is PlayerLoop");
+        if (_debugPlayerLoop) Debug.Log($"GameState is PlayerLoop");
     }
     private void VampireLordLoop()
     {
-        Debug.Log($"GameState is VampireLordLoop");
+        if (_debugPlayerLoop) Debug.Log($"GameState is VampireLordLoop");
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
         newPlayerController.Data = _nextPlayerData;
