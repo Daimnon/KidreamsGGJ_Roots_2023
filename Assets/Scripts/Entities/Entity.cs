@@ -20,6 +20,8 @@ public partial class Entity : MonoBehaviour
         RunningFromPlayer,
         Attacking,
     }
+
+    private int _hp;
     
     [SerializeField] private Animator _anim;
     [SerializeField] private BreatheMoveAnim moveStaggerAnim;
@@ -35,7 +37,7 @@ public partial class Entity : MonoBehaviour
 
     [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
     private EntityNavigation _navigation;
-    private EntityData _entityData;
+    public EntityData Data { get; private set; }
 
     private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
     private PlayerController _cachedPlayer;
@@ -44,13 +46,15 @@ public partial class Entity : MonoBehaviour
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
     private Transform CachedPlayerTransform => _cachedPlayer ? _cachedPlayer.transform : null;
-
-
+    
+    public static event Action<Entity> OnEntityDeath;
+    
     private void Awake()
     {
         InitData();
-        _entityData.OnValidated += OnValidate;
+        Data.OnValidated += OnValidate;
         InitState();
+        _hp = Data.Hp;
     }
 
     private void OnValidate()
@@ -64,13 +68,13 @@ public partial class Entity : MonoBehaviour
 
     private void InitData()
     {
-        _entityData = GetComponent<EntityDataHolder>().Data;
+        Data = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _updateAction = UpdateIdleState;
 
         if (Application.isPlaying)
         {
-            _navigation.Speed = _entityData.Speed;
+            _navigation.Speed = Data.Speed;
         }
     }
 
@@ -88,24 +92,43 @@ public partial class Entity : MonoBehaviour
         TransitionToIdle(EntityState.Idle);
     }
 
-    private void OnDrawGizmos()
-    {
-        if (!_showGizmos) return;
-     
-        if (!_entityData) InitData(); // hack for edit mode
-        Gizmos.color = _testRayColor;
-        foreach (var rayDir in GetRayDirections())
-        {
-            Gizmos.DrawRay(transform.position, rayDir * _entityData.ViewDistance);
-        }
-    }
-
     private void Update()
     {
         UpdatePlayerInSight();
         _updateAction();
     }
-    
+
+    private void OnDrawGizmos()
+    {
+        if (!_showGizmos) return;
+     
+        if (!Data) InitData(); // hack for edit mode
+        Gizmos.color = _testRayColor;
+        foreach (var rayDir in GetRayDirections())
+        {
+            Gizmos.DrawRay(transform.position, rayDir * Data.ViewDistance);
+        }
+    }
+
+    /// <param name="damage">true if entity died</param>
+    public bool TakeDamage(int damage)
+    {
+        _hp -= damage;
+        if (_hp == 0)
+        {
+            Kill();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void Kill()
+    {
+        OnEntityDeath?.Invoke(this);
+        Destroy(this);
+    }
+
     private void UpdatePlayerInSight()
     {
         var player = RayCastForPlayer();
@@ -137,7 +160,7 @@ public partial class Entity : MonoBehaviour
     {
         foreach (var rayDir in GetRayDirections())
         {
-            var size = Physics2D.RaycastNonAlloc(transform.position, rayDir, _raycastResultsCache, _entityData.ViewDistance, _playerRaycastMask);
+            var size = Physics2D.RaycastNonAlloc(transform.position, rayDir, _raycastResultsCache, Data.ViewDistance, _playerRaycastMask);
             if (size == 0) continue;
             
             var player = SearchPlayerInResults(_raycastResultsCache);
@@ -161,7 +184,7 @@ public partial class Entity : MonoBehaviour
     }
 
     private IEnumerable<Vector3> GetRayDirections() =>
-        GetRayDirections(_spriteDir.Vector, _entityData.ViewFOVAngle, _entityData.NumRays);
+        GetRayDirections(_spriteDir.Vector, Data.ViewFOVAngle, Data.NumRays);
 
     private static IEnumerable<Vector3> GetRayDirections(Vector2 direction, float angleDegrees, int numRays)
     {
