@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
-    [SerializeField] PlayerStates _playerStates;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -123,15 +122,12 @@ public class PlayerController : MonoBehaviour
         switch (newState)
         {
             case PlayerStates.Idle:
-                _playerStates = PlayerStates.Idle;
                 _state = Idle;
                 break;
             case PlayerStates.Moving:
-                _playerStates = PlayerStates.Moving;
                 _state = Moving;
                 break;
             case PlayerStates.Biting:
-                _playerStates = PlayerStates.Biting;
                 _state = Biting;
                 break;
         }
