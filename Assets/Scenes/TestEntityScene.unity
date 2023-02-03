@@ -417,6 +417,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6092333702798026847, guid: 93735aad35f26264bb2aec30aa642392, type: 3}
+      propertyPath: agent
+      value: 
+      objectReference: {fileID: 6144957633723597307}
     - target: {fileID: 6144957634684898835, guid: 93735aad35f26264bb2aec30aa642392, type: 3}
       propertyPath: m_Name
       value: OWLLLL
@@ -467,3 +471,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93735aad35f26264bb2aec30aa642392, type: 3}
+--- !u!195 &6144957633723597307 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 655535319, guid: 93735aad35f26264bb2aec30aa642392, type: 3}
+  m_PrefabInstance: {fileID: 6144957633723597306}
+  m_PrefabAsset: {fileID: 0}

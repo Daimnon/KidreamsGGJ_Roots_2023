@@ -17,9 +17,10 @@ public class EntityData : ScriptableObject
     [field: SerializeField] public int Hp { get; set; }
     [field: SerializeField] public int Speed { get; set; }
     [field: SerializeField] public int Vision { get; set; }
+    [field: SerializeField] public double AttackRange { get; set; }
 
     public int CalculatedSpeed => Speed * commonData.SpeedModifier;
-    
+
     // Entity View Raycasting - formulas
     [ShowNativeProperty] public float ViewDistance
     {

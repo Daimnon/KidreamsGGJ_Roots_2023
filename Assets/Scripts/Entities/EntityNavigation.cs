@@ -14,8 +14,10 @@ public class EntityNavigation : MonoBehaviour
     }
     [Header("AI Agent Data and setting")]
     private EntityData _data;
+    
     [NaughtyAttributes.ShowNativeProperty]
     public NavigationMode NavMode { get; private set; }
+    
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
     private NavMeshAgent agent;
@@ -65,8 +67,6 @@ public class EntityNavigation : MonoBehaviour
     {
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-        nextRandomTargetPos = GetNextTarget();
-        agent.SetDestination(new Vector3(nextRandomTargetPos.x, nextRandomTargetPos.y, transform.position.z));
     }
     private void MoveToNextRandomLocation()
     {
