@@ -38,6 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Tiles BG
+    uniqueID: 376455613
+    locked: 0
+  - name: Tile Static Environment
+    uniqueID: 383664667
+    locked: 0
+  - name: Tiles Collisions
+    uniqueID: 3941627085
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
