@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
-    [SerializeField] private float _biteDistance = 3f, _biteSpeed = 1f;
+    [SerializeField] private float _biteDistance = 3f, _moveToTargetDuration = 2f, _moveBackFromTargetDuration = 1f, _biteSpeed = 1f, _biteOffset = 1f, _biteTime = 1f;
+    [SerializeField] private AnimationCurve _moveToTargetCurve, _moveBackFromTargetCurve;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -78,8 +79,14 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _biteDistance, _biteLayer);
         if (hit)
         {
-            transform.DOMoveX(transform.position.x + _biteDistance, _biteSpeed);
-            Debug.Log($"player {name} bite {hit.collider.name}");
+            Vector2 originalPos = transform.position;
+
+            DOTween.Sequence().
+                Append(transform.DOMoveX(transform.position.x + _biteDistance - _biteOffset, _moveToTargetDuration).SetEase(_moveToTargetCurve)).
+                SetDelay(_biteTime).
+                Append(transform.DOMoveX(originalPos.x, _moveBackFromTargetDuration).SetEase(_moveBackFromTargetCurve));
+            
+            Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
         }
     }
 
