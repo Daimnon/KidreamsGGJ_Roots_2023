@@ -34,6 +34,16 @@ public class EntityNavigation : MonoBehaviour
         set => agent.speed = value;
     }
 
+    private Vector3 Destination
+    {
+        get => agent.destination;
+        set
+        {
+            Debug.Log($"Setting agent destination: {value}");
+            agent.destination = value;
+        }
+    }
+
     
     public void SetState(Transform playerTransform, NavigationMode navState)
     {
@@ -45,7 +55,7 @@ public class EntityNavigation : MonoBehaviour
         NavMode = navState;
         _playerTransform = playerTransform;
 
-        agent.destination = GetDestination(playerTransform);
+        Destination = GetDestination(playerTransform);
     }
 
     private void Awake()
@@ -73,7 +83,7 @@ public class EntityNavigation : MonoBehaviour
     {
         if(!_showGizmos || !Application.isPlaying) return;
         Gizmos.color = _gizmoColor;
-        Gizmos.DrawSphere(agent.destination, 0.5f);
+        Gizmos.DrawSphere(Destination, 0.5f);
     }
 
     private void Update()
@@ -86,8 +96,9 @@ public class EntityNavigation : MonoBehaviour
                 {
                     var dest = GetDestination(_playerTransform);
                     SetAgentDestination(dest);
+                    OnReachedDestination?.Invoke();
                 }
-                OnReachedDestination?.Invoke();
+                
                 break;
             case NavigationMode.MoveToPlayer:
                 SetAgentDestination(GetDestination(_playerTransform));
@@ -119,7 +130,7 @@ public class EntityNavigation : MonoBehaviour
         {
             NavigationMode.MoveRandomly => MapManager.Instance.GetRandomPlaceTransform().position,
             NavigationMode.MoveToPlayer => playerTransform.position,
-            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position, agent.destination),
+            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position, Destination),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

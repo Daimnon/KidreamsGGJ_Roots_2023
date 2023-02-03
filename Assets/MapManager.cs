@@ -37,19 +37,24 @@ public class MapManager : MonoBehaviour
 
     public Vector3 GetRandomRunawayPlace(Vector3 entityPos, Vector3 playerTransformPosition, Vector3 lastDestination)
     {
+        bool VectorIsNotLast(Vector3 vec)
+        {
+            return Vector3.Distance(vec, lastDestination) > 0.1f;
+        }
+        
         var filteredPlaces =  _randomPlaces.Select(trans => trans.position).Where(pos =>
         {
             var entityToTargetVec = pos - entityPos;
             var playerChaseVec = entityPos - playerTransformPosition;
 
             return Vector2.Dot(entityToTargetVec, playerChaseVec) > 0f;
-        }).Where(pos => pos != lastDestination).ToArray();
+        }).Where(VectorIsNotLast).ToArray();
 
         var chosen = filteredPlaces.Length > 0
             ? filteredPlaces.GetRandom()
             : RandomPlaces
                 .Select(trans => trans.position)
-                .Where(pos => pos != lastDestination)
+                .Where(VectorIsNotLast)
                 .ToArray()
                 .GetRandom();
 
@@ -57,6 +62,7 @@ public class MapManager : MonoBehaviour
         // var playerChaseVec = entityPos - playerTransformPosition;
         // Debug.Log($"Chosen point: EntityPos: {entityPos}, PlayerPos: {playerTransformPosition}, entityToTargetVec: {entityToTargetVec}, playerChaseVec: {playerChaseVec}. Dot: {Vector2.Dot(entityToTargetVec, playerChaseVec)}");
 
+        Debug.Log($"$Chosen Runaway pos: {chosen} Last: {lastDestination}");
         return chosen;
     }
 }

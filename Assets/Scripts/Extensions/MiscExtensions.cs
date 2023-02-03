@@ -13,7 +13,7 @@ namespace Extensions
 
         public static T GetRandom<T>(this IReadOnlyList<T> collection)
         {
-            if (collection == null) return default;
+            if (collection == null || collection.Count == 0) return default;
             var index = Random.Range(0, collection.Count);
             return collection[index];
         }

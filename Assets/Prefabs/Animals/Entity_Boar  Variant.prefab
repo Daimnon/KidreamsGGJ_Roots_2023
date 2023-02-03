@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Speed
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Height
@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: db1619e7585e4d247a0045c5d258ad91, type: 2}
     - target: {fileID: 6144957634684898835, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Name
-      value: Entity_Boar
+      value: Entity_Boar  Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6144957634684898836, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_RootOrder
