@@ -14,7 +14,7 @@ public class PlayerData : EntityData
 
     [Header("Player Values")]
     [SerializeField] private float _biteDistance = 3f;
-    [SerializeField] private float _biteOffset = 1f, _moveToTargetDurationWhileStrong = 1.25f, _moveBackFromTargetDurationWhileStrong = 0.75f, _moveToTargetDurationWhileWeak = 1.5f, _moveBackFromTargetDurationWhileWeak = 1f, _biteSpeedWhileStrong = 1f, _biteSpeedWhileWeak = 0.75f, _biteTime = 0.75f;
+    [SerializeField] private float _biteOffset = 1f, _moveToTargetDurationWhileStrong = 1f, _moveBackFromTargetDurationWhileStrong = 0.5f, _moveToTargetDurationWhileWeak = 1.25f, _moveBackFromTargetDurationWhileWeak = 0.75f, _biteSpeedWhileStrong = 1f, _biteSpeedWhileWeak = 0.75f, _biteTime = 0.5f;
 
     public float BiteDistance => _biteDistance;
     public float BiteOffset => _biteOffset;
