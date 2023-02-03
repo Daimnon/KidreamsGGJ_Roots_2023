@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: OwlData
   m_EditorClassIdentifier: 
   commonData: {fileID: 11400000, guid: 48531bcafa595164eab40db7ff4760f8, type: 2}
-  <Name>k__BackingField: Someone
+  <Name>k__BackingField: Owl
   <Hp>k__BackingField: 1
   <Speed>k__BackingField: 1
   <Vision>k__BackingField: 1
+  <AttackRange>k__BackingField: 0
