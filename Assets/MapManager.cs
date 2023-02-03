@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Extensions;
 using UnityEngine;
@@ -22,7 +23,7 @@ public class MapManager : MonoBehaviour
     
     public Transform GetRandomPlaceTransform() => RandomPlaces.GetRandom();
     public Vector3 GetRandomVillagerSpawnPosition() => VillagerSpawnPoints.GetRandom().position;
-
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -34,14 +35,28 @@ public class MapManager : MonoBehaviour
         Instance = this;
     }
 
-    public Vector3 GetRandomRunawayPlace(Vector3 entityPos, Vector3 playerTransformPosition)
+    public Vector3 GetRandomRunawayPlace(Vector3 entityPos, Vector3 playerTransformPosition, Vector3 lastDestination)
     {
-        return _randomPlaces.Select(trans => trans.position).Where(pos =>
+        var filteredPlaces =  _randomPlaces.Select(trans => trans.position).Where(pos =>
         {
             var entityToTargetVec = pos - entityPos;
             var playerChaseVec = entityPos - playerTransformPosition;
 
-            return Vector3.Dot(playerChaseVec, entityToTargetVec) < 0f;
-        }).ToArray().GetRandom();
+            return Vector2.Dot(entityToTargetVec, playerChaseVec) > 0f;
+        }).Where(pos => pos != lastDestination).ToArray();
+
+        var chosen = filteredPlaces.Length > 0
+            ? filteredPlaces.GetRandom()
+            : RandomPlaces
+                .Select(trans => trans.position)
+                .Where(pos => pos != lastDestination)
+                .ToArray()
+                .GetRandom();
+
+        // var entityToTargetVec = chosen - entityPos;
+        // var playerChaseVec = entityPos - playerTransformPosition;
+        // Debug.Log($"Chosen point: EntityPos: {entityPos}, PlayerPos: {playerTransformPosition}, entityToTargetVec: {entityToTargetVec}, playerChaseVec: {playerChaseVec}. Dot: {Vector2.Dot(entityToTargetVec, playerChaseVec)}");
+
+        return chosen;
     }
 }

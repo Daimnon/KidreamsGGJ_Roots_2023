@@ -26,6 +26,8 @@ public class EntityNavigation : MonoBehaviour
     [SerializeField] private bool _showGizmos;
     [SerializeField] private Color _gizmoColor;
 
+    public event Action OnReachedDestination;
+    
     public float Speed
     {
         get => agent.speed;
@@ -85,9 +87,11 @@ public class EntityNavigation : MonoBehaviour
                     var dest = GetDestination(_playerTransform);
                     SetAgentDestination(dest);
                 }
+                OnReachedDestination?.Invoke();
                 break;
             case NavigationMode.MoveToPlayer:
                 SetAgentDestination(GetDestination(_playerTransform));
+                // TODO: Need callback for reached player?
                 // Need something here?
                 break;
         }
@@ -115,7 +119,7 @@ public class EntityNavigation : MonoBehaviour
         {
             NavigationMode.MoveRandomly => MapManager.Instance.GetRandomPlaceTransform().position,
             NavigationMode.MoveToPlayer => playerTransform.position,
-            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position),
+            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position, agent.destination),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

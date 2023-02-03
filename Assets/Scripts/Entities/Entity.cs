@@ -76,6 +76,7 @@ public partial class Entity : MonoBehaviour
         Data = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _updateAction = UpdateIdleState;
+        _navigation.OnReachedDestination += OnNavigationReachedDestination;
 
         if (Application.isPlaying)
         {
