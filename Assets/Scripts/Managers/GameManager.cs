@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     {
         if (_debugPlayerLoop) Debug.Log($"GameState is VampireLordLoop");
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
+        newPlayer.transform.SetParent(_playerSpawn.parent);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
         newPlayerController.Data = _nextPlayerData;
         ChangeState(GameStates.PlayerLoop);
