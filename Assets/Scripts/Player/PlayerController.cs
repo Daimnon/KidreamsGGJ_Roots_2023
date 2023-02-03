@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using DG.Tweening;
 using NaughtyAttributes;
-using UnityEngine.InputSystem;
 
 public enum PlayerStates { Idle, Moving, Biting }
 
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region FixedUpdate Methods
-    private void Move()
+    protected void Move()
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
         _rb.velocity = _data.CalculatedSpeed * Time.fixedDeltaTime * direction;
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void Bite(InputAction.CallbackContext biteContext)
+    protected void Bite(InputAction.CallbackContext biteContext)
     {
         Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
 
