@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -12,14 +13,25 @@ public class EntityData : ScriptableObject
 {
     [ValidateInput(nameof(ValidateNotNull))]
     [SerializeField, Expandable] private CommonEntityData commonData;
+
+    [SerializeField] private int _maxHp;
+    [SerializeField] private int _speed;
+    [SerializeField] private int _vision;
+    [SerializeField] private float _attackRange;
     
-    [field: SerializeField] public string Name { get; set; }
-    [field: SerializeField] public int Hp { get; set; }
-    [field: SerializeField] public int Speed { get; set; }
-    [field: SerializeField] public int Vision { get; set; }
-    [field: SerializeField] public double AttackRange { get; set; }
+    [field: SerializeField] public string Name { get; private set; }
+    public int Hp => _maxHp;
+    public int Speed => _speed;
+    public int Vision => _vision;
+    public float AttackRange => _attackRange;
 
     public int CalculatedSpeed => Speed * commonData.SpeedModifier;
+    public event Action OnValidated;
+
+    private void OnValidate()
+    {
+        OnValidated?.Invoke();
+    }
 
     // Entity View Raycasting - formulas
     [ShowNativeProperty] public float ViewDistance

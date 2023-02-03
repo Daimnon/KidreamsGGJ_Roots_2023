@@ -13,19 +13,25 @@ public class EntityNavigation : MonoBehaviour
         MoveToPlayer,
     }
     [Header("AI Agent Data and setting")]
+    [SerializeField] private NavMeshAgent agent;
     private EntityData _data;
-    
+
     [NaughtyAttributes.ShowNativeProperty]
     public NavigationMode NavMode { get; private set; }
     
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
-    private NavMeshAgent agent;
     [SerializeField]
     private Transform _playerTransform;
     [Header("RandomRoaming")]
     private float distanceToNextTarget;
     private Vector3 nextRandomTargetPos;
+
+    public float Speed
+    {
+        get => agent.speed;
+        set => agent.speed = value;
+    }
 
     
     public void SetState(Transform playerTransform, NavigationMode navState)

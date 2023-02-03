@@ -44,11 +44,12 @@ public partial class Entity : MonoBehaviour
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
 
-    private Vector2 RaycastDirection => _spriteDir.Vector;
 
     private void Awake()
     {
-        Init();
+        InitData();
+        _entityData.OnValidated += OnValidate;
+        InitState();
     }
 
     private void OnValidate()
@@ -56,27 +57,40 @@ public partial class Entity : MonoBehaviour
         if (_spriteDir == null) _spriteDir = GetComponentInChildren<SpriteDirection>();
         if (_anim == null) _anim = GetComponentInChildren<Animator>();
         if (moveStaggerAnim == null) moveStaggerAnim = GetComponentInChildren<BreatheMoveAnim>();
+        
+        InitData();
     }
 
-    private void Init()
+    private void InitData()
     {
         _entityData = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _updateAction = UpdateIdleState;
 
+        if (Application.isPlaying)
+        {
+            _navigation.Speed = _entityData.Speed;
+        }
+    }
+
+    private void InitState()
+    {
+        moveStaggerAnim.enabled = false;
+        
         if (_startNavMode == EntityNavigation.NavigationMode.MoveToPlayer)
         {
             _cachedPlayer = FindObjectOfType<PlayerController>();
         }
-        _navigation.SetState(_cachedPlayer.transform, _startNavMode);
-        moveStaggerAnim.enabled = false;
+
+        var playerTrans = _cachedPlayer != null ? _cachedPlayer.transform : null;
+        _navigation.SetState(playerTrans, _startNavMode);
     }
 
     private void OnDrawGizmos()
     {
         if (!_showGizmos) return;
      
-        if (!_entityData) Init(); // hack for edit mode
+        if (!_entityData) InitData(); // hack for edit mode
         Gizmos.color = _testRayColor;
         foreach (var rayDir in GetRayDirections())
         {
