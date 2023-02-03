@@ -14,7 +14,7 @@ public partial class Entity
             {
                 EntityState.Idle => UpdateIdleState,
                 EntityState.ChasingPlayer => UpdateChasingState,
-                EntityState.RunningFromPlayer => UpdateRunningState,
+                EntityState.RunningFromPlayer => UpdateRunningAwayState,
                 EntityState.Attacking => UpdateAttackingState,
                 _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
             };
@@ -59,6 +59,7 @@ public partial class Entity
         Debug.Log(LogStr(nameof(TransitionToRunning)));
         
         _navigation.enabled = true;
+        _navigation.SetState(CachedPlayerTransform, EntityNavigation.NavigationMode.RunFromPlayer);
         
         moveStaggerAnim.enabled = true;
         _anim.SetTrigger(AnimTrigger_RunningFromPlayer);
@@ -81,9 +82,12 @@ public partial class Entity
 
     private void UpdateIdleState()
     {
-        if (_playerInSight) State = EntityState.ChasingPlayer;
+        if (_playerInSight)
+        {
+            State = PlayerSeenState;
+        }
     }
-
+    
     private void UpdateChasingState()
     {
         if (!_playerInSight)
@@ -91,22 +95,32 @@ public partial class Entity
             State = EntityState.Idle;
             return;
         }
-        var distToPlayer = Vector2.Distance(CachedPlayerTransform.position, transform.position);
-        if (distToPlayer < Data.AttackRange) State = EntityState.Attacking;
+        var isInAttackRange = IsPlayerInAttackRange();
+        if (isInAttackRange) State = EntityState.Attacking;
     }
 
-    private void UpdateRunningState()
+    private void UpdateRunningAwayState()
+    {
+        // Don't go idle if dont see player ( youre running away from him)
+    }
+
+    private void UpdateAttackingState()
     {
         if (!_playerInSight)
         {
             State = EntityState.Idle;
             return;
         }
+
+        if (!IsPlayerInAttackRange())
+        {
+            State = PlayerSeenState;
+        }
     }
 
-    private void UpdateAttackingState()
+    private void OnNavigationReachedDestination() // Currently only for random pos / runaway (not reached player)
     {
-        if (!_playerInSight)
+        if (State == EntityState.RunningFromPlayer && !_playerInSight)
         {
             State = EntityState.Idle;
             return;

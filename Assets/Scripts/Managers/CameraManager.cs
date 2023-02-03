@@ -31,6 +31,9 @@ public class CameraManager : MonoBehaviour
     }
     private void FollowPlayer()
     {
+        if (!GameManager.Instance.PlayerPrefab)
+            return;
+
         float playerX = GameManager.Instance.PlayerPrefab.transform.position.x;
         float playerY = GameManager.Instance.PlayerPrefab.transform.position.y;
         float cameraZ = _mainCamTransform.position.z;

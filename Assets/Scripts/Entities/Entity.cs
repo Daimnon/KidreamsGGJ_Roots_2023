@@ -29,7 +29,6 @@ public partial class Entity : MonoBehaviour
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
     [SerializeField] private SpriteDirection _spriteDir;
-    [SerializeField] private bool _attack;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
@@ -46,6 +45,12 @@ public partial class Entity : MonoBehaviour
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
     private Transform CachedPlayerTransform => _cachedPlayer ? _cachedPlayer.transform : null;
+    
+    private EntityState PlayerSeenState =>
+        Data.Damage > 0
+            ? EntityState.ChasingPlayer
+            : EntityState.RunningFromPlayer;
+
     
     public static event Action<Entity> OnEntityDeath;
     
@@ -71,6 +76,7 @@ public partial class Entity : MonoBehaviour
         Data = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _updateAction = UpdateIdleState;
+        _navigation.OnReachedDestination += OnNavigationReachedDestination;
 
         if (Application.isPlaying)
         {
@@ -199,4 +205,11 @@ public partial class Entity : MonoBehaviour
     }
 
     private string LogStr(string msg) => $"{nameof(Entity)}: {msg}";
+
+    private bool IsPlayerInAttackRange()
+    {
+        var distToPlayer = Vector2.Distance(CachedPlayerTransform.position, transform.position);
+        var isInAttackRange = distToPlayer < Data.AttackRange;
+        return isInAttackRange;
+    }
 }
