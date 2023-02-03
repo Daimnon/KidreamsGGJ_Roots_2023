@@ -22,7 +22,7 @@ public class Entity : MonoBehaviour
     private EntityData _data;
 
     private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
-    private PlayerDummy _cachedPlayer;
+    private PlayerController _cachedPlayer;
     private bool _playerInSight;
 
     private void Awake()
@@ -72,7 +72,7 @@ public class Entity : MonoBehaviour
         Debug.Log(LogStr("Where player???!!"));
     }
 
-    private PlayerDummy RayCastForPlayer(float fovAngleDeg, float rayDistance, int numRays)
+    private PlayerController RayCastForPlayer(float fovAngleDeg, float rayDistance, int numRays)
     {
         foreach (var rayDir in GetRayDirections(fovAngleDeg, numRays))
         {
@@ -86,7 +86,7 @@ public class Entity : MonoBehaviour
         return null;
     }
 
-    private PlayerDummy SearchPlayerInResults(RaycastHit2D[] results)
+    private PlayerController SearchPlayerInResults(RaycastHit2D[] results)
     {
         if (results == null || results.Length == 0) return null;
         return results
@@ -94,7 +94,7 @@ public class Entity : MonoBehaviour
             {
                 if (_cachedPlayer && _cachedPlayer.gameObject == res.transform.gameObject)
                     return _cachedPlayer;
-                return res.transform.GetComponent<PlayerDummy>();
+                return res.transform.GetComponent<PlayerController>();
             })
             .FirstOrDefault();
     }
