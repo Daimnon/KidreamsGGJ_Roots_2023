@@ -15,14 +15,20 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] protected PlayerControls _playerControls;
     [SerializeField] protected SpriteRenderer _playerGraphics;
+    [SerializeField] private SpriteDirection _spriteDir;
     [SerializeField] protected Rigidbody2D _rb;
     [SerializeField] private bool _debugPlayerState;
-    [SerializeField] private SpriteDirection _spriteDir;
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
     public PlayerData Data { get => _data; set => value = _data; }
+
+    private int _hp;
+    private int _damage;
+    private int _speed;
+    private int _vision;
+    private float _attackRange;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -172,6 +178,24 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
         Destroy(gameObject);
+    }
+
+    public bool TakeDamage(int damage)
+    {
+        bool isAlive;
+
+        _hp = _data.Hp;
+
+        if (_hp == 0)
+        {
+            isAlive = true;
+            Kill();
+            return isAlive;
+        }
+
+        isAlive = false;
+
+        return isAlive;
     }
 
     private void OnDrawGizmos()
