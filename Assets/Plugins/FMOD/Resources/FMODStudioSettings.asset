@@ -225,8 +225,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: Assets/FMOD Project/Fmod_Kidreams_2.fspro
-  sourceBankPath: Assets/FMOD Project/Build
+  sourceProjectPath: C:/Users/galaz/Desktop/Kidsdreams Projects/Kidsdreams Projects.fspro
+  sourceBankPath: C:/Users/galaz/Desktop/Kidsdreams Projects/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 0
@@ -247,7 +247,8 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks: []
+  MasterBanks:
+  - Master
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
