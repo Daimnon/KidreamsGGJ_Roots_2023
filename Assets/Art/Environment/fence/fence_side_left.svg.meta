@@ -10,10 +10,10 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: a57477913897c46af95d590f580878bd, type: 3}
   svgType: 1
   texturedSpriteMeshType: 0
-  svgPixelsPerUnit: 100
+  svgPixelsPerUnit: 130
   gradientResolution: 64
-  alignment: 9
-  customPivot: {x: 2.5, y: 0.5}
+  alignment: 0
+  customPivot: {x: 0, y: 0}
   generatePhysicsShape: 0
   viewportOptions: 0
   preserveViewport: 0
@@ -39,16 +39,16 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: fence_side_left
+      name: 
       originalName: 
-      pivot: {x: 2.5, y: 0.5}
-      alignment: 9
+      pivot: {x: 0, y: 0}
+      alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 51
-        height: 256
-      spriteID: fbccc263178d653468dd5058c8fd4877
+        width: 0
+        height: 0
+      spriteID: c11a1c32a19e265459e36563f9ab156e
     PhysicsOutlines: []
