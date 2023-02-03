@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    public static MapManager Instance { get; private set; }
+    private static MapManager _instance;
+    public static MapManager Instance
+    {
+        get => _instance ??= FindObjectOfType<MapManager>();
+        private set => _instance = value;
+    }
     [SerializeField] private Transform _randomPlacesParent;
 
     private Transform[] _randomPlaces;

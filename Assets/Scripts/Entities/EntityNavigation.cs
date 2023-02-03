@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,7 +7,6 @@ public class EntityNavigation : MonoBehaviour
 {
     public enum NavigationMode
     {
-        Idle,
         MoveRandomly,
         MoveToPlayer,
     }
@@ -42,6 +42,13 @@ public class EntityNavigation : MonoBehaviour
         }
         NavMode = navState;
         _playerTransform = playerTransform;
+
+        agent.destination = NavMode switch
+        {
+            NavigationMode.MoveRandomly => GetNextTarget(),
+            NavigationMode.MoveToPlayer => playerTransform.position,
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
     private void Awake()
@@ -56,6 +63,16 @@ public class EntityNavigation : MonoBehaviour
         InitAgent();
     }
 
+    private void OnEnable()
+    {
+        agent.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        agent.enabled = false;
+    }
+
     private void OnDrawGizmos()
     {
         if(!_showGizmos || !Application.isPlaying) return;
@@ -65,18 +82,18 @@ public class EntityNavigation : MonoBehaviour
 
     private void Update()
     {
-
         switch (NavMode)
         {
             case (NavigationMode.MoveRandomly):
-                if (agent.remainingDistance <= 0.5f)
+                if (agent.remainingDistance <= Mathf.Max(1f, Speed))
                     MoveToNextRandomLocation();
                 break;
             case (NavigationMode.MoveToPlayer):
-                MoveToPlayer();
+                // Need something here?
                 break;
         }
     }
+    
     private void InitAgent()
     {
         agent.updateRotation = false;
@@ -86,13 +103,6 @@ public class EntityNavigation : MonoBehaviour
     {
         nextRandomTargetPos = GetNextTarget();
         agent.SetDestination(new Vector3(nextRandomTargetPos.x, nextRandomTargetPos.y, transform.position.z));
-    }
-    private void MoveToPlayer()
-    {
-        if (_playerTransform == null && NavMode == NavigationMode.MoveToPlayer)
-            Debug.LogError("playerTransform is Null");
-        else
-            Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
     }
     
     private Vector3 GetNextTarget()

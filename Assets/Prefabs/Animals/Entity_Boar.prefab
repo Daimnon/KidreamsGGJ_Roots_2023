@@ -47,6 +47,22 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0.033073068
       objectReference: {fileID: 0}
+    - target: {fileID: 6092333702798026847, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
+      propertyPath: spriteDefaultDirection
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144957633723597308, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
+      propertyPath: _deltaValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144957633723597308, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
+      propertyPath: _moveOutTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144957633723597308, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
+      propertyPath: _moveBackTime
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6144957634684898833, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: <Data>k__BackingField
       value: 

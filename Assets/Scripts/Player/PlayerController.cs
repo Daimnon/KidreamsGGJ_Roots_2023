@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] protected PlayerControls _playerControls;
     [SerializeField] protected SpriteRenderer _playerGraphics;
     [SerializeField] protected Rigidbody2D _rb;
+    [SerializeField] private bool _debugPlayerState;
     
     public Rigidbody2D Rb => _rb;
 
@@ -119,7 +120,7 @@ public class PlayerController : MonoBehaviour
     #region States
     protected void Idle()
     {
-        Debug.Log($"player state is Idle");
+        if (_debugPlayerState) Debug.Log($"player state is Idle");
 
         _moveInput = _move.ReadValue<Vector2>();
 
@@ -128,7 +129,7 @@ public class PlayerController : MonoBehaviour
     }
     protected void Moving()
     {
-        Debug.Log($"player state is Moving");
+        if (_debugPlayerState) Debug.Log($"player state is Moving");
 
         _moveInput = _move.ReadValue<Vector2>();
 
@@ -138,12 +139,12 @@ public class PlayerController : MonoBehaviour
     protected void Biting()
     {
         _moveInput = Vector2.zero;
-        Debug.Log($"player state is Biting");
+        if (_debugPlayerState) Debug.Log($"player state is Biting");
     }
     protected void FailedBiting()
     {
         _moveInput = Vector2.zero;
-        Debug.Log($"player state tried to Bite and failed");
+        if (_debugPlayerState) Debug.Log($"player state tried to Bite and failed");
     }
     #endregion
 
