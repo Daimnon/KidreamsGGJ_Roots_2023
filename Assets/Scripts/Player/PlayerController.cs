@@ -9,6 +9,9 @@ public enum PlayerStates { Idle, Moving, Biting }
 
 public class PlayerController : MonoBehaviour
 {
+    protected delegate void PlayerState();
+    protected PlayerState _playerState;
+
     [Header("Player Components")]
     [SerializeField] protected PlayerControls _playerControls;
     [SerializeField] protected SpriteRenderer _playerGraphics;
@@ -18,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
+    public PlayerData Data { get => _data; set => value = _data; }
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -25,9 +29,6 @@ public class PlayerController : MonoBehaviour
     protected Vector2 _moveInput;
     protected InputAction _move, _bite;
     protected bool _isLookingRight = true;
-
-    protected delegate void PlayerState();
-    protected PlayerState _playerState;
 
     #region Monobehaviour Callbacks
     private void OnEnable()
@@ -41,8 +42,9 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
-        _playerState = Idle;
         _playerControls = new PlayerControls();
+        GameManager.Instance.CurrentPlayer = gameObject;
+        _playerState = Idle;
     }
     private void Update()
     {
@@ -138,7 +140,8 @@ public class PlayerController : MonoBehaviour
 
     private void Kill()
     {
-
+        GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmos()
