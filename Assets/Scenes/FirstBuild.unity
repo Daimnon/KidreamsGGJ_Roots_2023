@@ -610,33 +610,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1336632897603560554, guid: a8b34539a6372964c81e821966553517, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1336632897603560554, guid: a8b34539a6372964c81e821966553517, type: 3}
-      propertyPath: m_BodyType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1336632897603560554, guid: a8b34539a6372964c81e821966553517, type: 3}
-      propertyPath: m_Simulated
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1336632897603560554, guid: a8b34539a6372964c81e821966553517, type: 3}
-      propertyPath: m_Constraints
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1336632897603560555, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5262352227140306962, guid: a8b34539a6372964c81e821966553517, type: 3}
-      propertyPath: spriteDefaultDirection
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5262352227140306962, guid: a8b34539a6372964c81e821966553517, type: 3}
-      propertyPath: <Direction>k__BackingField
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8b34539a6372964c81e821966553517, type: 3}
