@@ -6,7 +6,7 @@ public class EntityData : ScriptableObject
 {
     [ValidateInput(nameof(ValidateNotNull))]
     [SerializeField, Expandable] private CommonEntityData commonData;
-    
+
     [field: SerializeField] public string Name { get; set; }
     [field: SerializeField] public int Hp { get; set; }
     [field: SerializeField] public int Speed { get; set; }
@@ -35,7 +35,7 @@ public class EntityData : ScriptableObject
 
     // Entity View raycasting - dependent (calculated from FOV/Distance)
     [ShowNativeProperty] public int NumRays => Mathf.CeilToInt(ViewFOVAngle / DeltaAngleRays);
-    public float DeltaAngleRays => Mathf.Atan2(commonData.MaxDistanceBetweenRays, ViewDistance);
+    public float DeltaAngleRays => Mathf.Atan2(commonData.MaxDistanceBetweenRays, ViewDistance) * Mathf.Rad2Deg;
 
 
     private bool ValidateNotNull(CommonEntityData x) => x != null;

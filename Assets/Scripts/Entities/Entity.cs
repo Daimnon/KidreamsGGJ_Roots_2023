@@ -1,9 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(EntityNavigation)), RequireComponent(typeof(EntityDataHolder))]
+public enum FaceDirection
+{
+    Left,
+    Right,
+}
+
+[RequireComponent(typeof(EntityNavigation))]
+[RequireComponent(typeof(EntityDataHolder))]
+[RequireComponent(typeof(SpriteDirection))]
 public class Entity : MonoBehaviour
 {
     [Header("Raycasting")]
@@ -12,30 +19,37 @@ public class Entity : MonoBehaviour
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
     [SerializeField] private Color _testRayColor;
-    [SerializeField] private float _testRayDistance;
-    [SerializeField] private float _testFovDegrees;
-    [SerializeField] private int _testNumRays;
-    
+
     private EntityNavigation.NavigationMode _startNavMode;
     private EntityNavigation _navigation;
     private EntityData _entityData;
+    private SpriteDirection _spriteDir;
 
     private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
     private PlayerController _cachedPlayer;
     private bool _playerInSight;
 
+    private Vector2 RaycastDirection => _spriteDir.Vector;
+
     private void Awake()
+    {
+        Init();
+    }
+
+    private void Init()
     {
         _entityData = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
+        _spriteDir = GetComponent<SpriteDirection>();
     }
 
     private void OnDrawGizmos()
     {
-        if (!_entityData) _entityData = GetComponent<EntityDataHolder>().Data; // hack for edit mode
         if (!_showGizmos) return;
+     
+        if (!_entityData) Init(); // hack for edit mode
         Gizmos.color = _testRayColor;
-        foreach (var rayDir in GetRayDirections(_entityData.ViewFOVAngle, _entityData.NumRays))
+        foreach (var rayDir in GetRayDirections())
         {
             Gizmos.DrawRay(transform.position, rayDir * _entityData.ViewDistance);
         }
@@ -48,7 +62,7 @@ public class Entity : MonoBehaviour
 
     private void UpdatePlayerInSight()
     {
-        var player = RayCastForPlayer(_testFovDegrees, _testRayDistance, _testNumRays);
+        var player = RayCastForPlayer();
         var foundPlayer = player != null;
         if (foundPlayer && !_playerInSight)
         {
@@ -72,11 +86,11 @@ public class Entity : MonoBehaviour
         Debug.Log(LogStr("Where player???!!"));
     }
 
-    private PlayerController RayCastForPlayer(float fovAngleDeg, float rayDistance, int numRays)
+    private PlayerController RayCastForPlayer()
     {
-        foreach (var rayDir in GetRayDirections(fovAngleDeg, numRays))
+        foreach (var rayDir in GetRayDirections())
         {
-            var size = Physics2D.RaycastNonAlloc(transform.position, rayDir, _raycastResultsCache, rayDistance, _playerRaycastMask);
+            var size = Physics2D.RaycastNonAlloc(transform.position, rayDir, _raycastResultsCache, _entityData.ViewDistance, _playerRaycastMask);
             if (size == 0) continue;
             
             var player = SearchPlayerInResults(_raycastResultsCache);
@@ -99,10 +113,13 @@ public class Entity : MonoBehaviour
             .FirstOrDefault();
     }
 
-    private IEnumerable<Vector3> GetRayDirections(float angleDegrees, int numRays)
+    private IEnumerable<Vector3> GetRayDirections() =>
+        GetRayDirections(_spriteDir.Vector, _entityData.ViewFOVAngle, _entityData.NumRays);
+
+    private static IEnumerable<Vector3> GetRayDirections(Vector2 direction, float angleDegrees, int numRays)
     {
         var deltaRot = Quaternion.AngleAxis(angleDegrees / numRays, Vector3.forward);
-        var curVec = Quaternion.AngleAxis(angleDegrees * 0.5f, Vector3.back) * transform.up;
+        var curVec = Quaternion.AngleAxis(angleDegrees * 0.5f, Vector3.back) * direction;
 
         for (var i = 0; i < numRays; i++)
         {
