@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{412c6238-3490-43d9-b349-37154f08baed}">
+		<property name="assetPath">
+			<value>Mixdown One/Kick.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>8.8888888888888893</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{3ef90ea4-d79e-48e3-a8f5-67c74ce86b5e}</destination>
+		</relationship>
+	</object>
+</objects>

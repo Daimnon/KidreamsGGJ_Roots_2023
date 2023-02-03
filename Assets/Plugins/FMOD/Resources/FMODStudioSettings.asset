@@ -225,11 +225,11 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: Audio/Fmod_Kidreams_2/Fmod_Kidreams_2.fspro
-  sourceBankPath: Audio/Fmod_Kidreams_2/Build
+  sourceProjectPath: Assets/FMOD Project/Fmod_Kidreams_2.fspro
+  sourceBankPath: Assets/FMOD Project/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
-  ShowBankRefreshWindow: 1
+  ShowBankRefreshWindow: 0
   AutomaticEventLoading: 1
   BankLoadType: 0
   AutomaticSampleLoading: 0
@@ -247,8 +247,7 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks:
-  - Master
+  MasterBanks: []
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
@@ -573,7 +572,7 @@ MonoBehaviour:
       Value: 0
       HasValue: 0
     SampleRate:
-      Value: 48000
+      Value: 44100
       HasValue: 1
     BuildDirectory:
       Value: 

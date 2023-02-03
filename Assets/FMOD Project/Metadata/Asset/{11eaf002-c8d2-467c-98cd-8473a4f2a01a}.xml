@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{11eaf002-c8d2-467c-98cd-8473a4f2a01a}">
+		<property name="assetPath">
+			<value>Mixdown One/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{3ef90ea4-d79e-48e3-a8f5-67c74ce86b5e}</destination>
+		</relationship>
+	</object>
+</objects>
