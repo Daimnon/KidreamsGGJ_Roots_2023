@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
+using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public enum FaceDirection
@@ -12,11 +15,27 @@ public enum FaceDirection
 [RequireComponent(typeof(EntityNavigation))]
 [RequireComponent(typeof(EntityDataHolder))]
 [RequireComponent(typeof(SpriteDirection))]
-public class Entity : MonoBehaviour
+public partial class Entity : MonoBehaviour
 {
+    private enum EntityState
+    {
+        Idle,
+        ChasingPlayer,
+        RunningFromPlayer,
+        Attacking,
+    }
+
+    private static int AnimTrigger_Idle = Animator.StringToHash("Idle");
+    private static int AnimTrigger_ChasingPlayer = Animator.StringToHash("ChasingPlayer");
+    private static int AnimTrigger_RunningFromPlayer = Animator.StringToHash("RunningFromPlayer");
+    private static int AnimTrigger_Attack = Animator.StringToHash("Attack");
+
+    [SerializeField] private Animator _anim;
+    
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
     [SerializeField] private SpriteDirection _spriteDir;
+    [SerializeField] private bool _attack;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
@@ -30,6 +49,9 @@ public class Entity : MonoBehaviour
     private PlayerController _cachedPlayer;
     private bool _playerInSight;
 
+    [ShowNonSerializedField] private EntityState _state;
+    private Action _updateAction;
+
     private Vector2 RaycastDirection => _spriteDir.Vector;
 
     private void Awake()
@@ -40,6 +62,7 @@ public class Entity : MonoBehaviour
     private void OnValidate()
     {
         if (_spriteDir == null) _spriteDir = GetComponentInChildren<SpriteDirection>();
+        if (_anim == null) _anim.GetComponentInChildren<AnimatorController>();
     }
 
     private void Init()
@@ -47,6 +70,7 @@ public class Entity : MonoBehaviour
         _entityData = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _spriteDir = GetComponent<SpriteDirection>();
+        _updateAction = UpdateIdleState;
     }
 
     private void OnDrawGizmos()
@@ -64,8 +88,9 @@ public class Entity : MonoBehaviour
     private void Update()
     {
         UpdatePlayerInSight();
+        _updateAction();
     }
-
+    
     private void UpdatePlayerInSight()
     {
         var player = RayCastForPlayer();
