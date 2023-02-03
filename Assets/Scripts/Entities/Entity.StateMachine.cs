@@ -72,8 +72,6 @@ public partial class Entity
         
         moveStaggerAnim.enabled = false;
         _anim.SetTrigger(AnimTrigger_Attack);
-        
-        Stub_AttackPlayer(_entityData.Damage);
     }
 
     private void Stub_AttackPlayer(int damage)
@@ -94,7 +92,7 @@ public partial class Entity
             return;
         }
         var distToPlayer = Vector2.Distance(CachedPlayerTransform.position, transform.position);
-        if (distToPlayer < _entityData.AttackRange) State = EntityState.Attacking;
+        if (distToPlayer < Data.AttackRange) State = EntityState.Attacking;
     }
 
     private void UpdateRunningState()
