@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
-    [SerializeField] private float _biteDistance;
+    [SerializeField] private float _biteDistance = 3f;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -111,5 +111,12 @@ public class PlayerController : MonoBehaviour
                 _state = Biting;
                 break;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        // cyan = biteRange
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawRay(transform.position, _biteDistance * Vector2.right);
     }
 }
