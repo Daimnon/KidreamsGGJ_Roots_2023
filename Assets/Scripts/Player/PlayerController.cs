@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
-    [SerializeField] private float _biteDistance = 3f, _moveToTargetDuration = 2f, _moveBackFromTargetDuration = 1f, _biteSpeed = 1f, _biteOffset = 1f, _biteTime = 1f;
-    [SerializeField] private AnimationCurve _moveToTargetCurve, _moveBackFromTargetCurve;
+    [SerializeField] PlayerStates _playerStates;
+    
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _state.Invoke();
-        _moveInput = _move.ReadValue<Vector2>();
     }
     private void FixedUpdate()
     {
@@ -76,15 +75,16 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _biteDistance, _biteLayer);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _data.BiteDistance, _biteLayer);
         if (hit)
         {
+            ChangeState(PlayerStates.Biting);
             Vector2 originalPos = transform.position;
 
             DOTween.Sequence().
-                Append(transform.DOMoveX(transform.position.x + _biteDistance - _biteOffset, _moveToTargetDuration).SetEase(_moveToTargetCurve)).
-                SetDelay(_biteTime).
-                Append(transform.DOMoveX(originalPos.x, _moveBackFromTargetDuration).SetEase(_moveBackFromTargetCurve));
+                Append(transform.DOMoveX(transform.position.x + _data.BiteDistance - _data.BiteOffset, _data.MoveToTargetDurationWhileStrong).SetEase(_data.MoveToTargetCurve)).
+                Append(transform.DOMoveX(originalPos.x, _data.MoveBackFromTargetDurationWhileStrong).SetEase(_data.MoveBackFromTargetCurve).SetDelay(_data.BiteTime)).
+                OnComplete(() => ChangeState(PlayerStates.Idle));
             
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
         }
@@ -93,15 +93,25 @@ public class PlayerController : MonoBehaviour
     #region States
     private void Idle()
     {
+        Debug.Log($"player state is Idle");
 
+        _moveInput = _move.ReadValue<Vector2>();
+
+        if (_moveInput != Vector2.zero)
+            ChangeState(PlayerStates.Moving);
     }
     private void Moving()
     {
+        Debug.Log($"player state is Moving");
 
+        _moveInput = _move.ReadValue<Vector2>();
+
+        if (_moveInput == Vector2.zero)
+            ChangeState(PlayerStates.Idle);
     }
     private void Biting()
     {
-
+        Debug.Log($"player state is Biting");
     }
     #endregion
 
@@ -110,12 +120,15 @@ public class PlayerController : MonoBehaviour
         switch (newState)
         {
             case PlayerStates.Idle:
+                _playerStates = PlayerStates.Idle;
                 _state = Idle;
                 break;
             case PlayerStates.Moving:
+                _playerStates = PlayerStates.Moving;
                 _state = Moving;
                 break;
             case PlayerStates.Biting:
+                _playerStates = PlayerStates.Biting;
                 _state = Biting;
                 break;
         }
@@ -125,6 +138,6 @@ public class PlayerController : MonoBehaviour
     {
         // cyan = biteRange
         Gizmos.color = Color.cyan;
-        Gizmos.DrawRay(transform.position, _biteDistance * Vector2.right);
+        Gizmos.DrawRay(transform.position, _data.BiteDistance * Vector2.right);
     }
 }
