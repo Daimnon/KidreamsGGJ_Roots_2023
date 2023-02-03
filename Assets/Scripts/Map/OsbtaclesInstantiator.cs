@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class OsbtaclesInstantiator : MonoBehaviour
 {
-    private LevelData levelData;
+    [SerializeField]
+    private LevelScriptable levelData;
     [SerializeField]
     private Tilemap tilemap;
     private void GenerateObstacles()

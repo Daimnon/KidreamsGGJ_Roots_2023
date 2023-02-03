@@ -48,6 +48,7 @@ public class EntityNavigation : MonoBehaviour
     }
     private void Update()
     {
+
         switch (NavMode)
         {
             case (NavigationMode.MoveRandomly):

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(menuName ="TilemapData/levelDataSO")]
-    public class LevelData : ScriptableObject
+[CreateAssetMenu(menuName ="TilemapData/LevelData")]
+    public class LevelScriptable : ScriptableObject
     {
     public List<obstacleData> obstaclesToGenerate;
     }

@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using NavMeshPlus.Extensions;
 //Create new script
 
 
 public class TilesLevelWriter : MonoBehaviour
 {
     [SerializeField]
-    private LevelData levelData;
+    private LevelScriptable levelData;
 
     [SerializeField]
     protected Vector2 tilesGenerationSize;
@@ -29,7 +30,7 @@ public class TilesLevelWriter : MonoBehaviour
         {
             for (int y = 0; y < tilesGenerationSize.y; y++)
             {
-                Vector3Int tilePos = new Vector3Int(x, y,0);
+                Vector3Int tilePos = new Vector3Int(x*2, y*2,0);
                 var obstacle = new obstacleData(tilePos , RandomTile());
                 levelData.obstaclesToGenerate.Add(obstacle);
             }
