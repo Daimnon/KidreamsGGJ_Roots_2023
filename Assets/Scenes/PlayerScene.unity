@@ -199,6 +199,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1691903986}
     - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
+      propertyPath: _biteLayer.m_Bits
+      value: 768
+      objectReference: {fileID: 0}
+    - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: _otherSpriteRenderer
       value: 
       objectReference: {fileID: 1691903986}
