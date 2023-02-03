@@ -12,17 +12,20 @@ public class EntityNavigation : MonoBehaviour
         MoveRandomly,
         MoveToPlayer,
     }
+    [Header("AI Agent Data and setting")]
     private EntityData _data;
     [NaughtyAttributes.ShowNativeProperty]
     public NavigationMode NavMode { get; private set; }
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
     private NavMeshAgent agent;
-    private Transform _playerTransform;
     [SerializeField]
+    private Transform _playerTransform;
+    [Header("RandomRoaming")]
     private float distanceToNextTarget;
-    [SerializeField] private Vector3 curTarget;
+    private Vector3 nextRandomTargetPos;
 
+    
     public void SetState(Transform playerTransform, NavigationMode navState)
     {
         if (playerTransform == null && navState == NavigationMode.MoveToPlayer)
@@ -37,7 +40,7 @@ public class EntityNavigation : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         NavMode = NavigationMode.MoveRandomly;
-        var dataHolder = GetComponent<EntityDataHolder>();
+        _data = GetComponent<EntityDataHolder>().Data;
     }
     
     private void Start()
@@ -46,6 +49,7 @@ public class EntityNavigation : MonoBehaviour
     }
     private void Update()
     {
+
         switch (NavMode)
         {
             case (NavigationMode.MoveRandomly):
@@ -53,7 +57,7 @@ public class EntityNavigation : MonoBehaviour
                     MoveToNextRandomLocation();
                 break;
             case (NavigationMode.MoveToPlayer):
-
+                MoveToPlayer();
                 break;
         }
     }
@@ -61,17 +65,21 @@ public class EntityNavigation : MonoBehaviour
     {
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-        curTarget = GetNextTarget();
-        agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
-        RotateToNewRoamingPos();
+        nextRandomTargetPos = GetNextTarget();
+        agent.SetDestination(new Vector3(nextRandomTargetPos.x, nextRandomTargetPos.y, transform.position.z));
     }
     private void MoveToNextRandomLocation()
     {
-        curTarget = GetNextTarget();
-        agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
-        RotateToNewRoamingPos();
+        nextRandomTargetPos = GetNextTarget();
+        agent.SetDestination(new Vector3(nextRandomTargetPos.x, nextRandomTargetPos.y, transform.position.z));
     }
-    private void MoveToPlayer() => Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
+    private void MoveToPlayer()
+    {
+        if (_playerTransform == null && NavMode == NavigationMode.MoveToPlayer)
+            Debug.LogError("playerTransform is Null");
+        else
+            Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
+    }
 
     #region WalkingStateLogic
     private Vector3 GetRandomDir()
@@ -85,18 +93,6 @@ public class EntityNavigation : MonoBehaviour
         return GetRandomDir() * DistanceToNextTarget;
     }
 
-    private Quaternion RotateTowardsNewPos(Vector3 newPos)
-    {
-        var offset = 90f;
-        Vector3 dir = newPos - transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Quaternion newRotation = Quaternion.Euler(0, 0, 1 * (angle - offset));
-        return newRotation;
-    }
-    private void RotateToNewRoamingPos()
-    {
-        transform.rotation = Quaternion.Slerp(transform.rotation, RotateTowardsNewPos(curTarget), 0.2f);
-    }
 }
 
     #endregion}
