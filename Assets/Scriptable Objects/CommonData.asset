@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: CommonData
   m_EditorClassIdentifier: 
   <SpeedModifier>k__BackingField: 100
+  <AnimalAttackSpeed>k__BackingField: 0
   <BaseFOVAngle>k__BackingField: 72.49
   <BaseViewDistance>k__BackingField: 3
   <MaxDistanceBetweenRays>k__BackingField: 0.5
-  <FOVAnglePerVisionPoint>k__BackingField: 5
+  <FOVAnglePerVisionPoint>k__BackingField: 2
   <ViewDistancePerVisionPoint>k__BackingField: 0.5
