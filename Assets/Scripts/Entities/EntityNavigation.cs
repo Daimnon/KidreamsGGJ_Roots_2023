@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
+
 [RequireComponent(typeof(EntityDataHolder))]
 public class EntityNavigation : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class EntityNavigation : MonoBehaviour
         MoveToPlayer,
     }
     private EntityData _data;
-
+    [NaughtyAttributes.ShowNativeProperty]
     public NavigationMode NavMode { get; private set; }
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
@@ -19,6 +21,8 @@ public class EntityNavigation : MonoBehaviour
     private Transform _playerTransform;
     [SerializeField]
     private float distanceToNextTarget;
+    [SerializeField] private Vector3 curTarget;
+
     public void SetState(Transform playerTransform, NavigationMode navState)
     {
         if (playerTransform == null && navState == NavigationMode.MoveToPlayer)
@@ -31,44 +35,58 @@ public class EntityNavigation : MonoBehaviour
 
     private void Awake()
     {
-        NavMode = NavigationMode.Idle;
+        agent = GetComponent<NavMeshAgent>();
+        NavMode = NavigationMode.MoveRandomly;
         var dataHolder = GetComponent<EntityDataHolder>();
-        Debug.LogError($"No EntityData found on Entity {name}", gameObject);
-        return;
+    }
+    private void Start()
+    {
+        curTarget = GetNextTarget();
+        agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
     }
     private void Update()
     {
-        switch(NavMode)
+        switch (NavMode)
         {
             case (NavigationMode.MoveRandomly):
-                MoveRandom();
+                if (agent.remainingDistance <= 3)
+                {
+                    Debug.Log(agent.remainingDistance);
+                    agent.SetDestination(GetNextTarget());
+                }
                 break;
             case (NavigationMode.MoveToPlayer):
-                MoveToPlayer();
+
                 break;
         }
     }
 
-    private void MoveRandom()
-    {
-        if(agent.remainingDistance <= 2)
-        {
-            Vector2 newPos = GetNewRandomPositions();
-            agent.SetDestination(newPos);
-        }
-    }
     private void MoveToPlayer() => Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
-    private Vector2 GetNewRandomPositions()
-    {
-        float newX = transform.position.x + XrandomOffset.x;
-        float newY = transform.position.y + YrandomOffset.y;
 
-        return new Vector2(newX, newY); 
-    }
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
+    #region WalkingStateLogic
+    private Vector3 GetRandomDir()
     {
-        Debug.DrawLine(transform.position, transform.up * distanceToNextTarget,Color.red);
+        var position = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1),transform.position.z);
+        return position;
     }
-#endif
+    private Vector3 GetNextTarget()
+    {
+        float DistanceToNextTarget = Random.Range(-5, 5);
+        return GetRandomDir() * DistanceToNextTarget;
+    }
+
+    private Quaternion RotateTowardsNewPos(Vector3 newPos)
+    {
+        var offset = 90f;
+        Vector3 dir = newPos - transform.position;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Quaternion newRotation = Quaternion.Euler(0, 0, 1 * (angle - offset));
+        return newRotation;
+    }
+    private void RotateToNewRoamingPos()
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, RotateTowardsNewPos(curTarget), 0.2f);
+    }
 }
+
+    #endregion}
