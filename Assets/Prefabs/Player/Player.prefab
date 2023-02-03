@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1827579985}
   - component: {fileID: 1827579984}
   - component: {fileID: 1827579983}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1336632896142081005}
   - component: {fileID: 1336632896142081006}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,8 +196,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1336632897603560552}
   - component: {fileID: 1336632897603560553}
+  - component: {fileID: 1464890357064402793}
   - component: {fileID: 1336632897603560554}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,14 +235,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerGraphics: {fileID: 1336632896142081006}
-  _bodyCollider: {fileID: 0}
   _rb: {fileID: 1336632897603560554}
-  _data: {fileID: 0}
+  _data: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
   _biteDistance: 0
   _biteLayer:
     serializedVersion: 2
     m_Bits: 0
   _body: {fileID: 0}
+--- !u!114 &1464890357064402793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336632897603560555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32dd5eb557db4999ba49909e4789374f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 0
+  rb: {fileID: 1336632897603560554}
+  agent: {fileID: 0}
+  spriteRenderer: {fileID: 1336632896142081006}
+  spriteDefaultDirection: 1
 --- !u!50 &1336632897603560554
 Rigidbody2D:
   serializedVersion: 4

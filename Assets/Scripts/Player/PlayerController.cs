@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] private PlayerControls _playerControls;
     [SerializeField] private SpriteRenderer _playerGraphics;
-    [SerializeField] private BoxCollider2D _bodyCollider;
     [SerializeField] private Rigidbody2D _rb;
+    
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
@@ -66,17 +66,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
         _rb.velocity = _data.CalculatedSpeed * Time.fixedDeltaTime * direction;
-
-        if (_moveInput.x < 0)
-        {
-            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            _isLookingRight = false;
-        }
-        else if (_moveInput.x > 0)
-        {
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            _isLookingRight = true;
-        }
+        // Moved Sprite direction logic to SpriteDirectionFromVelocity for reuse (in Entity)
     }
     #endregion
 
