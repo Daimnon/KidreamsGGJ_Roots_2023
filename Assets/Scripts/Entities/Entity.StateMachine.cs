@@ -36,17 +36,20 @@ public partial class Entity
     private void TransitionToIdle(EntityState prevState)
     {
         _anim.SetTrigger(AnimTrigger_Idle);
+        moveStaggerAnim.enabled = false;
         _navigation.SetState(_cachedPlayer.transform, EntityNavigation.NavigationMode.MoveRandomly);
     }
 
     private void TransitionToChasing(EntityState prevState)
     {
         _anim.SetTrigger(AnimTrigger_ChasingPlayer);
+        moveStaggerAnim.enabled = true;
         _navigation.SetState(_cachedPlayer.transform, EntityNavigation.NavigationMode.MoveToPlayer);
     }
 
     private void TransitionToRunning(EntityState prevState)
     {
+        moveStaggerAnim.enabled = true;
         _anim.SetTrigger(AnimTrigger_RunningFromPlayer);
     }
 

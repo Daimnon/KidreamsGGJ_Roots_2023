@@ -13,8 +13,10 @@ public class EntityNavigation : MonoBehaviour
         MoveToPlayer,
     }
     private EntityData _data;
+    
     [NaughtyAttributes.ShowNativeProperty]
     public NavigationMode NavMode { get; private set; }
+    
     private Vector2 XrandomOffset;
     private Vector2 YrandomOffset;
     private NavMeshAgent agent;
@@ -61,9 +63,9 @@ public class EntityNavigation : MonoBehaviour
     {
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-        curTarget = GetNextTarget();
-        agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
-        RotateToNewRoamingPos();
+        // curTarget = GetNextTarget();
+        // agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
+        // RotateToNewRoamingPos();
     }
     private void MoveToNextRandomLocation()
     {

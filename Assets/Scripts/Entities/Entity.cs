@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public enum FaceDirection
@@ -12,9 +10,7 @@ public enum FaceDirection
     Right,
 }
 
-[RequireComponent(typeof(EntityNavigation))]
 [RequireComponent(typeof(EntityDataHolder))]
-[RequireComponent(typeof(SpriteDirection))]
 public partial class Entity : MonoBehaviour
 {
     private enum EntityState
@@ -24,13 +20,9 @@ public partial class Entity : MonoBehaviour
         RunningFromPlayer,
         Attacking,
     }
-
-    private static int AnimTrigger_Idle = Animator.StringToHash("Idle");
-    private static int AnimTrigger_ChasingPlayer = Animator.StringToHash("ChasingPlayer");
-    private static int AnimTrigger_RunningFromPlayer = Animator.StringToHash("RunningFromPlayer");
-    private static int AnimTrigger_Attack = Animator.StringToHash("Attack");
-
+    
     [SerializeField] private Animator _anim;
+    [SerializeField] private BreatheMoveAnim moveStaggerAnim;
     
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
@@ -62,15 +54,17 @@ public partial class Entity : MonoBehaviour
     private void OnValidate()
     {
         if (_spriteDir == null) _spriteDir = GetComponentInChildren<SpriteDirection>();
-        if (_anim == null) _anim.GetComponentInChildren<AnimatorController>();
+        if (_anim == null) _anim = GetComponentInChildren<Animator>();
+        if (moveStaggerAnim == null) moveStaggerAnim = GetComponentInChildren<BreatheMoveAnim>();
     }
 
     private void Init()
     {
         _entityData = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
-        _spriteDir = GetComponent<SpriteDirection>();
         _updateAction = UpdateIdleState;
+        _navigation.SetState(null, EntityNavigation.NavigationMode.Idle);
+        moveStaggerAnim.enabled = false;
     }
 
     private void OnDrawGizmos()
