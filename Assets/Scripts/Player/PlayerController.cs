@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
     [SerializeField] PlayerStates _playerStates;
-    
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
