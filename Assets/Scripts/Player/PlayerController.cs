@@ -10,18 +10,17 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Player Components")]
     [SerializeField] private PlayerControls _playerControls;
+    [SerializeField] private SpriteRenderer _playerGraphics;
     [SerializeField] private BoxCollider2D _bodyCollider;
     [SerializeField] private Rigidbody2D _rb;
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
-    [SerializeField, Expandable] private EntityData _playerData;
+    [SerializeField, Expandable] private PlayerData _data;
     [SerializeField] private float _biteDistance;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
-    [SerializeField] private SpriteRenderer _otherSpriteRenderer;
-    [SerializeField] private Sprite _otherSprite;
     [SerializeField] private GameObject _body;
 
     private Vector2 _moveInput;
@@ -66,7 +65,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
-        _rb.velocity = _playerData.CalculatedSpeed * Time.fixedDeltaTime * direction;
+        _rb.velocity = _data.CalculatedSpeed * Time.fixedDeltaTime * direction;
 
         if (_moveInput.x < 0)
         {
@@ -83,7 +82,7 @@ public class PlayerController : MonoBehaviour
 
     private void Bite(InputAction.CallbackContext biteContext)
     {
-        _otherSpriteRenderer.sprite = _otherSprite;
+        _playerGraphics.sprite = _data.WeakSprite ? _data.StrongSprite : _data.WeakSprite;
         Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
 
         if (Physics2D.Raycast(transform.position, direction, _biteDistance, _biteLayer))
