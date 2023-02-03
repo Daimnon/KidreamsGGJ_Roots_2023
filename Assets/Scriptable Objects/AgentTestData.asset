@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 084b457117b7e3d4a84af7d480d76672, type: 3}
   m_Name: AgentTestData
   m_EditorClassIdentifier: 
+  commonData: {fileID: 11400000, guid: 48531bcafa595164eab40db7ff4760f8, type: 2}
   <Name>k__BackingField: 
   <Hp>k__BackingField: 0
   <Speed>k__BackingField: 5
