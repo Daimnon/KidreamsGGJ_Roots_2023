@@ -9,7 +9,7 @@ public class NutoriousSystem : MonoBehaviour
     private  int nutoriousPoints = 0;
     [SerializeField]
     private int[] spawnMilestones;
-    private int curSpawnMilestone;
+    private int curSpawnMilestone = 0;
     [SerializeField]
     private Entity entityToSpawn;
     [SerializeField]
@@ -17,7 +17,6 @@ public class NutoriousSystem : MonoBehaviour
     private void Start()
     {
         CheckSpawnMilestone();
-     //   curSpawnMilestone == spawnMilestones[0];
     }
     private void OnEnable()
     {
@@ -35,6 +34,7 @@ public class NutoriousSystem : MonoBehaviour
             var tempObj = Instantiate(entityToSpawn, mapManager.GetRandomVillagerSpawnPosition(), Quaternion.identity);
         }
         nutoriousPoints++;
+
 
     }
     private void OnEntityDeath()

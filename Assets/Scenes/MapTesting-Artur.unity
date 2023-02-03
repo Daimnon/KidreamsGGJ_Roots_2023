@@ -25281,7 +25281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nutoriousPoints: 1
-  spawnMilestones: 0100000004000000
+  spawnMilestones: 010000000400000007000000
   entityToSpawn: {fileID: 5789018814652983916, guid: fca221702b504b54b8319424027718d4, type: 3}
   mapManager: {fileID: 1082377774}
 --- !u!1 &1641637082
