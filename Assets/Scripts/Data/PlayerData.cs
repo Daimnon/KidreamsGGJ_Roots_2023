@@ -27,9 +27,16 @@ public class PlayerData : EntityData
     public float BiteTime => _biteTime;
 
     [Header("Animation Curves")]
-    [SerializeField] private AnimationCurve _moveToTargetCurve;
-    [SerializeField] private AnimationCurve _moveBackFromTargetCurve;
+    [SerializeField] private AnimationCurve _moveToTargetCurveBiteSuccess;
+    [SerializeField] private AnimationCurve _moveBackFromTargetCurveBiteSuccess;
 
-    public AnimationCurve MoveToTargetCurve => _moveToTargetCurve;
-    public AnimationCurve MoveBackFromTargetCurve => _moveBackFromTargetCurve;
+    public AnimationCurve MoveToTargetCurveBiteSuccess => _moveToTargetCurveBiteSuccess;
+    public AnimationCurve MoveBackFromTargetCurveBiteSuccess => _moveBackFromTargetCurveBiteSuccess;
+    
+    [SerializeField] private AnimationCurve _moveToTargetCurveFailedBite;
+    [SerializeField] private AnimationCurve _moveBackFromTargetCurveFailedBite;
+
+    public AnimationCurve MoveToTargetCurveFailedBite => _moveToTargetCurveFailedBite;
+    public AnimationCurve MoveBackFromTargetCurveFailedBite => _moveBackFromTargetCurveFailedBite;
+
 }

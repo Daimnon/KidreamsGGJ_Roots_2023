@@ -92,8 +92,8 @@ public class PlayerController : MonoBehaviour
             float moveBackFromTarget = _playerGraphics == _data.WeakSprite ?_data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
 
             DOTween.Sequence().
-                Append(transform.DOMove(targetPos, moveToTarget).SetEase(_data.MoveToTargetCurve)).
-                Append(transform.DOMove(originalPos, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurve).SetDelay(_data.BiteTime)).
+                Append(transform.DOMove(targetPos, moveToTarget).SetEase(_data.MoveToTargetCurveBiteSuccess)).
+                Append(transform.DOMove(originalPos, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).SetDelay(_data.BiteTime)).
                 OnComplete(() => ChangeState(PlayerStates.Idle));
             
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
@@ -108,8 +108,8 @@ public class PlayerController : MonoBehaviour
             float moveBackFromTarget = _playerGraphics == _data.WeakSprite ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
 
             DOTween.Sequence().
-                Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurve)).
-                Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurve)).
+                Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
+                Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
                 OnComplete(() => ChangeState(PlayerStates.Idle));
 
             Debug.Log($"player {name} didn't bite");
