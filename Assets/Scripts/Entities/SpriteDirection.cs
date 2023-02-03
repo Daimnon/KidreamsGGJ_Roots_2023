@@ -23,7 +23,7 @@ public class SpriteDirection : MonoBehaviour
     [SerializeField] private Transform graphicsParent;
     [SerializeField] private FaceDirection spriteDefaultDirection = FaceDirection.Right;
 
-    public FaceDirection Direction { get; private set; } // In case we need it
+    [field: SerializeField] public FaceDirection Direction { get; private set; } // In case we need it
 
     public Vector2 Vector => Direction == FaceDirection.Right ? Vector2.right : Vector2.left;
 
