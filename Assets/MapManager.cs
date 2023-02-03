@@ -21,7 +21,7 @@ public class MapManager : MonoBehaviour
     private Transform[] VillagerSpawnPoints => _villagerSpawns ??= _villagerSpawnParent.Cast<Transform>().ToArray();
     
     public Transform GetRandomPlaceTransform() => RandomPlaces.GetRandom();
-    public Vector3 GetVillagerSpawnPosition() => VillagerSpawnPoints.GetRandom().position;
+    public Vector3 GetRandomVillagerSpawnPosition() => VillagerSpawnPoints.GetRandom().position;
 
     private void Awake()
     {
