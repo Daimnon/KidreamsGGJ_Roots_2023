@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using DG.Tweening;
 using NaughtyAttributes;
 
-public enum PlayerStates { Idle, Moving, Biting }
+public enum PlayerStates { Idle, Moving, Biting, FailedBiting }
 
 public class PlayerController : MonoBehaviour
 {
@@ -43,8 +43,12 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _playerControls = new PlayerControls();
-        GameManager.Instance.CurrentPlayer = gameObject;
         _playerState = Idle;
+    }
+    private void Start()
+    {
+        GameManager.Instance.CurrentPlayer = gameObject;
+        GameManager.Instance.PlayerController = this;
     }
     private void Update()
     {
@@ -94,6 +98,22 @@ public class PlayerController : MonoBehaviour
             
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
         }
+        else
+        {
+            ChangeState(PlayerStates.FailedBiting);
+            Vector2 originalPos = transform.position;
+            float targetPosX = transform.position.x + _data.BiteDistance;
+
+            float moveToTarget = _playerGraphics == _data.WeakSprite ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
+            float moveBackFromTarget = _playerGraphics == _data.WeakSprite ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
+
+            DOTween.Sequence().
+                Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurve)).
+                Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurve)).
+                OnComplete(() => ChangeState(PlayerStates.Idle));
+
+            Debug.Log($"player {name} didn't bite");
+        }
     }
 
     #region States
@@ -120,6 +140,11 @@ public class PlayerController : MonoBehaviour
         _moveInput = Vector2.zero;
         Debug.Log($"player state is Biting");
     }
+    protected void FailedBiting()
+    {
+        _moveInput = Vector2.zero;
+        Debug.Log($"player state tried to Bite and failed");
+    }
     #endregion
 
     public void ChangeState(PlayerStates newState)
@@ -134,6 +159,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerStates.Biting:
                 _playerState = Biting;
+                break;
+            case PlayerStates.FailedBiting:
+                _playerState = FailedBiting;
                 break;
         }
     }
