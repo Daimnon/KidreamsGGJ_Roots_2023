@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
 [RequireComponent(typeof(EntityNavigation)), RequireComponent(typeof(EntityDataHolder))]
 public class Entity : MonoBehaviour
 {
@@ -19,7 +18,7 @@ public class Entity : MonoBehaviour
     
     private EntityNavigation.NavigationMode _startNavMode;
     private EntityNavigation _navigation;
-    private EntityData _data;
+    private EntityData _entityData;
 
     private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
     private PlayerController _cachedPlayer;
@@ -27,17 +26,18 @@ public class Entity : MonoBehaviour
 
     private void Awake()
     {
-        _data = GetComponent<EntityDataHolder>().Data;
+        _entityData = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
     }
 
     private void OnDrawGizmos()
     {
+        if (!_entityData) _entityData = GetComponent<EntityDataHolder>().Data; // hack for edit mode
         if (!_showGizmos) return;
         Gizmos.color = _testRayColor;
-        foreach (var rayDir in GetRayDirections(_testFovDegrees, _testNumRays))
+        foreach (var rayDir in GetRayDirections(_entityData.ViewFOVAngle, _entityData.NumRays))
         {
-            Gizmos.DrawRay(transform.position, rayDir * _testRayDistance);
+            Gizmos.DrawRay(transform.position, rayDir * _entityData.ViewDistance);
         }
     }
 
