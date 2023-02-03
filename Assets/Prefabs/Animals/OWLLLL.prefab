@@ -154,6 +154,7 @@ MonoBehaviour:
   _attack: 0
   _showGizmos: 1
   _testRayColor: {r: 1, g: 0, b: 0.53783464, a: 1}
+  _startNavMode: 1
 --- !u!114 &655535320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,8 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f151e132465c4a05874709a6e7241990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToNextTarget: 0.74
-  curTarget: {x: 0, y: 0, z: 16.82}
+  _playerTransform: {fileID: 0}
 --- !u!195 &655535319
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32dd5eb557db4999ba49909e4789374f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
+  mode: 2
   rb: {fileID: 0}
   agent: {fileID: 655535319}
   graphicsParent: {fileID: 6876095433351021162}
