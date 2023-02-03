@@ -29,7 +29,7 @@ public partial class Entity : MonoBehaviour
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
     [SerializeField] private SpriteDirection _spriteDir;
-    [SerializeField] private bool _attack;
+    [SerializeField] private bool _canAttack;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
@@ -46,6 +46,12 @@ public partial class Entity : MonoBehaviour
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
     private Transform CachedPlayerTransform => _cachedPlayer ? _cachedPlayer.transform : null;
+    
+    private EntityState PlayerSeenState =>
+        _canAttack
+            ? EntityState.ChasingPlayer
+            : EntityState.RunningFromPlayer;
+
     
     public static event Action<Entity> OnEntityDeath;
     
@@ -199,4 +205,11 @@ public partial class Entity : MonoBehaviour
     }
 
     private string LogStr(string msg) => $"{nameof(Entity)}: {msg}";
+
+    private bool IsPlayerInAttackRange()
+    {
+        var distToPlayer = Vector2.Distance(CachedPlayerTransform.position, transform.position);
+        var isInAttackRange = distToPlayer < Data.AttackRange;
+        return isInAttackRange;
+    }
 }

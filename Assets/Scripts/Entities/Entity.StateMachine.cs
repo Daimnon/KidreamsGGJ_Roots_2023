@@ -81,9 +81,12 @@ public partial class Entity
 
     private void UpdateIdleState()
     {
-        if (_playerInSight) State = EntityState.ChasingPlayer;
+        if (_playerInSight)
+        {
+            State = PlayerSeenState;
+        }
     }
-
+    
     private void UpdateChasingState()
     {
         if (!_playerInSight)
@@ -91,8 +94,8 @@ public partial class Entity
             State = EntityState.Idle;
             return;
         }
-        var distToPlayer = Vector2.Distance(CachedPlayerTransform.position, transform.position);
-        if (distToPlayer < Data.AttackRange) State = EntityState.Attacking;
+        var isInAttackRange = IsPlayerInAttackRange();
+        if (isInAttackRange) State = EntityState.Attacking;
     }
 
     private void UpdateRunningState()
@@ -110,6 +113,11 @@ public partial class Entity
         {
             State = EntityState.Idle;
             return;
+        }
+
+        if (!IsPlayerInAttackRange())
+        {
+            State = PlayerSeenState;
         }
     }
 }
