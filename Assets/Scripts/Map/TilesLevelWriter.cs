@@ -13,33 +13,36 @@ public class TilesLevelWriter : MonoBehaviour
     private LevelScriptable levelData;
 
     [SerializeField]
-    protected Vector2 tilesGenerationSize;
+    private Tile[] tilesToWrite;
     [SerializeField]
-    private Tile[] obstaclesToSpawn;
+    protected Vector2 backgroundSize = new Vector2(500,150);
+    [SerializeField]
+    private int startingX;
+    [SerializeField]
+    private int startingY;
 
 
     private void Awake()
     {
-        tilesGenerationSize = new Vector2(5, 5);
         WriteTilesData();
     }
     private void WriteTilesData()
     {
-        levelData.obstaclesToGenerate.Clear();
-        for (int x = 0; x < tilesGenerationSize.x; x++)
+        levelData.tilesToGenerate.Clear();
+        for (int x = startingX; x < backgroundSize.x; x++)
         {
-            for (int y = 0; y < tilesGenerationSize.y; y++)
+            for (int y = startingY; y < backgroundSize.y; y++)
             {
-                Vector3Int tilePos = new Vector3Int(x*2, y*2,0);
-                var obstacle = new obstacleData(tilePos , RandomTile());
-                levelData.obstaclesToGenerate.Add(obstacle);
+                Vector3Int tilePos = new Vector3Int(x, y,0);
+                var obstacle = new tileData(tilePos , RandomTile());
+                levelData.tilesToGenerate.Add(obstacle);
             }
         }
     }
 
     private Tile RandomTile()
     {
-        var random = UnityEngine.Random.Range(0, obstaclesToSpawn.Length);
-        return obstaclesToSpawn[random];
+        var random = UnityEngine.Random.Range(0, tilesToWrite.Length);
+        return tilesToWrite[random];
     }
 }
