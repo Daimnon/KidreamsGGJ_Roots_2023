@@ -1,36 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using DG.Tweening;
 using NaughtyAttributes;
-using UnityEngine.InputSystem;
 
 public enum PlayerStates { Idle, Moving, Biting }
 
 public class PlayerController : MonoBehaviour
 {
+    protected delegate void PlayerState();
+    protected PlayerState _playerState;
+
     [Header("Player Components")]
-    [SerializeField] private PlayerControls _playerControls;
-    [SerializeField] private SpriteRenderer _playerGraphics;
-    [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] protected PlayerControls _playerControls;
+    [SerializeField] protected SpriteRenderer _playerGraphics;
+    [SerializeField] protected Rigidbody2D _rb;
     
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
-    [SerializeField] PlayerStates _playerStates;
-    
+    public PlayerData Data { get => _data; set => value = _data; }
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
-    [SerializeField] private GameObject _body;
 
-    private Vector2 _moveInput;
-    private InputAction _move, _bite;
-    private bool _isLookingRight = true;
-
-    private delegate void State();
-    private State _state;
+    protected Vector2 _moveInput;
+    protected InputAction _move, _bite;
+    protected bool _isLookingRight = true;
 
     #region Monobehaviour Callbacks
     private void OnEnable()
@@ -44,12 +42,16 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
-        _state = Idle;
         _playerControls = new PlayerControls();
+        GameManager.Instance.CurrentPlayer = gameObject;
+        _playerState = Idle;
     }
     private void Update()
     {
-        _state.Invoke();
+        _playerState.Invoke();
+
+        if (_data.Hp <= 0)
+            Kill();
     }
     private void FixedUpdate()
     {
@@ -63,7 +65,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region FixedUpdate Methods
-    private void Move()
+    protected void Move()
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
         _rb.velocity = _data.CalculatedSpeed * Time.fixedDeltaTime * direction;
@@ -71,7 +73,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void Bite(InputAction.CallbackContext biteContext)
+    protected void Bite(InputAction.CallbackContext biteContext)
     {
         Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
 
@@ -80,10 +82,14 @@ public class PlayerController : MonoBehaviour
         {
             ChangeState(PlayerStates.Biting);
             Vector2 originalPos = transform.position;
+            Vector2 targetPos = new (transform.position.x + _data.BiteDistance - _data.BiteOffset, hit.transform.position.y);
+
+            float moveToTarget = _playerGraphics == _data.WeakSprite ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
+            float moveBackFromTarget = _playerGraphics == _data.WeakSprite ?_data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
 
             DOTween.Sequence().
-                Append(transform.DOMoveX(transform.position.x + _data.BiteDistance - _data.BiteOffset, _data.MoveToTargetDurationWhileStrong).SetEase(_data.MoveToTargetCurve)).
-                Append(transform.DOMoveX(originalPos.x, _data.MoveBackFromTargetDurationWhileStrong).SetEase(_data.MoveBackFromTargetCurve).SetDelay(_data.BiteTime)).
+                Append(transform.DOMove(targetPos, moveToTarget).SetEase(_data.MoveToTargetCurve)).
+                Append(transform.DOMove(originalPos, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurve).SetDelay(_data.BiteTime)).
                 OnComplete(() => ChangeState(PlayerStates.Idle));
             
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
@@ -91,7 +97,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #region States
-    private void Idle()
+    protected void Idle()
     {
         Debug.Log($"player state is Idle");
 
@@ -100,7 +106,7 @@ public class PlayerController : MonoBehaviour
         if (_moveInput != Vector2.zero)
             ChangeState(PlayerStates.Moving);
     }
-    private void Moving()
+    protected void Moving()
     {
         Debug.Log($"player state is Moving");
 
@@ -109,8 +115,9 @@ public class PlayerController : MonoBehaviour
         if (_moveInput == Vector2.zero)
             ChangeState(PlayerStates.Idle);
     }
-    private void Biting()
+    protected void Biting()
     {
+        _moveInput = Vector2.zero;
         Debug.Log($"player state is Biting");
     }
     #endregion
@@ -120,18 +127,21 @@ public class PlayerController : MonoBehaviour
         switch (newState)
         {
             case PlayerStates.Idle:
-                _playerStates = PlayerStates.Idle;
-                _state = Idle;
+                _playerState = Idle;
                 break;
             case PlayerStates.Moving:
-                _playerStates = PlayerStates.Moving;
-                _state = Moving;
+                _playerState = Moving;
                 break;
             case PlayerStates.Biting:
-                _playerStates = PlayerStates.Biting;
-                _state = Biting;
+                _playerState = Biting;
                 break;
         }
+    }
+
+    private void Kill()
+    {
+        GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmos()

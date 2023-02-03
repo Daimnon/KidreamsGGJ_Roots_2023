@@ -1,4 +1,5 @@
 using System;
+using Extensions;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,9 +17,10 @@ public class SpriteDirection : MonoBehaviour
 
     [SerializeField, ShowIf(nameof(ModeIsRigidBody))] private Rigidbody2D rb;
     [SerializeField, ShowIf(nameof(ModeIsNavMesh))] private NavMeshAgent agent;
-    
+
     [Header("Graphics")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    // [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Transform graphicsParent;
     [SerializeField] private FaceDirection spriteDefaultDirection = FaceDirection.Right;
     
     public FaceDirection Direction { get; private set; } // In case we need it
@@ -31,7 +33,7 @@ public class SpriteDirection : MonoBehaviour
 
     private void OnValidate()
     {
-        if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        // if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (rb == null) rb = GetComponentInParent<Rigidbody2D>();
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
     }
@@ -43,7 +45,8 @@ public class SpriteDirection : MonoBehaviour
         if (Direction != oldDir)
         {
             var shouldFlipX = Direction != spriteDefaultDirection;
-            spriteRenderer.flipX = shouldFlipX;
+            // spriteRenderer.flipX = shouldFlipX;
+            graphicsParent.SetLocalScaleX(shouldFlipX ? 1f : -1f);
         }
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 using UnityEngine;
 
 public enum FaceDirection
@@ -9,26 +10,39 @@ public enum FaceDirection
     Right,
 }
 
-[RequireComponent(typeof(EntityNavigation))]
 [RequireComponent(typeof(EntityDataHolder))]
-[RequireComponent(typeof(SpriteDirection))]
-public class Entity : MonoBehaviour
+public partial class Entity : MonoBehaviour
 {
+    private enum EntityState
+    {
+        Idle,
+        ChasingPlayer,
+        RunningFromPlayer,
+        Attacking,
+    }
+    
+    [SerializeField] private Animator _anim;
+    [SerializeField] private BreatheMoveAnim moveStaggerAnim;
+    
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
     [SerializeField] private SpriteDirection _spriteDir;
+    [SerializeField] private bool _attack;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
     [SerializeField] private Color _testRayColor;
 
-    private EntityNavigation.NavigationMode _startNavMode;
+    [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
     private EntityNavigation _navigation;
     private EntityData _entityData;
 
     private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
     private PlayerController _cachedPlayer;
     private bool _playerInSight;
+
+    [ShowNonSerializedField] private EntityState _state;
+    private Action _updateAction;
 
     private Vector2 RaycastDirection => _spriteDir.Vector;
 
@@ -40,13 +54,22 @@ public class Entity : MonoBehaviour
     private void OnValidate()
     {
         if (_spriteDir == null) _spriteDir = GetComponentInChildren<SpriteDirection>();
+        if (_anim == null) _anim = GetComponentInChildren<Animator>();
+        if (moveStaggerAnim == null) moveStaggerAnim = GetComponentInChildren<BreatheMoveAnim>();
     }
 
     private void Init()
     {
         _entityData = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
-        _spriteDir = GetComponent<SpriteDirection>();
+        _updateAction = UpdateIdleState;
+
+        if (_startNavMode == EntityNavigation.NavigationMode.MoveToPlayer)
+        {
+            _cachedPlayer = FindObjectOfType<PlayerController>();
+        }
+        _navigation.SetState(_cachedPlayer.transform, _startNavMode);
+        moveStaggerAnim.enabled = false;
     }
 
     private void OnDrawGizmos()
@@ -64,8 +87,9 @@ public class Entity : MonoBehaviour
     private void Update()
     {
         UpdatePlayerInSight();
+        _updateAction();
     }
-
+    
     private void UpdatePlayerInSight()
     {
         var player = RayCastForPlayer();
