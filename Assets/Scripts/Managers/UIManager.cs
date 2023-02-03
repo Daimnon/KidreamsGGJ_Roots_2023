@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance => _instance;
 
     [SerializeField] private GameObject _gravesParent, _heartsParent;
-    [SerializeField] private Image _bloodFill;
+    [SerializeField] private Transform _bloodFill;
 
     private void Awake()
     {
@@ -39,5 +39,11 @@ public class UIManager : MonoBehaviour
             else
                 gameObject.SetActive(true);
         }
+    }
+    public void UpdateBlood()
+    {
+        float bloodFillHeightPerBloodPoint = (float)GameManager.Instance.PlayerController.Hp / 10; // 10 = maxBlood;
+
+        _bloodFill.localScale = new Vector3(_bloodFill.localScale.x, bloodFillHeightPerBloodPoint, _bloodFill.localScale.z);
     }
 }
