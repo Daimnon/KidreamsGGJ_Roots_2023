@@ -47,7 +47,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.1766054, y: 1.2715584}
+  m_Offset: {x: 0, y: 1.25}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -58,7 +58,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.494495, y: 0.63669777}
+  m_Size: {x: 1.225, y: 0.625}
   m_EdgeRadius: 0
 --- !u!58 &1827579984
 CircleCollider2D:
@@ -73,7 +73,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.19174284, y: 0.62568766}
+  m_Offset: {x: 0.03, y: 0.625}
   serializedVersion: 2
   m_Radius: 0.631193
 --- !u!61 &1827579983
@@ -89,7 +89,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.10596317, y: -0.8325677}
+  m_Offset: {x: 0.03, y: -0.775}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -100,7 +100,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3128439, y: 1.5954127}
+  m_Size: {x: 1.325, y: 1.5}
   m_EdgeRadius: 0
 --- !u!1 &1336632896142081007
 GameObject:
@@ -175,7 +175,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3286163911610860551, guid: f459dcfe297c6a347b55e728843036f5, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: 1d8ff7984ff38424b8c4bf7fac2feced, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -237,11 +237,82 @@ MonoBehaviour:
   _playerGraphics: {fileID: 1336632896142081006}
   _rb: {fileID: 1336632897603560554}
   _data: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
-  _biteDistance: 0
+  _biteDistance: 3
+  _moveToTargetDuration: 1.25
+  _moveBackFromTargetDuration: 0.75
+  _biteSpeed: 1
+  _biteOffset: 1
+  _biteTime: 0.75
+  _moveToTargetCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 2.726084
+      outSlope: 2.726084
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.048317414
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0.007044268
+      outSlope: 0.007044268
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.06628579
+      outWeight: 0.10461724
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.0058578798
+      outSlope: 0.0058578798
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17332304
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _moveBackFromTargetCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.5714285
+      outSlope: 2.5714285
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.35
+      value: 0.9
+      inSlope: 0.57311165
+      outSlope: 0.57311165
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13998169
+      outWeight: 0.5721834
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.15384619
+      outSlope: 0.15384619
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _biteLayer:
     serializedVersion: 2
-    m_Bits: 0
-  _body: {fileID: 0}
+    m_Bits: 768
+  _body: {fileID: 1336632896142081007}
 --- !u!114 &1464890357064402793
 MonoBehaviour:
   m_ObjectHideFlags: 0
