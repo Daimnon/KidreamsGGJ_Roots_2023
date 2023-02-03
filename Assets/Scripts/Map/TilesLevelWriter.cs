@@ -22,10 +22,10 @@ public class TilesLevelWriter : MonoBehaviour
     private int startingY;
 
 
-    private void Awake()
+/*    private void Awake()
     {
         WriteTilesData();
-    }
+    }*/
     private void WriteTilesData()
     {
         levelData.tilesToGenerate.Clear();
