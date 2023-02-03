@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1336632896142081006, guid: a8b34539a6372964c81e821966553517, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3286163911610860551, guid: 1d8ff7984ff38424b8c4bf7fac2feced, type: 3}
     - target: {fileID: 1336632897603560552, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -174,6 +178,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
+      propertyPath: _body
+      value: 
+      objectReference: {fileID: 1691903984}
+    - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
+      propertyPath: _playerData
+      value: 
+      objectReference: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
+    - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
+      propertyPath: _otherSprite
+      value: 
+      objectReference: {fileID: 3286163911610860551, guid: bd6f80194f7c7db45b8ce0c077f1f5e2, type: 3}
+    - target: {fileID: 1336632897603560553, guid: a8b34539a6372964c81e821966553517, type: 3}
+      propertyPath: _otherSpriteRenderer
+      value: 
+      objectReference: {fileID: 1691903986}
     - target: {fileID: 1336632897603560555, guid: a8b34539a6372964c81e821966553517, type: 3}
       propertyPath: m_Name
       value: Player
@@ -264,3 +284,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1691903984 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1336632896142081007, guid: a8b34539a6372964c81e821966553517, type: 3}
+  m_PrefabInstance: {fileID: 358504887}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1691903986 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1336632896142081006, guid: a8b34539a6372964c81e821966553517, type: 3}
+  m_PrefabInstance: {fileID: 358504887}
+  m_PrefabAsset: {fileID: 0}

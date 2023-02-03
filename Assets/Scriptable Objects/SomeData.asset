@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06d67dd921cc76640ad940fd10769cbe, type: 3}
-  m_Name: PlayerData
+  m_Script: {fileID: 11500000, guid: 084b457117b7e3d4a84af7d480d76672, type: 3}
+  m_Name: SomeData
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Player
-  <Hp>k__BackingField: 3
+  <Name>k__BackingField: Someone
+  <Hp>k__BackingField: 1
   <Speed>k__BackingField: 1
   <Vision>k__BackingField: 1
-  _weakSprite: {fileID: 3286163911610860551, guid: 1d8ff7984ff38424b8c4bf7fac2feced, type: 3}
-  _strongSprite: {fileID: 3286163911610860551, guid: bd6f80194f7c7db45b8ce0c077f1f5e2, type: 3}

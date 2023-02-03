@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
+    [SerializeField] private SpriteRenderer _otherSpriteRenderer;
+    [SerializeField] private Sprite _otherSprite;
+    [SerializeField] private GameObject _body;
 
     private Vector2 _moveInput;
     private InputAction _move, _bite;
@@ -80,10 +83,12 @@ public class PlayerController : MonoBehaviour
 
     private void Bite(InputAction.CallbackContext biteContext)
     {
+        _otherSpriteRenderer.sprite = _otherSprite;
         Vector2 direction = _isLookingRight ? Vector2.right : Vector2.left;
 
         if (Physics2D.Raycast(transform.position, direction, _biteDistance, _biteLayer))
         {
+            
             Debug.Log($"player {name} bite");
         }
     }
