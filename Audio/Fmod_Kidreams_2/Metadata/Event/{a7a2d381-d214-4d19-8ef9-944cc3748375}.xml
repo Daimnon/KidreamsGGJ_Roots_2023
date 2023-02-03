@@ -999,6 +999,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{d4e66bef-80f8-4e60-9a46-b5b84f700044}">
+		<property name="volume">
+			<value>-3</value>
+		</property>
 		<property name="name">
 			<value>Piano</value>
 		</property>
@@ -1024,6 +1027,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{f963b8f9-b7f9-4bc9-a143-9b9d36209217}">
+		<property name="volume">
+			<value>-4.5</value>
+		</property>
 		<property name="name">
 			<value>Piano 2</value>
 		</property>
@@ -1288,6 +1294,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{49942847-a857-42b2-9798-57a9c10ee5d1}">
+		<property name="volume">
+			<value>-7.5</value>
+		</property>
 		<property name="name">
 			<value>Chord Prog</value>
 		</property>
