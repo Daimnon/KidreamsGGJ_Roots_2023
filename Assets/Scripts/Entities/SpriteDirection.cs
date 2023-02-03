@@ -32,6 +32,8 @@ public class SpriteDirection : MonoBehaviour
     private void OnValidate()
     {
         if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (rb == null) rb = GetComponentInParent<Rigidbody2D>();
+        if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
     }
 
     private void Update()

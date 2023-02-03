@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class Entity : MonoBehaviour
 {
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
+    [SerializeField] private SpriteDirection _spriteDir;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
@@ -23,7 +25,6 @@ public class Entity : MonoBehaviour
     private EntityNavigation.NavigationMode _startNavMode;
     private EntityNavigation _navigation;
     private EntityData _entityData;
-    private SpriteDirection _spriteDir;
 
     private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
     private PlayerController _cachedPlayer;
@@ -34,6 +35,11 @@ public class Entity : MonoBehaviour
     private void Awake()
     {
         Init();
+    }
+
+    private void OnValidate()
+    {
+        if (_spriteDir == null) _spriteDir = GetComponentInChildren<SpriteDirection>();
     }
 
     private void Init()

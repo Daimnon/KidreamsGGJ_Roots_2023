@@ -5,6 +5,7 @@ public class CommonEntityData : ScriptableObject
 {
     [Tooltip("Multiplier to set Rigidbody velocity")]
     [field: SerializeField] public int SpeedModifier { get; private set; } = 100;
+    [field: SerializeField] public float AnimalAttackSpeed { get; set; }
     
     [field: Header("Entity view raycasting")]
     [field: SerializeField] public float BaseFOVAngle { get; private set; }
