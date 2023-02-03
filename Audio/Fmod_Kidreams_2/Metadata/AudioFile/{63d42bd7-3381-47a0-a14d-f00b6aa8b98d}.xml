@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{63d42bd7-3381-47a0-a14d-f00b6aa8b98d}">
 		<property name="assetPath">
-			<value>Footstep Grass Running 1_08.wav</value>
+			<value>Grass Footsteps/Footstep Grass Running 1_08.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>44.0999985</value>
@@ -14,7 +14,7 @@
 			<value>0.88065759637188212</value>
 		</property>
 		<relationship name="masterAssetFolder">
-			<destination>{e3ec7456-d362-4d6d-9c9c-f7acbc428446}</destination>
+			<destination>{3ef90ea4-d79e-48e3-a8f5-67c74ce86b5e}</destination>
 		</relationship>
 	</object>
 </objects>

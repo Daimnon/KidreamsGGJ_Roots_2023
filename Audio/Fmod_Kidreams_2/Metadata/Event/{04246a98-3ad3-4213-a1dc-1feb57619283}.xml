@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{04246a98-3ad3-4213-a1dc-1feb57619283}">
 		<property name="name">
-			<value>Grass_Footsteps</value>
+			<value>Grass Footsteps</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
 		</property>
 		<relationship name="folder">
-			<destination>{f596f50b-7348-4e1d-b788-8d939c57fbca}</destination>
+			<destination>{2faf2cb4-1f89-4178-837f-38f90c683ebf}</destination>
 		</relationship>
 		<relationship name="mixer">
 			<destination>{1a23f3cd-24c6-4753-89e8-979d42be6035}</destination>
@@ -33,6 +33,7 @@
 		</relationship>
 		<relationship name="banks">
 			<destination>{be1fa6b4-59ac-4cf0-a409-bc43bd7992d8}</destination>
+			<destination>{cbac1c8e-18cb-4090-b49e-cf73c699744e}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixer" id="{1a23f3cd-24c6-4753-89e8-979d42be6035}">
@@ -56,7 +57,7 @@
 			<destination>{ffbdd22f-c874-4fbc-8e18-ed96a88551ca}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{cc630e46-36c2-411b-a601-95aa563b7b2d}</destination>
+			<destination>{877b4443-015a-4042-8fc2-879276fd1760}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{81012740-e276-434d-b671-8c620593f9d0}" />
