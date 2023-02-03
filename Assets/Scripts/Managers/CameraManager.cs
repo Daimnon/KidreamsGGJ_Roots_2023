@@ -16,11 +16,12 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Transform _mainCamTransform;
     public Transform MainCamTransform => _mainCamTransform;
 
-    [SerializeField] private float _size = 5f;
+    [SerializeField] private float _size = 8f;
 
     private void Awake()
     {
         _mainCam = Camera.main;
+        _mainCam.orthographicSize = _size;
         _mainCamTransform = _mainCam.transform;
         _cameraState = FollowPlayer;
     }
@@ -30,7 +31,12 @@ public class CameraManager : MonoBehaviour
     }
     private void FollowPlayer()
     {
-        //_mainCamTransform = 
+        float playerX = GameManager.Instance.PlayerPrefab.transform.position.x;
+        float playerY = GameManager.Instance.PlayerPrefab.transform.position.y;
+        float cameraZ = _mainCamTransform.position.z;
+
+        Vector3 newCamPos = new(playerX, playerY, cameraZ);
+        _mainCamTransform.position = newCamPos;
     }
     private void FollowVampireLord()
     {
