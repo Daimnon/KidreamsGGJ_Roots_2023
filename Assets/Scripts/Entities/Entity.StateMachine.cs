@@ -38,8 +38,7 @@ public partial class Entity
         Debug.Log(LogStr(nameof(TransitionToIdle)));
         _anim.SetTrigger(AnimTrigger_Idle);
         moveStaggerAnim.enabled = true;
-        _navigation.SetState(
-            _cachedPlayer.transform, EntityNavigation.NavigationMode.MoveRandomly);
+        _navigation.SetState(CachedPlayerTransform, EntityNavigation.NavigationMode.MoveRandomly);
     }
 
     private void TransitionToChasing(EntityState prevState)
@@ -47,7 +46,7 @@ public partial class Entity
         Debug.Log(LogStr(nameof(TransitionToChasing)));
         _anim.SetTrigger(AnimTrigger_ChasingPlayer);
         moveStaggerAnim.enabled = true;
-        _navigation.SetState(_cachedPlayer.transform, EntityNavigation.NavigationMode.MoveToPlayer);
+        _navigation.SetState(CachedPlayerTransform, EntityNavigation.NavigationMode.MoveToPlayer);
     }
 
     private void TransitionToRunning(EntityState prevState)
@@ -78,14 +77,22 @@ public partial class Entity
 
     private void UpdateChasingState()
     {
-        if (!_playerInSight) State = EntityState.Idle;
-        var distToPlayer = Vector2.Distance(_cachedPlayer.transform.position, transform.position);
+        if (!_playerInSight)
+        {
+            State = EntityState.Idle;
+            return;
+        }
+        var distToPlayer = Vector2.Distance(CachedPlayerTransform.position, transform.position);
         if (distToPlayer < _entityData.AttackRange) State = EntityState.Attacking;
     }
 
     private void UpdateRunningState()
     {
-        if (!_playerInSight) State = EntityState.Idle;
+        if (!_playerInSight)
+        {
+            State = EntityState.Idle;
+            return;
+        }
     }
 
     private void UpdateAttackingState()

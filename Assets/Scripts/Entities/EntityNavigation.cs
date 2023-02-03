@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(EntityDataHolder))]
 public class EntityNavigation : MonoBehaviour
@@ -19,8 +17,6 @@ public class EntityNavigation : MonoBehaviour
     [NaughtyAttributes.ShowNativeProperty]
     public NavigationMode NavMode { get; private set; }
     
-    private Vector2 XrandomOffset;
-    private Vector2 YrandomOffset;
     [SerializeField] private Transform _playerTransform;
     [Header("RandomRoaming")]
     private float distanceToNextTarget;
@@ -98,19 +94,10 @@ public class EntityNavigation : MonoBehaviour
         else
             Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
     }
-
-    #region WalkingStateLogic
-    private Vector3 GetRandomDir()
-    {
-        var position = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1),transform.position.z);
-        return position;
-    }
+    
     private Vector3 GetNextTarget()
     {
-        float DistanceToNextTarget = Random.Range(-5, 5);
-        return GetRandomDir() * DistanceToNextTarget;
+        var trans =  MapManager.Instance.GetRandomPlaceTransform();
+        return trans.position;
     }
-
 }
-
-    #endregion}
