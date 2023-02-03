@@ -48,7 +48,7 @@ public class EntityNavigation : MonoBehaviour
         {
             NavigationMode.MoveRandomly => GetNextTarget(),
             NavigationMode.MoveToPlayer => playerTransform.position,
-            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position);
+            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
