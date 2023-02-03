@@ -181,7 +181,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Kill()
+    public void Kill()
     {
         GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
         Destroy(gameObject);
