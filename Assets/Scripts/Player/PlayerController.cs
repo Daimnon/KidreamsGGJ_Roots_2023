@@ -24,11 +24,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Expandable] private PlayerData _data;
     public PlayerData Data { get => _data; set => value = _data; }
 
-    private int _hp;
-    private int _damage;
-    private int _speed;
-    private int _vision;
-    private float _attackRange;
+    [SerializeField] private int _hp, _damage, _speed, _vision, _engravedAmount;
+    public int Hp { get => _hp; set => value = _hp; }
+    public int Damage { get => _damage; set => value = _damage; }
+    public int Speed { get => _speed; set => value = _speed; }
+    public int Vision { get => _vision; set => value = _vision; }
+    public int EngravedAmount { get => _engravedAmount; set => value = _engravedAmount; }
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -48,8 +49,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
-        _playerControls = new PlayerControls();
-        _playerState = Idle;
+        Initialize();
     }
     private void Start()
     {
@@ -59,9 +59,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _playerState.Invoke();
-
-        if (_data.Hp <= 0)
-            Kill();
     }
     private void FixedUpdate()
     {
@@ -73,6 +70,16 @@ public class PlayerController : MonoBehaviour
         _bite.Disable();
     }
     #endregion
+
+    private void Initialize()
+    {
+        _playerControls = new PlayerControls();
+        _hp = _data.Hp;
+        _damage = _data.Damage;
+        _speed = _data.Speed;
+        _vision = _data.Vision;
+        _playerState = Idle;
+    }
 
     #region FixedUpdate Methods
     protected void Move()
