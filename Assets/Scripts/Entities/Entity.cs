@@ -33,7 +33,7 @@ public partial class Entity : MonoBehaviour
     [SerializeField] private bool _showGizmos;
     [SerializeField] private Color _testRayColor;
 
-    private EntityNavigation.NavigationMode _startNavMode;
+    [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
     private EntityNavigation _navigation;
     private EntityData _entityData;
 
@@ -63,7 +63,12 @@ public partial class Entity : MonoBehaviour
         _entityData = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _updateAction = UpdateIdleState;
-        _navigation.SetState(null, EntityNavigation.NavigationMode.Idle);
+
+        if (_startNavMode == EntityNavigation.NavigationMode.MoveToPlayer)
+        {
+            _cachedPlayer = FindObjectOfType<PlayerController>();
+        }
+        _navigation.SetState(_cachedPlayer.transform, _startNavMode);
         moveStaggerAnim.enabled = false;
     }
 
