@@ -41,8 +41,7 @@ public class EntityNavigation : MonoBehaviour
     }
     private void Start()
     {
-        curTarget = GetNextTarget();
-        agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
+        InitAgent();
     }
     private void Update()
     {
@@ -50,17 +49,27 @@ public class EntityNavigation : MonoBehaviour
         {
             case (NavigationMode.MoveRandomly):
                 if (agent.remainingDistance <= 3)
-                {
-                    Debug.Log(agent.remainingDistance);
-                    agent.SetDestination(GetNextTarget());
-                }
+                    MoveToNextRandomLocation();
                 break;
             case (NavigationMode.MoveToPlayer):
 
                 break;
         }
     }
-
+    private void InitAgent()
+    {
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        curTarget = GetNextTarget();
+        agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
+        RotateToNewRoamingPos();
+    }
+    private void MoveToNextRandomLocation()
+    {
+        curTarget = GetNextTarget();
+        agent.SetDestination(new Vector3(curTarget.x, curTarget.y, 0));
+        RotateToNewRoamingPos();
+    }
     private void MoveToPlayer() => Vector2.MoveTowards(transform.position, _playerTransform.position, _data.Speed);
 
     #region WalkingStateLogic
