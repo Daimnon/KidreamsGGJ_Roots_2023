@@ -28,4 +28,15 @@ public class MapManager : MonoBehaviour
 
         Instance = this;
     }
+
+    public Vector3 GetRandomRunawayPlace(Vector3 entityPos, Vector3 playerTransformPosition)
+    {
+        return _randomPlaces.Select(trans => trans.position).Where(pos =>
+        {
+            var entityToTargetVec = pos - entityPos;
+            var playerChaseVec = entityPos - playerTransformPosition;
+
+            return Vector3.Dot(playerChaseVec, entityToTargetVec) < 0f;
+        }).ToArray().GetRandom();
+    }
 }
