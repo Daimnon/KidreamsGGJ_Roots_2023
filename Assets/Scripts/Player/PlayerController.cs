@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteDirection _spriteDir;
     [SerializeField] protected Rigidbody2D _rb;
     [SerializeField] private bool _debugPlayerState;
+    [SerializeField] private BreatheMoveAnim _moveAnim;
     public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
@@ -147,8 +148,10 @@ public class PlayerController : MonoBehaviour
 
         _moveInput = _move.ReadValue<Vector2>();
 
-        if (_moveInput == Vector2.zero)
+        var hasInput = _moveInput != Vector2.zero;
+        if (!hasInput)
             ChangeState(PlayerStates.Idle);
+        _moveAnim.enabled = hasInput;
     }
     protected void Biting()
     {

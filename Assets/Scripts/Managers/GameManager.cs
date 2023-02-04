@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     {
         await _underworldOverlay.StartUnderworldAnim();
         Debug.Log("Underworld anim done - Resurrecting player!");
-        ResurrectPlayer();   
+        ResurrectPlayer();
     }
 
     public void ChangeState(GameStates newState)

@@ -37,7 +37,7 @@ public partial class Entity
 
     protected virtual void TransitionToIdle(EntityState prevState)
     {
-        Debug.Log(LogStr(nameof(TransitionToIdle)));
+        if (_debugLogState) Debug.Log(LogStr(nameof(TransitionToIdle)), gameObject);
         
         _navigation.enabled = true;
         _navigation.SetState(CachedPlayerTransform, EntityNavigation.NavigationMode.MoveRandomly);

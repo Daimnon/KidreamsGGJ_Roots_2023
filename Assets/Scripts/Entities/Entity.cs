@@ -33,6 +33,7 @@ public partial class Entity : MonoBehaviour
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
+    [SerializeField] private bool _debugLogState;
     [SerializeField] private Color _testRayColor;
 
     [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
@@ -120,7 +121,7 @@ public partial class Entity : MonoBehaviour
     public bool TakeDamage(int damage)
     {
         _hp -= damage;
-        Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}");
+        if (_debugLogState) Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}", gameObject);
         if (_hp <= 0)
         {
             Kill();
@@ -133,7 +134,7 @@ public partial class Entity : MonoBehaviour
     public void CaptureEntity() => State = EntityState.CapturedByPlayer;
     public void ReleaseEntity() => State = EntityState.Idle;
 
-    private void Kill()
+    protected virtual void Kill()
     {
         OnEntityDeath?.Invoke(this);
         Destroy(this);
@@ -158,12 +159,12 @@ public partial class Entity : MonoBehaviour
 
     private void OnPlayerFound()
     {
-        Debug.Log(LogStr("Found player!"));
+        if (_debugLogState) Debug.Log(LogStr("Found player!"), gameObject);
     }
 
     private void OnPlayerLost()
     {
-        Debug.Log(LogStr("Where player?!"));
+       if (_debugLogState) Debug.Log(LogStr("Where player?!"), gameObject);
     }
 
     private PlayerController RayCastForPlayer()
