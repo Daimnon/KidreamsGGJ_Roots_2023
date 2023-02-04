@@ -240,6 +240,8 @@ public class PlayerController : MonoBehaviour
 
         transform.DOMoveX(_lastAttackingPos.x, _moveBackFromTargetDuration / 2).SetEase(_data.MoveBackFromTargetCurveFailedBite).
             OnComplete(() => ChangeState(PlayerStates.Idle));
+
+        _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
     }
     #endregion
 
