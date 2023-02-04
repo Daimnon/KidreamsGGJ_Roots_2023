@@ -86,7 +86,7 @@ public partial class Entity : MonoBehaviour
 
         if (Application.isPlaying)
         {
-            _navigation.Speed = Data.Speed;
+            _navigation.Speed = Data.EntitySpeed;
         }
     }
     private IEnumerator CachPlayer()

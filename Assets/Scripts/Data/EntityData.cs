@@ -33,13 +33,14 @@ public class EntityData : ScriptableObject
 
     public int Hp => _maxHp;
     public int Damage => _damage;
-    public int Speed => _speed;
+    public int PlayerSpeed => _speed;
+    public int EntitySpeed => Mathf.FloorToInt(_speed * commonData.EntitySpeedModifier);
     public int Vision => _vision;
     public float AttackRange => _attackRange;
     public Stat[] AbsorbedStats => absorbedStats;
     public CommonEntityData CommonData => commonData;
 
-    public int CalculatedSpeed => Speed * commonData.SpeedModifier;
+    public int CalculatedSpeed => PlayerSpeed * commonData.SpeedModifier;
     public event Action OnValidated;
 
     private void OnValidate()
@@ -72,7 +73,7 @@ public class EntityData : ScriptableObject
         {
             Stat.Hp => Hp,
             Stat.Damage => Damage,
-            Stat.Speed => Speed,
+            Stat.Speed => PlayerSpeed,
             Stat.Vision => Vision,
             _ => throw new ArgumentOutOfRangeException(nameof(stat), stat, null)
         };

@@ -112,8 +112,7 @@ public partial class Entity
     {
         // Don't go idle if dont see player ( youre running away from him)
     }
-
-    private float DeltaAttackTime => 2f;
+    
     protected virtual void UpdateAttackingState()
     {
         if (!_playerInSight)
@@ -132,7 +131,7 @@ public partial class Entity
         //    return;
         //}
 
-        if (Time.time - _lastAttackTime > DeltaAttackTime)
+        if (Time.time - _lastAttackTime > Data.CommonData.EntityAttackTimeDelta)
         {
             _cachedPlayer.TakeDamage(Data.Damage);
             _lastAttackTime = Time.time;

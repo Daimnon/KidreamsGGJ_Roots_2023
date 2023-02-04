@@ -18,5 +18,5 @@ MonoBehaviour:
   _speed: 2
   _vision: 3
   _attackRange: 2
-  absorbedStats: 
+  absorbedStats: 03000000
   <Name>k__BackingField: Boar
