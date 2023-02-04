@@ -86,7 +86,7 @@ public partial class Entity : MonoBehaviour
 
         if (Application.isPlaying)
         {
-            _navigation.Speed = Data.Speed;
+            _navigation.Speed = Data.EntitySpeed;
         }
     }
     private IEnumerator CachPlayer()
@@ -149,7 +149,7 @@ public partial class Entity : MonoBehaviour
     protected virtual void Kill()
     {
         OnEntityDeath?.Invoke(this);
-        Destroy(this);
+        Destroy(gameObject);
     }
 
     private void UpdatePlayerInSight()

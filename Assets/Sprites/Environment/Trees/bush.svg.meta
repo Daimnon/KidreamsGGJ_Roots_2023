@@ -39,16 +39,26 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: 
+      name: bush
       originalName: 
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 0
-        height: 0
+        width: 194
+        height: 200
       spriteID: 34ef86b05e5710d4bbf861a0c1276d4a
-    PhysicsOutlines: []
+    PhysicsOutlines:
+    - Vertices:
+      - {x: 21, y: 100}
+      - {x: -43, y: 89}
+      - {x: -84, y: 52}
+      - {x: -61, y: 50}
+      - {x: -9, y: 58}
+      - {x: 31, y: 54}
+      - {x: 70, y: 49}
+      - {x: 94, y: 44}
+      - {x: 79, y: 79}

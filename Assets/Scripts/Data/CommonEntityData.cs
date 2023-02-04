@@ -4,8 +4,10 @@ using UnityEngine;
 public class CommonEntityData : ScriptableObject
 {
     [Tooltip("Multiplier to set Rigidbody velocity")]
-    [field: SerializeField] public int SpeedModifier { get; private set; } = 100;
-    [field: SerializeField] public float AnimalAttackSpeed { get; set; }
+    [field: SerializeField] public int SpeedModifier { get; private set; } = 100; // Player only
+
+    [field: SerializeField] public float EntityAttackTimeDelta { get; set; } = 2f;
+    [field: SerializeField] public float EntitySpeedModifier { get; private set; } = 1f;
 
     [Header("Stat calculation")]
     [SerializeField] private int _killPointsDivider;

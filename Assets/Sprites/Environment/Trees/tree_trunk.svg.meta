@@ -39,16 +39,26 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: 
+      name: tree_trunk
       originalName: 
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 0
-        height: 0
+        width: 200
+        height: 182
       spriteID: e24570ff8980ecc448e5b9f3bfac0a59
-    PhysicsOutlines: []
+    PhysicsOutlines:
+    - Vertices:
+      - {x: 36, y: 57}
+      - {x: -35, y: 59}
+      - {x: -73, y: 50}
+      - {x: -78, y: 71}
+      - {x: -31, y: 71}
+      - {x: -1, y: 91}
+      - {x: 33, y: 70}
+      - {x: 71, y: 61}
+      - {x: 71, y: 50}
