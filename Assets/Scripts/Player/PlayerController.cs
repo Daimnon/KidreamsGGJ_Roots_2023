@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _data.BiteDistance, _biteLayer);
         if (hit)
         {
+            Entity entity = hit.transform.GetComponent<Entity>();
             ChangeState(PlayerStates.Attacking);
 
             _lastAttackingPos = transform.position;
@@ -116,6 +117,8 @@ public class PlayerController : MonoBehaviour
             _moveToTargetDuration = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
             _moveBackFromTargetDuration = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
 
+            entity.CaptureEntity();
+            entity.TakeDamage(entity.Data.Hp); // instakill
             transform.DOMove(_lastTargetPos, _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
 
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
@@ -145,6 +148,7 @@ public class PlayerController : MonoBehaviour
         if (_debugPlayerState) Debug.Log($"player state is Idle");
 
         _moveInput = _move.ReadValue<Vector2>();
+        _lastPrey = null;
 
         if (_moveInput != Vector2.zero)
             ChangeState(PlayerStates.Moving);
@@ -193,8 +197,6 @@ public class PlayerController : MonoBehaviour
         else if (_lastPrey is Villiger)
         {
             transform.DOMove(_lastAttackingPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
-
-            _lastPrey = null;
         }
     }
     protected void Eating()
@@ -205,6 +207,14 @@ public class PlayerController : MonoBehaviour
 
         if (!_lastPrey)
             return;
+
+        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
+            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
+
+        if (_playerGraphics.sprite == _data.WeakEatingAnimation[0] || _playerGraphics.sprite == _data.StrongEatingAnimation[0])
+            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[1] : _data.StrongEatingAnimation[1];
+        else
+            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
 
         transform.DOMove(_lastAttackingPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
 

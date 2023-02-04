@@ -94,7 +94,7 @@ public partial class Entity : MonoBehaviour
         
         if (_startNavMode == EntityNavigation.NavigationMode.MoveToPlayer)
         {
-            _cachedPlayer = FindObjectOfType<PlayerController>();
+            _cachedPlayer = GameManager.Instance.PlayerController;
         }
 
         _navigation.SetState(CachedPlayerTransform, _startNavMode);
