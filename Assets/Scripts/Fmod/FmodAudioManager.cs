@@ -11,12 +11,13 @@ public class FmodAudioManager : MonoBehaviour
     [SerializeField] private EventReference ambianceRef;
     [SerializeField] private EventReference bgmRef;
     [SerializeField] List<FmodSfxClass> sfxList = new List<FmodSfxClass>();
+    [SerializeField] List<FmodBGMClass> bgmList = new();
     [SerializeField] List<FmodSnapshots> sceneSnapShots = new List<FmodSnapshots>();
     [Header("Dependencies")]
     [SerializeField] private StudioListener mainListener;
     [SerializeField] private ParamRef bgm_dynamics;
     public Transform ambianceTransform;
-    [SerializeField]private EventInstance bgm;
+    [SerializeField]private EventInstance[] bgm;
     [SerializeField] private EventInstance ambiance;
     [HideInInspector]public PLAYBACK_STATE bgmState;
     [SerializeField] private bool playOnAwake;
@@ -24,7 +25,6 @@ public class FmodAudioManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        bgm = RuntimeManager.CreateInstance(bgmRef);
         ambiance = RuntimeManager.CreateInstance(ambianceRef);
         PopulateSceneSnapshots();
     }
@@ -32,7 +32,6 @@ public class FmodAudioManager : MonoBehaviour
     {
         if(playOnAwake)
         {
-            bgm.start();
             ambiance.start();
         }
     }
@@ -48,10 +47,16 @@ public class FmodAudioManager : MonoBehaviour
     //Update inspector UI to match enum to name
     private void OnValidate()
     {
-        foreach(FmodSfxClass sfx in sfxList)
+        foreach (FmodSfxClass sfx in sfxList)
         {
             if (sfx != null)
-            sfx.name = sfx.sfx.ToString();
+                sfx.name = sfx.sfx.ToString();
+        }
+
+        foreach (FmodBGMClass bgm in bgmList)
+        {
+            if (bgm != null)
+                bgm.name = bgm._bgmEnums.ToString();
         }
     }
     #region sfxHandler
@@ -96,9 +101,14 @@ public class FmodAudioManager : MonoBehaviour
         instance.start();
         instance.release();
     }
-   
+
     #endregion
     #region eventsHandler
+    private FmodBGMClass GetBGMClass(FmodBGMClass.bgmEnums bgmEnum)
+    {
+        FmodBGMClass bgmElement = bgmList.Find(num => num._bgmEnums == bgmEnum);
+        return bgmElement;
+    }
     public void PlayEvent(EventInstance fmodEvent, Vector3 posInWorld)
     {
         if (PlaybackState(fmodEvent) != PLAYBACK_STATE.PLAYING)
