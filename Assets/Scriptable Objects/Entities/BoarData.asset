@@ -15,7 +15,7 @@ MonoBehaviour:
   commonData: {fileID: 11400000, guid: 48531bcafa595164eab40db7ff4760f8, type: 2}
   _maxHp: 1
   _damage: 1
-  _speed: 1
+  _speed: 2
   _vision: 1
   _attackRange: 2
   absorbedStats: 00000000
