@@ -20,6 +20,7 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
+        _instance = this;
         _mainCam = Camera.main;
         _mainCam.orthographicSize = _size;
         _mainCamTransform = _mainCam.transform;
@@ -34,11 +35,11 @@ public class CameraManager : MonoBehaviour
     }
     private void FollowPlayer()
     {
-        if (!GameManager.Instance.PlayerPrefab)
+        if (!GameManager.Instance.CurrentPlayer)
             return;
 
-        float playerX = GameManager.Instance.PlayerPrefab.transform.position.x;
-        float playerY = GameManager.Instance.PlayerPrefab.transform.position.y;
+        float playerX = GameManager.Instance.CurrentPlayer.transform.position.x;
+        float playerY = GameManager.Instance.CurrentPlayer.transform.position.y;
         float cameraZ = _mainCamTransform.position.z;
 
         Vector3 newCamPos = new(playerX, playerY, cameraZ);
