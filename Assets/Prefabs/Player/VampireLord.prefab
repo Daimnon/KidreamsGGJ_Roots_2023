@@ -204,7 +204,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1466416634592152739
 Transform:
   m_ObjectHideFlags: 0
@@ -237,10 +237,13 @@ MonoBehaviour:
   _spriteDir: {fileID: 5751888205707944153}
   _rb: {fileID: 1466416634592152737}
   _debugPlayerState: 0
-  _moveAnim: {fileID: 0}
+  _moveAnim: {fileID: 367238195533511137}
   _data: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
   _engravedAmount: 0
   _biteLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _graveLayer:
     serializedVersion: 2
     m_Bits: 0
 --- !u!50 &1466416634592152737

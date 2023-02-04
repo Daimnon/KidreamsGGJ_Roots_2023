@@ -26,14 +26,14 @@ public class PlayerController : MonoBehaviour
     public PlayerData Data { get => _data; set => value = _data; }
 
     [SerializeField] private int _engravedAmount;
-    private EntityData _absorbedEntity; // TODO: Set absorbed entity when bite person / resurrect from grave
+    private readonly List<EntityData> _absorbedEntities = new List<EntityData>(); // TODO: Set absorbed entity when bite person / resurrect from grave
     private int _damageTaken; // separated from hp so we can calculate Absorbed enitty separately
     
     // TODO: Test (stats work + with absorbed entity)
-    [ShowNativeProperty] public int Hp => StatHelper.GetHp(_data, _damageTaken, _absorbedEntity);
-    [ShowNativeProperty] public int Damage => StatHelper.GetDamage(_data, _absorbedEntity);
-    [ShowNativeProperty] public int Speed => StatHelper.GeSpeed(_data, _absorbedEntity);
-    [ShowNativeProperty] public int Vision => StatHelper.GetVision(_data, _absorbedEntity);
+    [ShowNativeProperty] public int Hp => StatHelper.GetHp(_data, _damageTaken, _absorbedEntities);
+    [ShowNativeProperty] public int Damage => StatHelper.GetDamage(_data, _absorbedEntities);
+    [ShowNativeProperty] public int Speed => StatHelper.GeSpeed(_data, _absorbedEntities);
+    [ShowNativeProperty] public int Vision => StatHelper.GetVision(_data, _absorbedEntities);
     public int EngravedAmount { get => _engravedAmount; set => value = _engravedAmount; }
 
     [Header("World Data")]
@@ -121,7 +121,8 @@ public class PlayerController : MonoBehaviour
 
             entity.CaptureEntity();
             entity.TakeDamage(entity.Data.Hp +1); // instakill
-            
+
+            //_absorbedEntites.Add(entity.Data);
 
             transform.DOMove(_lastTargetPos, _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
 
@@ -139,10 +140,10 @@ public class PlayerController : MonoBehaviour
 
             transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.FailedBiting));
 
-            DOTween.Sequence().
-                Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
-                Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
-                OnComplete(() => ChangeState(PlayerStates.Idle));
+            //DOTween.Sequence().
+                //Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
+                //Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
+                //OnComplete(() => ChangeState(PlayerStates.Idle));
 
             Debug.Log($"player {name} didn't bite");
         }

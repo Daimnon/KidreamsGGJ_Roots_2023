@@ -7,6 +7,8 @@ using NaughtyAttributes;
 
 public class VampireLordController : PlayerController
 {
+    [SerializeField] private LayerMask _graveLayer;
+    private bool _isTouchingGrave = false;
     #region Monobehaviour Callbacks
     private void OnEnable()
     {
@@ -36,6 +38,11 @@ public class VampireLordController : PlayerController
         _bite.Disable();
     }
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        _isTouchingGrave = collision.IsTouchingLayers(_graveLayer);
+    }
 
     protected override void Bite(InputAction.CallbackContext biteContext)
     {
