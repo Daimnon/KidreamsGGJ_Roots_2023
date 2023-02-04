@@ -16,7 +16,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Transform _mainCamTransform;
     public Transform MainCamTransform => _mainCamTransform;
 
-    [SerializeField] private float _size = 8f;
+    [SerializeField] private float _size = 14f;
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class CameraManager : MonoBehaviour
         float playerY = GameManager.Instance.CurrentPlayer.transform.position.y;
         float cameraZ = _mainCamTransform.position.z;
 
-        Vector3 newCamPos = new(playerX, playerY, cameraZ);
+        Vector3 newCamPos = new Vector3(playerX, playerY, cameraZ);
         _mainCamTransform.position = newCamPos;
     }
     private void FollowVampireLord()
