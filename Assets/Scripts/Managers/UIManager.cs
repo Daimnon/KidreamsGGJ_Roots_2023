@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private static UIManager _instance;
-    public static UIManager Instance => _instance;
+    public static UIManager Instance => (_instance ??= FindObjectOfType<UIManager>());
 
     [SerializeField] private GameObject _gravesParent, _heartsParent;
     [SerializeField] private Transform _bloodFill;

@@ -9,7 +9,7 @@ public enum GameStates { PlayerLoop, VampireLordLoop }
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-    public static GameManager Instance => _instance;
+    public static GameManager Instance => (_instance ??= FindObjectOfType<GameManager>());
 
     private delegate void GameState();
     private GameState _gameState;
