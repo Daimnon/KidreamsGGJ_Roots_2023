@@ -69,7 +69,8 @@ public class GameManager : MonoBehaviour
     {
         foreach (Entity entity in AllEntities)
         {
-            Destroy(entity.gameObject);
+            if (entity)
+                Destroy(entity.gameObject);
         }
 
         AllEntities.Clear();
