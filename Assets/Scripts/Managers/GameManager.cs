@@ -14,41 +14,45 @@ public class GameManager : MonoBehaviour
     private delegate void GameState();
     private GameState _gameState;
 
-    [SerializeField] private PlayerData _newPlayerData, _nextPlayerData;
-    [SerializeField] private GameObject _playerPrefab, _currentPlayer, _vampireLord;
-    [SerializeField] private PlayerController _playerController;
-    [SerializeField] private Transform _playerSpawn, _vampireLordSpawn;
-    [SerializeField] private Grave _chosenGrave;
-    [SerializeField] private List<Grave> _savedGraves;
-    [SerializeField] private bool _debugPlayerLoop;
+    // win/lose condition: blood empty = perma-death, blood full = vampireLord resurrection, value = 0-100.
+    [SerializeField] private int _bloodAmount = 25;
+    public int BloodAmount => _bloodAmount;
 
-    public List<Entity> AllEntities { get; set; }
-
-    public Grave ChosenGrave { get => _chosenGrave; set => value = _chosenGrave; }
-    public List<Grave> SavedGraves { get => _savedGraves; set => value = _savedGraves; }
-
-    public PlayerData NewPlayerData => _newPlayerData;
-    public PlayerData NextPlayerData { get => _nextPlayerData; set => value = _nextPlayerData; }
-
+    [SerializeField] private GameObject _playerPrefab, _vampireLordPrefab;
     public GameObject PlayerPrefab => _playerPrefab;
-    public GameObject VampireLord => _vampireLord;
-    public GameObject CurrentPlayer { get => _currentPlayer; set => value = _currentPlayer; }
+    public GameObject VampireLordPrefab => _vampireLordPrefab;
 
+    [SerializeField] private PlayerController _playerController;
     public PlayerController PlayerController { get => _playerController; set => value = _playerController; }
+    
+    [SerializeField] private VampireLordController _vampireLordController;
+    public VampireLordController VampireLordController => _vampireLordController;
 
-    public Transform PlayerSpawn { get => _playerSpawn; set => value = _playerSpawn; }
+    [SerializeField] private Transform _playerSpawn, _vampireLordSpawn;
+    public Transform PlayerSpawn => _playerSpawn;
     public Transform VampireLordSpawn => _vampireLordSpawn;
 
-    private UnderworldOverlay _underworldOverlay;
+    [SerializeField] private List<Villager> _engraved;
+    public List<Villager> Engraved { get => _engraved; set => value = _engraved; }
 
+    [SerializeField] private Villager _chosenEngraved;
+    public Villager ChosenEngraved { get => _chosenEngraved; set => value = _chosenEngraved; }
+
+    [SerializeField] private List<Entity> _allEntities;
+    public List<Entity> AllEntities { get => _allEntities; set => value = _allEntities; }
+
+    [SerializeField] private UnderworldOverlay _underworldOverlay;
+    public UnderworldOverlay UnderworldOverlay => _underworldOverlay;
+
+    [SerializeField] private bool _debugPlayerLoop = false;
 
     private void Awake()
     {
         _instance = this;
-        _gameState = PlayerLoop;
-        _underworldOverlay = GetComponent<UnderworldOverlay>();
+        _engraved = new();
+        _allEntities = new();
         _underworldOverlay.SetRegularMode();
-        AllEntities = new();
+        _gameState = PlayerLoop;
     }
     private void Update()
     {
@@ -78,13 +82,13 @@ public class GameManager : MonoBehaviour
         await _underworldOverlay.StartUnderworldAnim();
         Debug.Log("Underworld anim done - Resurrecting player!");
 
-        VampireLord.SetActive(true);
+        _vampireLordController.gameObject.SetActive(true);
         //ResurrectPlayer();
     }
 
     public void TransitionToOverworld()
     {
-        VampireLord.SetActive(false);
+        _vampireLordController.gameObject.SetActive(false);
 
         _underworldOverlay.SetRegularMode();
         Debug.Log("Underworld anim done - Resurrecting player!");
@@ -110,7 +114,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
-        newPlayerController.AbsorbedEntity = _chosenGrave.EntityData;
+        newPlayerController.AbsorbedEntity = _chosenEngraved.Data;
         ChangeState(GameStates.PlayerLoop);
     }
     public void Test()

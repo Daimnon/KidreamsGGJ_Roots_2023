@@ -55,7 +55,7 @@ public class VampireLordController : PlayerController
     {
         if (_isTouchingGrave)
         {
-            GameManager.Instance.ChosenGrave = _currentGrave;
+            GameManager.Instance.ChosenEngraved = _currentGrave.EngravedVillager;
             GameManager.Instance.TransitionToOverworld();
         }
     }
