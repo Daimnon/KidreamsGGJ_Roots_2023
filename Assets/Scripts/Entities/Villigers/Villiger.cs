@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Villiger : Entity
 {
-    [SerializeField] private GameObject _gravePrefab, _currentGraveGameObject, _currentTomb;
-    [SerializeField] private Grave ;
+    [SerializeField] private GameObject _gravePrefab, _currentGraveGameObject;
+    [SerializeField] private Grave _currentGrave;
     [SerializeField] private SpriteRenderer _villigerGraphics;
     [SerializeField] private float _graveInstansiationOffsetY = 10f;
 
@@ -13,7 +13,7 @@ public class Villiger : Entity
 
     private void Update()
     {
-        if (_currentTomb && CheckGravePosInAir())
+        if (_currentGrave && CheckGravePosInAir())
         {
             Engrave();
         }
@@ -21,11 +21,11 @@ public class Villiger : Entity
 
     private void Engrave()
     {
-        _currentTomb.transform.position = transform.position;
-        _currentTomb.EntityData = Data;
+        _currentGrave.transform.position = transform.position;
+        _currentGrave.EntityData = Data;
 
         if (GameManager.Instance.SavedGraves.Count < _maxGraves)
-            GameManager.Instance.SavedGraves.Add(_currentTomb);
+            GameManager.Instance.SavedGraves.Add(_currentGrave);
 
         Destroy(gameObject);
     }
@@ -36,7 +36,7 @@ public class Villiger : Entity
     }
     private bool CheckGravePosInAir()
     {
-        bool isGraveInAir = _currentTomb.transform.position.y > transform.position.y ? true : false;
+        bool isGraveInAir = _currentGrave.transform.position.y > transform.position.y ? true : false;
 
         return isGraveInAir;
     }
