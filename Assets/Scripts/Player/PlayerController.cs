@@ -121,7 +121,8 @@ public class PlayerController : MonoBehaviour
 
             entity.CaptureEntity();
             entity.TakeDamage(entity.Data.Hp +1); // instakill
-            
+
+            _absorbedEntity = entity.Data;
 
             transform.DOMove(_lastTargetPos, _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
 
@@ -139,10 +140,10 @@ public class PlayerController : MonoBehaviour
 
             transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.FailedBiting));
 
-            DOTween.Sequence().
-                Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
-                Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
-                OnComplete(() => ChangeState(PlayerStates.Idle));
+            //DOTween.Sequence().
+                //Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
+                //Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
+                //OnComplete(() => ChangeState(PlayerStates.Idle));
 
             Debug.Log($"player {name} didn't bite");
         }
