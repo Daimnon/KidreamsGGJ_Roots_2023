@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using NaughtyAttributes;
+using UnityEngine.EventSystems;
+using System;
 
 public enum PlayerStates { Idle, Moving, Attacking, Biting, Eating, FailedBiting }
 
@@ -17,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Expandable] private PlayerData _data;
     public PlayerData Data { get => _data; set => value = _data; }
 
-    private bool _isWeak, _previousIsWeak, _newIsWeak;
+    private bool _isWeak;
     public bool IsWeak => _isWeak;
 
     // TODO: Set kills/absorption absorbed entity when bite person / resurrect from grave
@@ -37,7 +39,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] protected PlayerControls _playerControls;
     [SerializeField] protected SpriteRenderer _playerGraphics;
-    [SerializeField] private SpriteDirection _spriteDir;
+    //[SerializeField] private SpriteDirection _spriteDir;
     [SerializeField] protected Rigidbody2D _rb;
     public Rigidbody2D Rb => _rb;
 
@@ -53,8 +55,7 @@ public class PlayerController : MonoBehaviour
     private int _hpStatCounter = 0, _speedStatCounter = 0, _visionStatCounter = 0;
     private float _moveToTargetDuration, _moveBackFromTargetDuration, _biteOffset;
 
-    protected Vector2 _moveInput, _previousMoveInput, _newMoveInput;
-    protected Vector2 _spriteDirection;
+    protected Vector2 _moveInput, _spriteDirection;
     protected InputAction _move, _bite;
 
     #region Monobehaviour Callbacks
@@ -90,18 +91,6 @@ public class PlayerController : MonoBehaviour
     {
         _move.Disable();
         _bite.Disable();
-    }
-
-    private bool DetectValueChangeInMoveInput()
-    {
-        bool isMoveInputChanged = false;
-        _newMoveInput = _moveInput;
-
-        if (_previousMoveInput != _newMoveInput)
-            isMoveInputChanged = true;
-
-        _previousMoveInput = _moveInput;
-        return isMoveInputChanged;
     }
     private void OnValueChangedInMoveInput()
     {
@@ -153,17 +142,19 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
         _rb.velocity = _data.CalculatedSpeed * Time.fixedDeltaTime * direction;
+
+        FlipSpriteToMoveDirection();
     }
     #endregion
 
     protected virtual void Bite(InputAction.CallbackContext biteContext)
     {
-        Vector2 direction = _spriteDir.Vector;
+        //Vector2 direction = _spriteDir.Vector;
         //_playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
 
         _lastPrey = null;
         _lastAttackingOriginPos = transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _data.BiteDistance, _biteLayer);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, _spriteDirection, _data.BiteDistance, _biteLayer);
 
         if (hit)
         {
@@ -172,7 +163,7 @@ public class PlayerController : MonoBehaviour
             if (!_lastPrey)
                 return;
 
-            Vector2 pos = (Vector2)transform.position + direction * _data.BiteDistance;
+            Vector2 pos = (Vector2)transform.position + _spriteDirection * _data.BiteDistance;
             _lastTargetPos = new(pos.x, hit.transform.position.y);
 
 
@@ -201,7 +192,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Vector2 pos = (Vector2)transform.position + direction * _data.BiteDistance;
+            Vector2 pos = (Vector2)transform.position + _spriteDirection * _data.BiteDistance;
             _lastTargetPos = new(pos.x, transform.position.y);
 
             ChangeState(PlayerStates.Attacking);
@@ -325,6 +316,20 @@ public class PlayerController : MonoBehaviour
             OnComplete(() => ChangeState(PlayerStates.Idle));
     }
     #endregion
+
+    private void FlipSpriteToMoveDirection()
+    {
+        if (_moveInput.x < 0)
+        {
+            _spriteDirection = new(-Mathf.Abs(transform.localScale.x), 0);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else if (_moveInput.x > 0)
+        {
+            _spriteDirection = new(Mathf.Abs(transform.localScale.x), 0);
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+    }
 
     public void ChangeState(PlayerStates newState)
     {

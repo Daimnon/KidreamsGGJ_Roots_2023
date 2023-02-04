@@ -276,13 +276,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92550bf87e3a22b46aafb9bb376a9ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerGraphics: {fileID: 1336632896142081006}
-  _spriteDir: {fileID: 5262352227140306962}
-  _rb: {fileID: 1336632897603560554}
-  _debugPlayerState: 0
-  _moveAnim: {fileID: 5454714431184253933}
   _data: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
-  _engravedAmount: 0
+  AbsorbedEntity: {fileID: 0}
+  _playerGraphics: {fileID: 1336632896142081006}
+  _rb: {fileID: 1336632897603560554}
+  _moveAnim: {fileID: 5454714431184253933}
+  _debugPlayerState: 0
   _biteLayer:
     serializedVersion: 2
     m_Bits: 768
