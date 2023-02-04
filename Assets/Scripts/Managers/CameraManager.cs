@@ -21,7 +21,6 @@ public class CameraManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        _mainCam = Camera.main;
         _mainCam.orthographicSize = _size;
         _mainCamTransform = _mainCam.transform;
     }

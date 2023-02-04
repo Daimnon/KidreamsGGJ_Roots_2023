@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
             entity.CaptureEntity();
             entity.TakeDamage(entity.Data.Hp +1); // instakill
 
-            _absorbedEntity = entity.Data;
+            //_absorbedEntites.Add(entity.Data);
 
             transform.DOMove(_lastTargetPos, _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
 
