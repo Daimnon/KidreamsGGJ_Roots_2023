@@ -11,6 +11,13 @@ public enum EntityType
 [CreateAssetMenu(fileName = "New Entity", menuName = "ScriptableObject/Data/Entity Data", order = 21)]
 public class EntityData : ScriptableObject
 {
+    public enum Stat
+    {
+        Hp,
+        Damage,
+        Speed,
+        Vision,
+    }
     [ValidateInput(nameof(ValidateNotNull))]
     [SerializeField, Expandable] private CommonEntityData commonData;
 
@@ -19,13 +26,17 @@ public class EntityData : ScriptableObject
     [SerializeField] private int _speed;
     [SerializeField] private int _vision;
     [SerializeField] private float _attackRange;
+
+    [SerializeField] private Stat _absorbedStat;
     
     [field: SerializeField] public string Name { get; private set; }
+
     public int Hp => _maxHp;
     public int Damage => _damage;
     public int Speed => _speed;
     public int Vision => _vision;
     public float AttackRange => _attackRange;
+    public Stat AbsorbedStat => _absorbedStat;
 
     public int CalculatedSpeed => Speed * commonData.SpeedModifier;
     public event Action OnValidated;
@@ -54,6 +65,19 @@ public class EntityData : ScriptableObject
             return commonData.BaseFOVAngle + Vision * commonData.FOVAnglePerVisionPoint;
         }
     }
+    
+    public int GetStat(Stat stat)
+    {
+        return stat switch
+        {
+            Stat.Hp => Hp,
+            Stat.Damage => Damage,
+            Stat.Speed => Speed,
+            Stat.Vision => Vision,
+            _ => throw new ArgumentOutOfRangeException(nameof(stat), stat, null)
+        };
+    }
+
 
     // Entity View raycasting - dependent (calculated from FOV/Distance)
     [ShowNativeProperty] public int NumRays => Mathf.CeilToInt(ViewFOVAngle / DeltaAngleRays);
