@@ -11,7 +11,7 @@ ScriptedImporter:
   svgType: 1
   texturedSpriteMeshType: 0
   svgPixelsPerUnit: 100
-  gradientResolution: 64
+  gradientResolution: 100
   alignment: 9
   customPivot: {x: -1.5, y: 0.5}
   generatePhysicsShape: 0
@@ -28,27 +28,27 @@ ScriptedImporter:
   maxTangentAngleEnabled: 0
   maxTangentAngle: 5
   keepTextureAspectRatio: 1
-  textureSize: 256
+  textureSize: 200
   textureWidth: 256
   textureHeight: 256
   wrapMode: 0
   filterMode: 1
-  sampleCount: 4
+  sampleCount: 8
   preserveSVGImageAspect: 0
   useSVGPixelsPerUnit: 0
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: fence_side_right
+      name: 
       originalName: 
-      pivot: {x: -1.5, y: 0.5}
-      alignment: 9
+      pivot: {x: 0, y: 0}
+      alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 51
-        height: 256
-      spriteID: 0453713adf461684ab9676dc08716ecc
+        width: 0
+        height: 0
+      spriteID: fa848c63d5a12e8439e4ec3b3b6d4405
     PhysicsOutlines: []
