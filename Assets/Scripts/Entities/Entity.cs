@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
@@ -59,6 +60,9 @@ public partial class Entity : MonoBehaviour
     {
         InitData();
         Data.OnValidated += OnValidate;
+    }
+    private void Start()
+    {
         InitState();
         _hp = Data.Hp;
         GameManager.Instance.AllEntities.Add(this);
@@ -85,7 +89,14 @@ public partial class Entity : MonoBehaviour
             _navigation.Speed = Data.Speed;
         }
     }
-
+    private IEnumerator CachPlayer()
+    {
+        while (!GameManager.Instance.PlayerController)
+        {
+            yield return null;
+            InitState();
+        }
+    }
     private void InitState()
     {
         moveStaggerAnim.enabled = false;

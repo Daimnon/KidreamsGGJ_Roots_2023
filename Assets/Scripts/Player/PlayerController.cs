@@ -129,13 +129,15 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            ChangeState(PlayerStates.FailedBiting);
+            ChangeState(PlayerStates.Attacking);
             Vector2 originalPos = transform.position;
             Vector2 pos = (Vector2) transform.position + direction * _data.BiteDistance;
             float targetPosX = pos.x;
             
             float moveToTarget = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
             float moveBackFromTarget = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
+
+            transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.FailedBiting));
 
             DOTween.Sequence().
                 Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
@@ -235,6 +237,9 @@ public class PlayerController : MonoBehaviour
     {
         if (_debugPlayerState) Debug.Log($"player state tried to Bite and failed");
         _moveInput = Vector2.zero;
+
+        transform.DOMoveX(_lastAttackingPos.x, _moveBackFromTargetDuration / 2).SetEase(_data.MoveBackFromTargetCurveFailedBite).
+            OnComplete(() => ChangeState(PlayerStates.Idle));
     }
     #endregion
 
