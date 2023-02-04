@@ -18,10 +18,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _playerPrefab, _currentPlayer, _vampireLord;
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private Transform _playerSpawn, _vampireLordSpawn;
+    [SerializeField] private Grave _chosenGrave;
     [SerializeField] private List<Grave> _savedGraves;
     [SerializeField] private bool _debugPlayerLoop;
 
     public List<Entity> AllEntities { get; set; }
+
+    public Grave ChosenGrave { get => _chosenGrave; set => value = _chosenGrave; }
     public List<Grave> SavedGraves { get => _savedGraves; set => value = _savedGraves; }
 
     public PlayerData NewPlayerData => _newPlayerData;
@@ -106,8 +109,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
-        newPlayerController.AbsorbedEntity = _nextPlayerData;
-        AbsorbedEntity.
+        newPlayerController.AbsorbedEntity = _chosenGrave.EntityData;
         ChangeState(GameStates.PlayerLoop);
     }
 }
