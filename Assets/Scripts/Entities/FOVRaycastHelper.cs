@@ -8,13 +8,15 @@ public class FOVRaycastHelper<TTarget> where TTarget : Component
     
     private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
     private readonly LayerMask _layerMask;
+    private readonly bool _findThroughOtherColliders;
 
     public TTarget CachedComponent { get; private set; }
 
-    public FOVRaycastHelper(Transform raycastOriginTrans, LayerMask layerMask)
+    public FOVRaycastHelper(Transform raycastOriginTrans, LayerMask layerMask, bool findThroughOtherColliders = true)
     {
         _raycastOriginTrans = raycastOriginTrans;
         _layerMask = layerMask;
+        _findThroughOtherColliders = findThroughOtherColliders;
     }
     
     public TTarget RayCastForPlayer(IEnumerable<Vector3> rayDirections, float distance)

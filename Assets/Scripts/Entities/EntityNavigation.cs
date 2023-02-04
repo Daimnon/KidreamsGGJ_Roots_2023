@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,6 +26,9 @@ public class EntityNavigation : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _showGizmos;
     [SerializeField] private Color _gizmoColor;
+    [SerializeField] private LayerMask _playerAndCollidersLayer;
+
+    private FOVRaycastHelper<PlayerController> _playerRaycaster;
 
     public event Action OnReachedDestination;
     
@@ -55,13 +59,34 @@ public class EntityNavigation : MonoBehaviour
         NavMode = navState;
         _playerTransform = playerTransform;
 
-        Destination = GetDestination(playerTransform);
+        if (navState == NavigationMode.RunFromPlayer)
+        {
+            StartCoroutine(RunFromPlayerFindLocationRoutine);
+        }
+        else
+        {
+            Destination = GetDestination(playerTransform);
+        }
+    }
+
+    public IEnumerator RunFromPlayerFindLocationRoutine()
+    {
+        const float minDistance = 7;
+        const float maxDistance = 30;
+        // 1. find clear direction (min distance)
+        
+        // TODO: raycast away from player
+        // TODO: if not work, wait frame, rotate 90deg and try again
+        // if tried all, stop
+
+        // 2. random distance (min, maxDist) in that direction
     }
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         _data = GetComponent<EntityDataHolder>().Data;
+        _playerRaycaster = new FOVRaycastHelper<PlayerController>(transform, _playerAndCollidersLayer);
     }
 
     private void Start()
