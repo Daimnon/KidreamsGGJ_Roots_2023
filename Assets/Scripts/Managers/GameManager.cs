@@ -18,9 +18,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _bloodAmount = 25;
     public int BloodAmount => _bloodAmount;
 
-    [SerializeField] private GameObject _playerPrefab, _vampireLordPrefab;
+    [SerializeField] private GameObject _playerPrefab, _currentVampireLord;
     public GameObject PlayerPrefab => _playerPrefab;
-    public GameObject VampireLordPrefab => _vampireLordPrefab;
+    public GameObject CurrentVampireLord => _currentVampireLord;
 
     [SerializeField] private PlayerController _playerController;
     public PlayerController PlayerController { get => _playerController; set => value = _playerController; }
@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
         _instance = this;
         _engraved = new();
         _allEntities = new();
+        _vampireLordController = _currentVampireLord.GetComponent<VampireLordController>();
         _underworldOverlay.SetRegularMode();
         _gameState = PlayerLoop;
     }
