@@ -13,15 +13,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Height
-      value: 2.74
+      value: 3.3
       objectReference: {fileID: 0}
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Radius
-      value: 1.63
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_BaseOffset
-      value: 1.68
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_StoppingDistance
@@ -30,7 +30,7 @@ PrefabInstance:
     - target: {fileID: 800674697070924778, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 3286163911610860551, guid: 7390ac43cb6fdd54586fc37b5f21dbaf, type: 3}
+      objectReference: {fileID: 3286163911610860551, guid: e4f8135a866bb3d44a8aaee33e4ab6ab, type: 3}
     - target: {fileID: 2863150261493718017, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Size.x
       value: 1.8946285
@@ -65,7 +65,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: db1619e7585e4d247a0045c5d258ad91, type: 2}
     - target: {fileID: 6144957634684898835, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Name
-      value: Entity_Boar  Variant
+      value: Entity_Rabbit  Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6144957634684898836, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_RootOrder
