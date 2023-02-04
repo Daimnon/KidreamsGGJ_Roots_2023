@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public Transform VampireLordSpawn => _vampireLordSpawn;
 
     private UnderworldOverlay _underworldOverlay;
+    private Vector3 _lastPlayerPosition;
 
 
     private void Awake()
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         _gameState.Invoke();
+        if (PlayerController) _lastPlayerPosition = PlayerController.transform.position;
     }
 
     private void PlayerLoop()
@@ -73,11 +75,13 @@ public class GameManager : MonoBehaviour
                 Destroy(entity.gameObject);
         }
 
+        CurrentPlayer = VampireLord;
         AllEntities.Clear();
 
         await _underworldOverlay.StartUnderworldAnim();
         Debug.Log("Underworld anim done - Resurrecting player!");
 
+        VampireLord.transform.position = _lastPlayerPosition;
         VampireLord.SetActive(true);
         //ResurrectPlayer();
     }
@@ -110,6 +114,8 @@ public class GameManager : MonoBehaviour
     {
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
+        CurrentPlayer = newPlayer;
+        
         newPlayerController.AbsorbedEntity = _chosenGrave.EntityData;
         ChangeState(GameStates.PlayerLoop);
     }

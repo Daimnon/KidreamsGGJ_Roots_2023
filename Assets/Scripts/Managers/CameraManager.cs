@@ -32,6 +32,7 @@ public class CameraManager : MonoBehaviour
     {
         _cameraState.Invoke();
     }
+    
     private void FollowPlayer()
     {
         if (!GameManager.Instance.CurrentPlayer)
@@ -43,9 +44,5 @@ public class CameraManager : MonoBehaviour
 
         Vector3 newCamPos = new Vector3(playerX, playerY, cameraZ);
         _mainCamTransform.position = newCamPos;
-    }
-    private void FollowVampireLord()
-    {
-
     }
 }
