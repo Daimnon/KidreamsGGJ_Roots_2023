@@ -23,6 +23,9 @@ public class CameraManager : MonoBehaviour
         _mainCam = Camera.main;
         _mainCam.orthographicSize = _size;
         _mainCamTransform = _mainCam.transform;
+    }
+    private void Start()
+    {
         _cameraState = FollowPlayer;
     }
     private void Update()
