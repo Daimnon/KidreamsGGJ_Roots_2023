@@ -13,12 +13,13 @@ public enum FaceDirection
 [RequireComponent(typeof(EntityDataHolder))]
 public partial class Entity : MonoBehaviour
 {
-    private enum EntityState
+    protected enum EntityState
     {
         Idle,
         ChasingPlayer,
         RunningFromPlayer,
         Attacking,
+        CapturedByPlayer,
     }
 
     private int _hp;
@@ -32,6 +33,7 @@ public partial class Entity : MonoBehaviour
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
+    [SerializeField] private bool _debugLogState;
     [SerializeField] private Color _testRayColor;
 
     [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
@@ -51,8 +53,9 @@ public partial class Entity : MonoBehaviour
             ? EntityState.ChasingPlayer
             : EntityState.RunningFromPlayer;
 
-    
     public static event Action<Entity> OnEntityDeath;
+
+    private static List<Entity> AllEntities = new();
     
     private void Awake()
     {
@@ -60,6 +63,7 @@ public partial class Entity : MonoBehaviour
         Data.OnValidated += OnValidate;
         InitState();
         _hp = Data.Hp;
+        AllEntities.Add(this);
     }
 
     private void OnValidate()
@@ -116,20 +120,24 @@ public partial class Entity : MonoBehaviour
         }
     }
 
-    /// <param name="damage">true if entity died</param>
+    /// <param name="damage">true if entity is still alive</param>
     public bool TakeDamage(int damage)
     {
         _hp -= damage;
-        if (_hp == 0)
+        if (_debugLogState) Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}", gameObject);
+        if (_hp <= 0)
         {
             Kill();
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
-    private void Kill()
+    public void CaptureEntity() => State = EntityState.CapturedByPlayer;
+    public void ReleaseEntity() => State = EntityState.Idle;
+
+    protected virtual void Kill()
     {
         OnEntityDeath?.Invoke(this);
         Destroy(this);
@@ -154,12 +162,12 @@ public partial class Entity : MonoBehaviour
 
     private void OnPlayerFound()
     {
-        Debug.Log(LogStr("Found player!!!!"));
+        if (_debugLogState) Debug.Log(LogStr("Found player!"), gameObject);
     }
 
     private void OnPlayerLost()
     {
-        Debug.Log(LogStr("Where player???!!"));
+       if (_debugLogState) Debug.Log(LogStr("Where player?!"), gameObject);
     }
 
     private PlayerController RayCastForPlayer()

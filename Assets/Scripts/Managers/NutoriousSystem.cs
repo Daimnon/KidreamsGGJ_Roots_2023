@@ -25,10 +25,11 @@ public class NutoriousSystem : MonoBehaviour
 
     private void OnEntityDeath(Entity obj)
     {
-        var shouldSpawn = spawnMilestones.Where(milestone => milestone == nutoriousPoints).Any();
+        var shouldSpawn = spawnMilestones.Any(milestone => milestone == nutoriousPoints);
         if(shouldSpawn)
         {
             var tempObj = Instantiate(entityToSpawn, mapManager.GetRandomVillagerSpawnPosition(), Quaternion.identity);
         }
+        nutoriousPoints++;
     }
 }

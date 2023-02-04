@@ -20,7 +20,7 @@ public class TilesInstantiator : MonoBehaviour
     {
         foreach (var obstacleData in levelData.tilesToGenerate)
         {
-            tilemap.SetTile(obstacleData._tilePos * tilesPadding, obstacleData._tile);
+            tilemap.SetTile(obstacleData._tilePos * tilesPadding,obstacleData._tile);
         }
     }
     private void Awake()

@@ -13,7 +13,7 @@ public class TilesLevelWriter : MonoBehaviour
     private LevelScriptable levelData;
 
     [SerializeField]
-    private Tile[] tilesToWrite;
+    private CostumeTileData[] tilesToWrite;
     [SerializeField]
     protected Vector2 backgroundSize = new Vector2(500,150);
     [SerializeField]
@@ -34,13 +34,13 @@ public class TilesLevelWriter : MonoBehaviour
             for (int y = startingY; y < backgroundSize.y; y++)
             {
                 Vector3Int tilePos = new Vector3Int(x, y,0);
-                var obstacle = new tileData(tilePos , RandomTile());
+                var obstacle = new CostumeTileData(tilePos , RandomTile()._tile);
                 levelData.tilesToGenerate.Add(obstacle);
             }
         }
     }
 
-    private Tile RandomTile()
+    private CostumeTileData RandomTile()
     {
         var random = UnityEngine.Random.Range(0, tilesToWrite.Length);
         return tilesToWrite[random];

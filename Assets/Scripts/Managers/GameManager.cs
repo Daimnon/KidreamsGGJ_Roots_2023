@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 public enum GameStates { PlayerLoop, VampireLordLoop }
@@ -29,11 +31,15 @@ public class GameManager : MonoBehaviour
     public Transform PlayerSpawn { get => _playerSpawn; set => value = _playerSpawn; }
     public Transform VampireLordSpawn => _vampireLordSpawn;
 
+    private UnderworldOverlay _underworldOverlay;
+
 
     private void Awake()
     {
         _instance = this;
         _gameState = PlayerLoop;
+        _underworldOverlay = GetComponent<UnderworldOverlay>();
+        _underworldOverlay.SetRegularMode();
     }
     private void Update()
     {
@@ -47,12 +53,14 @@ public class GameManager : MonoBehaviour
     private void VampireLordLoop()
     {
         if (_debugPlayerLoop) Debug.Log($"GameState is VampireLordLoop");
-        GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
-        newPlayer.transform.SetParent(_playerSpawn.parent);
-        PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
-        newPlayerController.Data = _nextPlayerData;
-        ChangeState(GameStates.PlayerLoop);
+    }
 
+    [Button("Test TransitionToUnderworld")]
+    public async void TransitionToUnderworld()
+    {
+        await _underworldOverlay.StartUnderworldAnim();
+        Debug.Log("Underworld anim done - Resurrecting player!");
+        ResurrectPlayer();
     }
 
     public void ChangeState(GameStates newState)
@@ -64,7 +72,16 @@ public class GameManager : MonoBehaviour
                 break;
             case GameStates.VampireLordLoop:
                 _gameState = VampireLordLoop;
+                TransitionToUnderworld();
                 break;
         }
+    }
+
+    private void ResurrectPlayer()
+    {
+        GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
+        PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
+        newPlayerController.Data = _nextPlayerData;
+        ChangeState(GameStates.PlayerLoop);
     }
 }
