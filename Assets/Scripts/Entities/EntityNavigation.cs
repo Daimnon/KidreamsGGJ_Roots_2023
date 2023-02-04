@@ -39,7 +39,7 @@ public class EntityNavigation : MonoBehaviour
         get => agent.destination;
         set
         {
-            Debug.Log($"Setting agent destination: {value}");
+            // Debug.Log($"Setting agent destination: {value}");
             agent.destination = value;
         }
     }

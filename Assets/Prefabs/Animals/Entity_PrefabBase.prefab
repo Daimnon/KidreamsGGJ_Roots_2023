@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3576291507744249355}
   - component: {fileID: 800674697070924778}
+  - component: {fileID: 3396881238886378742}
   m_Layer: 8
   m_Name: Sprite
   m_TagString: Untagged
@@ -84,6 +85,48 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3396881238886378742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5581337490398368336}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125d7e1ad094a369ce82d3c7dc8ec04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mode: 1
+  _trans: {fileID: 6876095433351021162}
+  _dirVector: {x: 0, y: 0, z: 1}
+  _deltaValue: 10
+  _moveOutTime: 0.2
+  _ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _moveBackTime: 0.2
 --- !u!1 &6144957634684898835
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,12 +189,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 8154517945007613275}
-  moveStaggerAnim: {fileID: 6144957633723597308}
+  moveStaggerAnim: {fileID: 3396881238886378742}
   _playerRaycastMask:
     serializedVersion: 2
     m_Bits: 192
   _spriteDir: {fileID: 6092333702798026847}
   _showGizmos: 1
+  _debugLogState: 0
   _testRayColor: {r: 1, g: 0, b: 0.53783464, a: 1}
   _startNavMode: 1
 --- !u!114 &655535320
@@ -261,9 +305,8 @@ GameObject:
   - component: {fileID: 6876095433351021162}
   - component: {fileID: 8154517945007613275}
   - component: {fileID: 6092333702798026847}
-  - component: {fileID: 6144957633723597308}
   m_Layer: 8
-  m_Name: EntityHolder
+  m_Name: Components
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -324,45 +367,3 @@ MonoBehaviour:
   graphicsParent: {fileID: 6876095433351021162}
   spriteDefaultDirection: 0
   <Direction>k__BackingField: 0
---- !u!114 &6144957633723597308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9104120784747632204}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e125d7e1ad094a369ce82d3c7dc8ec04, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mode: 1
-  _trans: {fileID: 6876095433351021162}
-  _dirVector: {x: 0, y: 0, z: 1}
-  _deltaValue: 10
-  _moveOutTime: 0.2
-  _ease:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _moveBackTime: 0.2

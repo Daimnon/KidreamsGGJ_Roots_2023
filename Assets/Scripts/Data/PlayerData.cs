@@ -7,10 +7,15 @@ public class PlayerData : EntityData
 {
     [Header("Player Sprites")]
     [SerializeField] private Sprite _weakSprite;
-    [SerializeField] private Sprite _strongSprite;
+    [SerializeField] private Sprite _strongSprite, _weakAttackingSprite, _strongAttackingSprite;
+    [SerializeField] private Sprite[] _weakEatingAnimation, _strongEatingAnimation;
 
     public Sprite WeakSprite => _weakSprite;
     public Sprite StrongSprite => _strongSprite;
+    public Sprite WeakAttackingSprite => _weakAttackingSprite;
+    public Sprite StrongAttackingSprite => _strongAttackingSprite;
+    public Sprite[] WeakEatingAnimation => _weakEatingAnimation;
+    public Sprite[] StrongEatingAnimation => _strongEatingAnimation;
 
     [Header("Player Values")]
     [SerializeField] private float _biteDistance = 3f;

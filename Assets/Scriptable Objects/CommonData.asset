@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SpeedModifier>k__BackingField: 100
   <AnimalAttackSpeed>k__BackingField: 0
+  _killPointsDivider: 5
+  _absorptionPointsDivider: 3
   <BaseFOVAngle>k__BackingField: 72.49
   <BaseViewDistance>k__BackingField: 15
   <MaxDistanceBetweenRays>k__BackingField: 1
