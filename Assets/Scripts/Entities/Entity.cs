@@ -116,17 +116,18 @@ public partial class Entity : MonoBehaviour
         }
     }
 
-    /// <param name="damage">true if entity died</param>
+    /// <param name="damage">true if entity is still alive</param>
     public bool TakeDamage(int damage)
     {
         _hp -= damage;
-        if (_hp == 0)
+        Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}");
+        if (_hp <= 0)
         {
             Kill();
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public void CaptureEntity() => State = EntityState.CapturedByPlayer;
@@ -157,12 +158,12 @@ public partial class Entity : MonoBehaviour
 
     private void OnPlayerFound()
     {
-        Debug.Log(LogStr("Found player!!!!"));
+        Debug.Log(LogStr("Found player!"));
     }
 
     private void OnPlayerLost()
     {
-        Debug.Log(LogStr("Where player???!!"));
+        Debug.Log(LogStr("Where player?!"));
     }
 
     private PlayerController RayCastForPlayer()

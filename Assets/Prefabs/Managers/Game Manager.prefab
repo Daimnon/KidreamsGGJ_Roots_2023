@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5707917979217978607}
   - component: {fileID: 5707917979217978604}
   - component: {fileID: 1541899359}
+  - component: {fileID: 1554731876}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -47,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _newPlayerData: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
   _nextPlayerData: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 1336632897603560555, guid: a8b34539a6372964c81e821966553517, type: 3}
   _currentPlayer: {fileID: 0}
   _playerController: {fileID: 0}
   _playerSpawn: {fileID: 0}
@@ -73,3 +74,19 @@ MonoBehaviour:
   _underworldColor: {r: 0.38679248, g: 0.32986832, b: 0.32986832, a: 1}
   _noiseBlend2: 0.125
   _animDuration2: 2
+--- !u!114 &1554731876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5707917979217978605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 675cc387f9bec624c80a411c343d1141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nutoriousPoints: 7
+  spawnMilestones: 030000000500000007000000090000000b0000000d0000000f0000001200000014000000
+  entityToSpawn: {fileID: 5789018814652983916, guid: fca221702b504b54b8319424027718d4, type: 3}
+  mapManager: {fileID: 0}

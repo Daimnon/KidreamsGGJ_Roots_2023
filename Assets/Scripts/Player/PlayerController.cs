@@ -24,11 +24,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Expandable] private PlayerData _data;
     public PlayerData Data { get => _data; set => value = _data; }
 
-    [SerializeField] private int _hp, _damage, _speed, _vision, _engravedAmount;
-    public int Hp { get => _hp; set => value = _hp; }
-    public int Damage { get => _damage; set => value = _damage; }
-    public int Speed { get => _speed; set => value = _speed; }
-    public int Vision { get => _vision; set => value = _vision; }
+    [SerializeField] private int _engravedAmount;
+    private EntityData _absorbedEntity; // TODO: Set absorbed entity when bite person / resurrect from grave
+    private int _damageTaken; // separated from hp so we can calculate Absorbed enitty separately
+    
+    // TODO: Test (stats work + with absorbed entity)
+    [ShowNativeProperty] public int Hp => StatHelper.GetHp(_data, _damageTaken, _absorbedEntity);
+    [ShowNativeProperty] public int Damage => StatHelper.GetDamage(_data, _absorbedEntity);
+    [ShowNativeProperty] public int Speed => StatHelper.GeSpeed(_data, _absorbedEntity);
+    [ShowNativeProperty] public int Vision => StatHelper.GetVision(_data, _absorbedEntity);
     public int EngravedAmount { get => _engravedAmount; set => value = _engravedAmount; }
 
     [Header("World Data")]
@@ -74,10 +78,6 @@ public class PlayerController : MonoBehaviour
     private void Initialize()
     {
         _playerControls = new PlayerControls();
-        _hp = _data.Hp;
-        _damage = _data.Damage;
-        _speed = _data.Speed;
-        _vision = _data.Vision;
         _playerState = Idle;
     }
 
@@ -183,6 +183,7 @@ public class PlayerController : MonoBehaviour
 
     public void Kill()
     {
+        Debug.Log("Player: Died!");
         GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
         Destroy(gameObject);
     }
@@ -190,10 +191,10 @@ public class PlayerController : MonoBehaviour
     public bool TakeDamage(int damage)
     {
         bool isAlive;
+        _damageTaken += damage;
 
-        _hp = _data.Hp;
-
-        if (_hp == 0)
+        Debug.Log($"Player.TakeDamage({damage}). Hp is now {Hp}");
+        if (Hp <= 0)
         {
             isAlive = true;
             Kill();

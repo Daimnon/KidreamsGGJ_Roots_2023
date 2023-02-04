@@ -31,11 +31,15 @@ public class GameManager : MonoBehaviour
     public Transform PlayerSpawn { get => _playerSpawn; set => value = _playerSpawn; }
     public Transform VampireLordSpawn => _vampireLordSpawn;
 
+    private UnderworldOverlay _underworldOverlay;
+
 
     private void Awake()
     {
         _instance = this;
         _gameState = PlayerLoop;
+        _underworldOverlay = GetComponent<UnderworldOverlay>();
+        _underworldOverlay.SetRegularMode();
     }
     private void Update()
     {
@@ -54,8 +58,7 @@ public class GameManager : MonoBehaviour
     [Button("Test TransitionToUnderworld")]
     public async void TransitionToUnderworld()
     {
-        var underworldOverlay = GetComponent<UnderworldOverlay>();
-        await underworldOverlay.StartUnderworldAnim();
+        await _underworldOverlay.StartUnderworldAnim();
         Debug.Log("Underworld anim done - Resurrecting player!");
         ResurrectPlayer();   
     }
