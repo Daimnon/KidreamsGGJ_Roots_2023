@@ -9,5 +9,5 @@ public class FmodSoundGenerator : MonoBehaviour
     public EventReference soundToPlayPath;
     public UnityEvent eventToPlay;
 
-    public void PlaySound() => FmodAudioManager.instance.PlayAndAttachOneShot(soundToPlayPath, transform.position);
+   // public void PlaySound() => FmodAudioManager.instance.PlayAndAttachOneShot(soundToPlayPath, transform.position);
 }

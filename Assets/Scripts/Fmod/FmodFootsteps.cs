@@ -8,9 +8,10 @@ using UnityEngine.InputSystem;
 public class FmodFootsteps : MonoBehaviour
 {
     [SerializeField]private Transform footstepsTransform;
-    [SerializeField] private InputActionReference action;
+    [SerializeField] private Rigidbody2D playerRig;
     [SerializeField] private ParamRef materialParam;
     [SerializeField]private LayerMask Ground;
+    [SerializeField] private FmodAudioManager audioManager;
     public enum FootstepsMaterial {Wood , Gravel , Stone, Metal }
     public enum MoveState {Walk , Run , Crouch }
     private FootstepsMaterial footstepsMaterial;
@@ -35,7 +36,7 @@ public class FmodFootsteps : MonoBehaviour
 
     private void CheckMovement()
     {
-        if (action.action.ReadValue<Vector2>().magnitude > 0f)
+        if (playerRig.velocity.magnitude > 0)
         {
             PlayStep();
         }
@@ -47,7 +48,7 @@ public class FmodFootsteps : MonoBehaviour
         if(curTime >= timeBetweenSteps)
         {
             curTime = 0;
-            FmodAudioManager.instance.PlayAndAttachOneShot(FmodSfxClass.sfxEnums.footsteps,materialParam, footstepsMaterial.ToString(), footstepsTransform.position);
+            audioManager.PlayAndAttachOneShot(FmodSfxClass.sfxEnums.footsteps,playerRig.transform.position);
         }
     }
 }

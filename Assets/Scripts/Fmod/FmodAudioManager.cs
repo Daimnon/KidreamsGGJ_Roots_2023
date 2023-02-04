@@ -20,11 +20,9 @@ public class FmodAudioManager : MonoBehaviour
     [SerializeField] private EventInstance ambiance;
     [HideInInspector]public PLAYBACK_STATE bgmState;
     [SerializeField] private bool playOnAwake;
-    public static FmodAudioManager instance;
 
     private void Awake()
     {
-        instance = this;
         bgm = RuntimeManager.CreateInstance(bgmRef);
         ambiance = RuntimeManager.CreateInstance(ambianceRef);
         PopulateSceneSnapshots();
@@ -44,11 +42,6 @@ public class FmodAudioManager : MonoBehaviour
         {
             snap.instance = RuntimeManager.CreateInstance(snap.path);
         }
-    }
-
-    internal void PlayAndAttachOneShot(FmodSfxClass.sfxEnums footsteps, object material, string v, Vector3 position)
-    {
-        throw new NotImplementedException();
     }
 
     //Update inspector UI to match enum to name
