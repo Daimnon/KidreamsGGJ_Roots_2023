@@ -10,7 +10,15 @@ public class FmodSfxClass
 
 {
     public string name;
-    public enum sfxEnums { Default , footsteps }
+    public enum sfxEnums { 
+        footsteps,
+        pigKill,
+        ratKill,
+        rabbitKill,
+        Bite,
+        Switch,
+        GraveEmerge
+    }
     public  sfxEnums sfx;
     public EventReference path;
     public EventInstance instance;
