@@ -26,14 +26,17 @@ public class PlayerController : MonoBehaviour
     public PlayerData Data { get => _data; set => value = _data; }
 
     [SerializeField] private int _engravedAmount;
-    private readonly List<EntityData> _absorbedEntities = new List<EntityData>(); // TODO: Set absorbed entity when bite person / resurrect from grave
+
+    // TODO: Set kills/absorption absorbed entity when bite person / resurrect from grave
+    private readonly EntityData _absorbedEntity;
+    private readonly List<EntityData> _killedEntities = new();
     private int _damageTaken; // separated from hp so we can calculate Absorbed enitty separately
     
     // TODO: Test (stats work + with absorbed entity)
-    [ShowNativeProperty] public int Hp => StatHelper.GetHp(_data, _damageTaken, _absorbedEntities);
-    [ShowNativeProperty] public int Damage => StatHelper.GetDamage(_data, _absorbedEntities);
-    [ShowNativeProperty] public int Speed => StatHelper.GeSpeed(_data, _absorbedEntities);
-    [ShowNativeProperty] public int Vision => StatHelper.GetVision(_data, _absorbedEntities);
+    [ShowNativeProperty] public int Hp => StatHelper.GetHp(_data, _damageTaken, _killedEntities, _absorbedEntity, _data.CommonData);
+    [ShowNativeProperty] public int Damage => StatHelper.GetDamage(_data, _killedEntities, _absorbedEntity, _data.CommonData);
+    [ShowNativeProperty] public int Speed => StatHelper.GeSpeed(_data, _killedEntities, _absorbedEntity, _data.CommonData);
+    [ShowNativeProperty] public int Vision => StatHelper.GetVision(_data, _killedEntities, _absorbedEntity, _data.CommonData);
     public int EngravedAmount { get => _engravedAmount; set => value = _engravedAmount; }
 
     [Header("World Data")]
@@ -104,9 +107,11 @@ public class PlayerController : MonoBehaviour
         _isWeak = _playerGraphics.sprite == _data.WeakSprite;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _data.BiteDistance, _biteLayer);
-        if (hit)
+        
+        Entity entity = null;
+        if (hit) entity = hit.transform.GetComponentInParent<Entity>();
+        if (entity != null)
         {
-            Entity entity = hit.transform.GetComponent<Entity>();
             ChangeState(PlayerStates.Attacking);
 
             _lastAttackingPos = transform.position;
@@ -120,7 +125,10 @@ public class PlayerController : MonoBehaviour
             _moveBackFromTargetDuration = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
 
             entity.CaptureEntity();
-            entity.TakeDamage(entity.Data.Hp +1); // instakill
+            
+            var entityData = entity.Data;
+            var isEntityAlive = entity.TakeDamage(entity.Data.Hp +1); // instakill
+            if (!isEntityAlive) _killedEntities.Add(entityData);
 
             //_absorbedEntites.Add(entity.Data);
 

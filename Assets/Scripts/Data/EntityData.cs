@@ -27,7 +27,7 @@ public class EntityData : ScriptableObject
     [SerializeField] private int _vision;
     [SerializeField] private float _attackRange;
 
-    [SerializeField] private Stat _absorbedStat;
+    [SerializeField] private Stat[] absorbedStats;
     
     [field: SerializeField] public string Name { get; private set; }
 
@@ -36,7 +36,8 @@ public class EntityData : ScriptableObject
     public int Speed => _speed;
     public int Vision => _vision;
     public float AttackRange => _attackRange;
-    public Stat AbsorbedStat => _absorbedStat;
+    public Stat[] AbsorbedStats => absorbedStats;
+    public CommonEntityData CommonData => commonData;
 
     public int CalculatedSpeed => Speed * commonData.SpeedModifier;
     public event Action OnValidated;
@@ -51,7 +52,6 @@ public class EntityData : ScriptableObject
     {
         get
         {
-            
             if (Vision == 0) return 0;
             return commonData.BaseViewDistance + Vision * commonData.ViewDistancePerVisionPoint;
         }
