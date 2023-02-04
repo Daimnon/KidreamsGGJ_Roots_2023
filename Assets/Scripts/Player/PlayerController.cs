@@ -149,9 +149,9 @@ public class PlayerController : MonoBehaviour
             transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.FailedBiting));
 
             //DOTween.Sequence().
-                //Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
-                //Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
-                //OnComplete(() => ChangeState(PlayerStates.Idle));
+            //    Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
+            //    Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
+            //    OnComplete(() => ChangeState(PlayerStates.Idle));
 
             Debug.Log($"player {name} didn't bite");
         }
@@ -247,10 +247,11 @@ public class PlayerController : MonoBehaviour
         if (_debugPlayerState) Debug.Log($"player state tried to Bite and failed");
         _moveInput = Vector2.zero;
 
-        transform.DOMoveX(_lastAttackingPos.x, _moveBackFromTargetDuration / 2).SetEase(_data.MoveBackFromTargetCurveFailedBite).
-            OnComplete(() => ChangeState(PlayerStates.Idle));
+        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
+            _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
 
-        _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
+        transform.DOMoveX(_lastAttackingPos.x, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveFailedBite).
+            OnComplete(() => ChangeState(PlayerStates.Idle));
     }
     #endregion
 
