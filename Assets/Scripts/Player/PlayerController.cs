@@ -90,6 +90,9 @@ public class PlayerController : MonoBehaviour
     {
         _playerControls = new PlayerControls();
         _playerState = Idle;
+        UIManager.Instance.UpdateBlood();
+        UIManager.Instance.UpdateGraves();
+        UIManager.Instance.UpdateHearts();
     }
 
     #region FixedUpdate Methods
@@ -165,6 +168,9 @@ public class PlayerController : MonoBehaviour
         _moveInput = _move.ReadValue<Vector2>();
         _lastPrey = null;
 
+        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
+            _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
+
         if (_moveInput != Vector2.zero)
             ChangeState(PlayerStates.Moving);
     }
@@ -187,6 +193,8 @@ public class PlayerController : MonoBehaviour
 
         if (_playerGraphics.sprite != _data.WeakAttackingSprite && _playerGraphics.sprite != _data.StrongAttackingSprite)
             _playerGraphics.sprite = _isWeak ? _data.WeakAttackingSprite : _data.StrongAttackingSprite;
+
+        ChangeState(PlayerStates.Biting);
     }
     protected void Biting()
     {
