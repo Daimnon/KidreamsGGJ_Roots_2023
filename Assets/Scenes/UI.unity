@@ -382,6 +382,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1565865064 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1466416634592152736, guid: 730b6277ff8cab44e8bb65a3ca77e60d, type: 3}
+  m_PrefabInstance: {fileID: 8780619026317065271}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1637844978
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,9 +821,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1535978776}
     - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
+      propertyPath: _vampireLord
+      value: 
+      objectReference: {fileID: 1565865064}
+    - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
       propertyPath: _playerPrefab
       value: 
-      objectReference: {fileID: 3085492}
+      objectReference: {fileID: 1336632897603560555, guid: a8b34539a6372964c81e821966553517, type: 3}
     - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
       propertyPath: _currentPlayer
       value: 
@@ -831,6 +840,10 @@ PrefabInstance:
       propertyPath: _vampireLordSpawn
       value: 
       objectReference: {fileID: 1819207673}
+    - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
+      propertyPath: _vempireLordPrefab
+      value: 
+      objectReference: {fileID: 1565865064}
     - target: {fileID: 5707917979217978605, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
       propertyPath: m_Name
       value: Game Manager

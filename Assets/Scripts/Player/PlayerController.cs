@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    protected void Bite(InputAction.CallbackContext biteContext)
+    protected virtual void Bite(InputAction.CallbackContext biteContext)
     {
         Vector2 direction = _spriteDir.Vector;
         _isWeak = _playerGraphics.sprite == _data.WeakSprite;
@@ -263,7 +263,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Kill()
+    public virtual void Kill()
     {
         Debug.Log("Player: Died!");
         GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
