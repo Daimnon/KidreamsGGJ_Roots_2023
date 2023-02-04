@@ -11,13 +11,13 @@ public static class StatHelper
         => GetStatAbsorbed(myData.Hp, killedEntities, absorbedEntity, commonData, EntityData.Stat.Hp) - damageTaken;
 
     public static int GetSpeed(PlayerData myData, IEnumerable<EntityData> killedEntities, EntityData absorbedEntity, CommonEntityData commonData)
-        => GetStatAbsorbed(myData.Speed, killedEntities, absorbedEntity, commonData, EntityData.Stat.Speed);
+        => GetStatAbsorbed(myData.PlayerSpeed, killedEntities, absorbedEntity, commonData, EntityData.Stat.Speed);
 
     public static int GetDamage(PlayerData myData, IEnumerable<EntityData> killedEntities, EntityData absorbedEntity, CommonEntityData commonData)
         => GetStatAbsorbed(myData.Damage, killedEntities, absorbedEntity, commonData, EntityData.Stat.Damage);
 
     public static int GeSpeed(PlayerData myData, IEnumerable<EntityData> killedEntities, EntityData absorbedEntity, CommonEntityData commonData)
-        => GetStatAbsorbed(myData.Speed, killedEntities, absorbedEntity, commonData, EntityData.Stat.Speed);
+        => GetStatAbsorbed(myData.PlayerSpeed, killedEntities, absorbedEntity, commonData, EntityData.Stat.Speed);
 
     public static int GetVision(PlayerData myData, IEnumerable<EntityData> killedEntities, EntityData absorbedEntity, CommonEntityData commonData)
         => GetStatAbsorbed(myData.Vision, killedEntities, absorbedEntity, commonData, EntityData.Stat.Vision);

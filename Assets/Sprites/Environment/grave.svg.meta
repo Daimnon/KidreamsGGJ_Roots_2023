@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ed7d6b5e96fc639459f38d40ea89b83d
+guid: 4673d0e68b9bb48f18b7e58e71b0aa8f
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -10,10 +10,10 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: a57477913897c46af95d590f580878bd, type: 3}
   svgType: 1
   texturedSpriteMeshType: 0
-  svgPixelsPerUnit: 100
+  svgPixelsPerUnit: 50
   gradientResolution: 100
-  alignment: 0
-  customPivot: {x: 0, y: 0}
+  alignment: 9
+  customPivot: {x: 0.5, y: 0.25}
   generatePhysicsShape: 0
   viewportOptions: 0
   preserveViewport: 0
@@ -39,23 +39,28 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: fence_bot_right
+      name: grave
       originalName: 
-      pivot: {x: 0.5, y: 0.5}
-      alignment: 0
+      pivot: {x: 0.5, y: 0.25}
+      alignment: 9
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
+        width: 121
         height: 200
-      spriteID: f3986513ef366ed469e99a62487612c7
+      spriteID: e64995d2db9464d6d9b5a6aa021ea5f0
     PhysicsOutlines:
     - Vertices:
-      - {x: -100, y: 38}
-      - {x: -100, y: 100}
-      - {x: 3, y: 100}
-      - {x: 69, y: 100}
-      - {x: 92, y: 100}
-      - {x: 93, y: 36}
+      - {x: 23.5, y: 93}
+      - {x: -1.5, y: 100}
+      - {x: -26.5, y: 93}
+      - {x: -48.5, y: 65}
+      - {x: -46.5, y: 49}
+      - {x: -28.5, y: 60}
+      - {x: -0.5, y: 64}
+      - {x: 21.5, y: 61}
+      - {x: 32.5, y: 53}
+      - {x: 44.5, y: 47}
+      - {x: 44.5, y: 66}

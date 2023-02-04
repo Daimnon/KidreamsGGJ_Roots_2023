@@ -41,23 +41,23 @@ ScriptedImporter:
     SpriteRect:
       name: tree
       originalName: 
-      pivot: {x: 0.14705883, y: 0.073529415}
+      pivot: {x: 0.5, y: 0.25}
       alignment: 9
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 476
-        height: 680
+        width: 140
+        height: 200
       spriteID: ffa45e1ec72e4a441827ef5b162021b7
     PhysicsOutlines:
     - Vertices:
-      - {x: 17.883492, y: -0.9244919}
-      - {x: -28.944984, y: -3.3149948}
-      - {x: -58, y: -35}
-      - {x: -51, y: -84}
-      - {x: 2, y: -100}
-      - {x: 48, y: -85}
-      - {x: 64, y: -45}
-      - {x: 45, y: -13}
+      - {x: 6, y: 100}
+      - {x: -1, y: 100}
+      - {x: -63, y: -7}
+      - {x: -40, y: -12}
+      - {x: -5, y: -12}
+      - {x: 34, y: -12}
+      - {x: 51, y: -11}
+      - {x: 64, y: -7}

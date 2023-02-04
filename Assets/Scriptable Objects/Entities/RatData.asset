@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commonData: {fileID: 11400000, guid: 48531bcafa595164eab40db7ff4760f8, type: 2}
   _maxHp: 1
-  _damage: 2
+  _damage: 0
   _speed: 2
-  _vision: 14
+  _vision: 3
   _attackRange: 2
-  absorbedStats: 
+  absorbedStats: 03000000
   <Name>k__BackingField: Boar

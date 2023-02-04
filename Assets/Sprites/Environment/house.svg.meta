@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4673d0e68b9bb48f18b7e58e71b0aa8f
+guid: 1e7b835e6f92d4dd4b00d74354e68d12
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -10,7 +10,7 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: a57477913897c46af95d590f580878bd, type: 3}
   svgType: 1
   texturedSpriteMeshType: 0
-  svgPixelsPerUnit: 50
+  svgPixelsPerUnit: 20
   gradientResolution: 100
   alignment: 9
   customPivot: {x: 0.5, y: 0.25}
@@ -39,7 +39,7 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: env_grave
+      name: house
       originalName: 
       pivot: {x: 0.5, y: 0.25}
       alignment: 9
@@ -48,15 +48,16 @@ ScriptedImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 155
-        height: 256
-      spriteID: e64995d2db9464d6d9b5a6aa021ea5f0
+        width: 136
+        height: 200
+      spriteID: 00fbaa26d0572466089b4189ae17389e
     PhysicsOutlines:
     - Vertices:
-      - {x: -8.5, y: -128}
-      - {x: -77.5, y: -100}
-      - {x: -68.5, y: 1}
-      - {x: -56.5, y: 35}
-      - {x: 52.5, y: 35}
-      - {x: 56.5, y: 1}
-      - {x: 58.5, y: -109}
+      - {x: -4, y: 100}
+      - {x: -58, y: 42}
+      - {x: -58, y: -6}
+      - {x: -34, y: -6}
+      - {x: 31, y: -6}
+      - {x: 58, y: -7}
+      - {x: 57, y: 47}
+      - {x: 3, y: 100}

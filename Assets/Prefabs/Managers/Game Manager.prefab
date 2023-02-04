@@ -50,9 +50,12 @@ MonoBehaviour:
   _nextPlayerData: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
   _playerPrefab: {fileID: 1336632897603560555, guid: a8b34539a6372964c81e821966553517, type: 3}
   _currentPlayer: {fileID: 0}
+  _vampireLord: {fileID: 0}
   _playerController: {fileID: 0}
   _playerSpawn: {fileID: 0}
   _vampireLordSpawn: {fileID: 0}
+  _chosenGrave: {fileID: 0}
+  _savedGraves: []
   _debugPlayerLoop: 0
 --- !u!114 &1541899359
 MonoBehaviour:
@@ -70,9 +73,9 @@ MonoBehaviour:
   _transition1Color: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
   _noiseBlend1: 1
   _animDuration1: 2
-  _midAnimDelay: 1
+  _midAnimDelay: 0.5
   _underworldColor: {r: 0.38679248, g: 0.32986832, b: 0.32986832, a: 1}
-  _noiseBlend2: 0.125
+  _noiseBlend2: 0.13
   _animDuration2: 2
 --- !u!114 &1554731876
 MonoBehaviour:

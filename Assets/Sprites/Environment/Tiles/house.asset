@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: fence_top_right
+  m_Name: house
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 3286163911610860551, guid: d0b01bf61bbac6649b691b2efbfc73c4, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: 1e7b835e6f92d4dd4b00d74354e68d12, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
