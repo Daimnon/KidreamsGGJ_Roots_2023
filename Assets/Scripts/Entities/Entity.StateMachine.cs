@@ -127,6 +127,11 @@ public partial class Entity
             State = PlayerSeenState;
         }
 
+        //if (State == EntityState.CapturedByPlayer)
+        //{
+        //    return;
+        //}
+
         if (Time.time - _lastAttackTime > DeltaAttackTime)
         {
             _cachedPlayer.TakeDamage(Data.Damage);

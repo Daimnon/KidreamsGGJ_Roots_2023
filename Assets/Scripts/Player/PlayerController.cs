@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 _lastAttackingPos, _lastTargetPos;
     private bool _isWeak;
 
+    private int _speedStatCounter = 0, _visionStatCounter = 0, _hpStatCounter = 0;
+
     protected Vector2 _moveInput;
     protected InputAction _move, _bite;
 
@@ -118,7 +120,9 @@ public class PlayerController : MonoBehaviour
             _moveBackFromTargetDuration = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
 
             entity.CaptureEntity();
-            entity.TakeDamage(entity.Data.Hp); // instakill
+            entity.TakeDamage(entity.Data.Hp +1); // instakill
+            
+
             transform.DOMove(_lastTargetPos, _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
 
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
