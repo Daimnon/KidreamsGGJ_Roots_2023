@@ -46,7 +46,8 @@ public class VampireLordController : PlayerController
 
     protected override void Bite(InputAction.CallbackContext biteContext)
     {
-        GameManager.Instance.TransitionToOverworld();
+        if (_isTouchingGrave)
+            GameManager.Instance.TransitionToOverworld();
     }
 
     public override void Kill()
