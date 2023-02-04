@@ -44,6 +44,9 @@ TagManager:
   - name: Tile Static Environment
     uniqueID: 383664667
     locked: 0
+  - name: Player
+    uniqueID: 2676056455
+    locked: 0
   - name: Tiles Collisions
     uniqueID: 3941627085
     locked: 0
