@@ -6,11 +6,16 @@ public class AudioEventHandler : MonoBehaviour
 {
     [SerializeField]
     private GameManager gm;
-    
+    public static AudioEventHandler instance;
+    [SerializeField]
+    private FmodAudioManager audioManager;
+
+    private void Awake()
+    {
+        instance = this;
+    }
     private void OnEnable()
     {
-        //Subscribe to bite
-        //
     }
     private void OnDisable()
     {

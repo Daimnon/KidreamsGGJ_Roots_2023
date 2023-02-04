@@ -20,9 +20,10 @@ public class FmodAudioManager : MonoBehaviour
     [SerializeField] private EventInstance ambiance;
     [HideInInspector]public PLAYBACK_STATE bgmState;
     [SerializeField] private bool playOnAwake;
-
+    public static FmodAudioManager instance;
     private void Awake()
     {
+        instance = this;
         bgm = RuntimeManager.CreateInstance(bgmRef);
         ambiance = RuntimeManager.CreateInstance(ambianceRef);
         PopulateSceneSnapshots();

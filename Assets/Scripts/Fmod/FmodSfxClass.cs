@@ -12,9 +12,7 @@ public class FmodSfxClass
     public string name;
     public enum sfxEnums { 
         footsteps,
-        pigKill,
-        ratKill,
-        rabbitKill,
+        animalKill,
         Bite,
         Switch,
         GraveEmerge
