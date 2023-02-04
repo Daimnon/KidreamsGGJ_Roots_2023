@@ -128,7 +128,10 @@ public partial class Entity
         }
 
         if (Time.time - _lastAttackTime > DeltaAttackTime)
+        {
             _cachedPlayer.TakeDamage(Data.Damage);
+            _lastAttackTime = Time.time;
+        }
     }
     
     protected virtual void UpdateCapturedState()
