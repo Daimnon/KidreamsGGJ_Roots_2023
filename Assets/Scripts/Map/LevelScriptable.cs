@@ -6,15 +6,15 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName ="TilemapData/LevelData")]
     public class LevelScriptable : ScriptableObject
     {
-    public List<tileData> tilesToGenerate;
+    public List<CostumeTileData> tilesToGenerate;
     }
 
 [System.Serializable]
-public struct tileData
+public struct CostumeTileData
 {
     public Vector3Int _tilePos;
-    public Tile _tile;
-    public tileData(Vector3Int _tilePos, Tile tile)
+    public TileBase _tile;
+    public CostumeTileData(Vector3Int _tilePos, TileBase tile)
     {
         this._tilePos = _tilePos;
         _tile = tile;

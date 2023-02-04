@@ -30,5 +30,6 @@ public class NutoriousSystem : MonoBehaviour
         {
             var tempObj = Instantiate(entityToSpawn, mapManager.GetRandomVillagerSpawnPosition(), Quaternion.identity);
         }
+        nutoriousPoints++;
     }
 }

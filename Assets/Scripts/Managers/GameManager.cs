@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
         newPlayerController.Data = _nextPlayerData;
         ChangeState(GameStates.PlayerLoop);
+
     }
 
     public void ChangeState(GameStates newState)
