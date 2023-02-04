@@ -1422,6 +1422,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 175346737016384452, guid: efff1c4acb0b8aa40a64558f2c658ea5, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 175346737016384452, guid: efff1c4acb0b8aa40a64558f2c658ea5, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 175346737016384452, guid: efff1c4acb0b8aa40a64558f2c658ea5, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 175346737016384452, guid: efff1c4acb0b8aa40a64558f2c658ea5, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 175346737016384454, guid: efff1c4acb0b8aa40a64558f2c658ea5, type: 3}
       propertyPath: m_Name
       value: Game Canvas
