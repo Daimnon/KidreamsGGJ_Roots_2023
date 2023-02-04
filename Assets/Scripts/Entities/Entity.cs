@@ -54,6 +54,8 @@ public partial class Entity : MonoBehaviour
             : EntityState.RunningFromPlayer;
 
     public static event Action<Entity> OnEntityDeath;
+
+    private static List<Entity> AllEntities = new();
     
     private void Awake()
     {
@@ -61,6 +63,7 @@ public partial class Entity : MonoBehaviour
         Data.OnValidated += OnValidate;
         InitState();
         _hp = Data.Hp;
+        AllEntities.Add(this);
     }
 
     private void OnValidate()
