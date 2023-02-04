@@ -113,4 +113,8 @@ public class GameManager : MonoBehaviour
         newPlayerController.AbsorbedEntity = _chosenGrave.EntityData;
         ChangeState(GameStates.PlayerLoop);
     }
+    public void Test()
+    {
+
+    }
 }
