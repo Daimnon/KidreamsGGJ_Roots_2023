@@ -1486,7 +1486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1339863163
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1649,6 +1649,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1541899356 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5707917979217978605, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
+  m_PrefabInstance: {fileID: 5707917980343209225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1541899359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541899356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2342085deca6c504dbfa8724f491b0b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _underworldOverlayMaterial: {fileID: 2100000, guid: 67fe5a17e5de91646a855f0cba69352f, type: 2}
+  _transition1Color: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+  _noiseBlend1: 1
+  _animDuration1: 2
+  _midAnimDelay: 1
+  _underworldColor: {r: 0.38679248, g: 0.32986832, b: 0.32986832, a: 1}
+  _noiseBlend2: 0.125
+  _animDuration2: 2
 --- !u!1 &1555193747
 GameObject:
   m_ObjectHideFlags: 0
