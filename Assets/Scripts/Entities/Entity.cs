@@ -149,7 +149,7 @@ public partial class Entity : MonoBehaviour
     protected virtual void Kill()
     {
         OnEntityDeath?.Invoke(this);
-        Destroy(this);
+        Destroy(gameObject);
     }
 
     private void UpdatePlayerInSight()

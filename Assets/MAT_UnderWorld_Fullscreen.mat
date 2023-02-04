@@ -40,13 +40,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaClip: 0
-    - _Blend: 0
+    - _Blend: 1
     - _CastShadows: 1
     - _Cull: 2
     - _Darken: 0.48
     - _DstBlend: 0
     - _GreyscaleBlend: 0.7
-    - _NoiseBlend: 0.125
+    - _NoiseBlend: 0.13
+    - _NoiseChangeSpeed: 0.1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SrcBlend: 1
