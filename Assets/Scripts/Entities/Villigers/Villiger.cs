@@ -9,6 +9,8 @@ public class Villiger : Entity
     [SerializeField] private SpriteRenderer _villigerGraphics;
     [SerializeField] private float _graveInstansiationOffsetY = 10f;
 
+    private const int _maxGraves = 5;
+
     private void Update()
     {
         if (_currentGrave && CheckGravePosInAir())
@@ -21,6 +23,10 @@ public class Villiger : Entity
     {
         _currentGrave.transform.position = transform.position;
         _currentGrave.EntityData = Data;
+
+        if (GameManager.Instance.SavedGraves.Count < _maxGraves)
+            GameManager.Instance.SavedGraves.Add(_currentGrave);
+
         Destroy(gameObject);
     }
     public void CreateGrave()
