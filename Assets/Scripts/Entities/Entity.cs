@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
@@ -13,12 +14,13 @@ public enum FaceDirection
 [RequireComponent(typeof(EntityDataHolder))]
 public partial class Entity : MonoBehaviour
 {
-    private enum EntityState
+    protected enum EntityState
     {
         Idle,
         ChasingPlayer,
         RunningFromPlayer,
         Attacking,
+        CapturedByPlayer,
     }
 
     private int _hp;
@@ -29,10 +31,10 @@ public partial class Entity : MonoBehaviour
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
     [SerializeField] private SpriteDirection _spriteDir;
-    [SerializeField] private bool _attack;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
+    [SerializeField] private bool _debugLogState;
     [SerializeField] private Color _testRayColor;
 
     [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
@@ -47,14 +49,23 @@ public partial class Entity : MonoBehaviour
     private Action _updateAction;
     private Transform CachedPlayerTransform => _cachedPlayer ? _cachedPlayer.transform : null;
     
+    private EntityState PlayerSeenState =>
+        Data.Damage > 0
+            ? EntityState.ChasingPlayer
+            : EntityState.RunningFromPlayer;
+
     public static event Action<Entity> OnEntityDeath;
     
     private void Awake()
     {
         InitData();
         Data.OnValidated += OnValidate;
+    }
+    private void Start()
+    {
         InitState();
         _hp = Data.Hp;
+        GameManager.Instance.AllEntities.Add(this);
     }
 
     private void OnValidate()
@@ -71,20 +82,28 @@ public partial class Entity : MonoBehaviour
         Data = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _updateAction = UpdateIdleState;
+        _navigation.OnReachedDestination += OnNavigationReachedDestination;
 
         if (Application.isPlaying)
         {
             _navigation.Speed = Data.Speed;
         }
     }
-
+    private IEnumerator CachPlayer()
+    {
+        while (!GameManager.Instance.PlayerController)
+        {
+            yield return null;
+            InitState();
+        }
+    }
     private void InitState()
     {
         moveStaggerAnim.enabled = false;
         
         if (_startNavMode == EntityNavigation.NavigationMode.MoveToPlayer)
         {
-            _cachedPlayer = FindObjectOfType<PlayerController>();
+            _cachedPlayer = GameManager.Instance.PlayerController;
         }
 
         _navigation.SetState(CachedPlayerTransform, _startNavMode);
@@ -110,20 +129,24 @@ public partial class Entity : MonoBehaviour
         }
     }
 
-    /// <param name="damage">true if entity died</param>
+    /// <param name="damage">true if entity is still alive</param>
     public bool TakeDamage(int damage)
     {
         _hp -= damage;
-        if (_hp == 0)
+        if (_debugLogState) Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}", gameObject);
+        if (_hp <= 0)
         {
             Kill();
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
-    private void Kill()
+    public void CaptureEntity() => State = EntityState.CapturedByPlayer;
+    public void ReleaseEntity() => State = EntityState.Idle;
+
+    protected virtual void Kill()
     {
         OnEntityDeath?.Invoke(this);
         Destroy(this);
@@ -148,12 +171,12 @@ public partial class Entity : MonoBehaviour
 
     private void OnPlayerFound()
     {
-        Debug.Log(LogStr("Found player!!!!"));
+        if (_debugLogState) Debug.Log(LogStr("Found player!"), gameObject);
     }
 
     private void OnPlayerLost()
     {
-        Debug.Log(LogStr("Where player???!!"));
+       if (_debugLogState) Debug.Log(LogStr("Where player?!"), gameObject);
     }
 
     private PlayerController RayCastForPlayer()
@@ -199,4 +222,11 @@ public partial class Entity : MonoBehaviour
     }
 
     private string LogStr(string msg) => $"{nameof(Entity)}: {msg}";
+
+    private bool IsPlayerInAttackRange()
+    {
+        var distToPlayer = Vector2.Distance(CachedPlayerTransform.position, transform.position);
+        var isInAttackRange = distToPlayer < Data.AttackRange;
+        return isInAttackRange;
+    }
 }

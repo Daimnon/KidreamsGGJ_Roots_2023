@@ -36,4 +36,14 @@ public class VampireLordController : PlayerController
         _bite.Disable();
     }
     #endregion
+
+    protected override void Bite(InputAction.CallbackContext biteContext)
+    {
+        GameManager.Instance.TransitionToOverworld();
+    }
+
+    public override void Kill()
+    {
+        
+    }
 }

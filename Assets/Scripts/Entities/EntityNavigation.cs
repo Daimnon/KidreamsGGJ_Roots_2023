@@ -21,16 +21,27 @@ public class EntityNavigation : MonoBehaviour
     [SerializeField] private Transform _playerTransform;
     [Header("RandomRoaming")]
     private float distanceToNextTarget;
-    private Vector3 nextRandomTargetPos;
 
     [Header("Debug")]
     [SerializeField] private bool _showGizmos;
     [SerializeField] private Color _gizmoColor;
 
+    public event Action OnReachedDestination;
+    
     public float Speed
     {
         get => agent.speed;
         set => agent.speed = value;
+    }
+
+    private Vector3 Destination
+    {
+        get => agent.destination;
+        set
+        {
+            // Debug.Log($"Setting agent destination: {value}");
+            agent.destination = value;
+        }
     }
 
     
@@ -44,22 +55,15 @@ public class EntityNavigation : MonoBehaviour
         NavMode = navState;
         _playerTransform = playerTransform;
 
-        agent.destination = NavMode switch
-        {
-            NavigationMode.MoveRandomly => GetNextTarget(),
-            NavigationMode.MoveToPlayer => playerTransform.position,
-            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position),
-            _ => throw new ArgumentOutOfRangeException()
-        };
+        Destination = GetDestination(playerTransform);
     }
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        NavMode = NavigationMode.MoveRandomly;
         _data = GetComponent<EntityDataHolder>().Data;
     }
-    
+
     private void Start()
     {
         InitAgent();
@@ -79,37 +83,55 @@ public class EntityNavigation : MonoBehaviour
     {
         if(!_showGizmos || !Application.isPlaying) return;
         Gizmos.color = _gizmoColor;
-        Gizmos.DrawSphere(agent.destination, 0.5f);
+        Gizmos.DrawSphere(Destination, 0.5f);
     }
 
     private void Update()
     {
         switch (NavMode)
         {
-            case (NavigationMode.MoveRandomly):
-                if (agent.remainingDistance <= Mathf.Max(1f, Speed))
-                    MoveToNextRandomLocation();
+            case NavigationMode.MoveRandomly:
+            case NavigationMode.RunFromPlayer:
+                if (IsAgentCloseToTarget())
+                {
+                    var dest = GetDestination(_playerTransform);
+                    SetAgentDestination(dest);
+                    OnReachedDestination?.Invoke();
+                }
+                
                 break;
-            case (NavigationMode.MoveToPlayer):
+            case NavigationMode.MoveToPlayer:
+                SetAgentDestination(GetDestination(_playerTransform));
+                // TODO: Need callback for reached player?
                 // Need something here?
                 break;
         }
     }
-    
+
+    private bool IsAgentCloseToTarget()
+    {
+        return agent.remainingDistance <= 0.1f;
+    }
+
     private void InitAgent()
     {
         agent.updateRotation = false;
         agent.updateUpAxis = false;
     }
-    private void MoveToNextRandomLocation()
+
+    private void SetAgentDestination(Vector3 destination)
     {
-        nextRandomTargetPos = GetNextTarget();
-        agent.SetDestination(new Vector3(nextRandomTargetPos.x, nextRandomTargetPos.y, transform.position.z));
+        agent.SetDestination(new Vector3(destination.x, destination.y, transform.position.z));
     }
     
-    private Vector3 GetNextTarget()
+    private Vector3 GetDestination(Transform playerTransform)
     {
-        var trans =  MapManager.Instance.GetRandomPlaceTransform();
-        return trans.position;
+        return NavMode switch
+        {
+            NavigationMode.MoveRandomly => MapManager.Instance.GetRandomPlaceTransform().position,
+            NavigationMode.MoveToPlayer => playerTransform.position,
+            NavigationMode.RunFromPlayer => MapManager.Instance.GetRandomRunawayPlace(transform.position, playerTransform.position, Destination),
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 }
