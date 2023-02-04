@@ -2554,14 +2554,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1541899359, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
-      propertyPath: _noiseBlend2
-      value: 0.13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1541899359, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
-      propertyPath: _midAnimDelay
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 1554731876, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
       propertyPath: mapManager
       value: 
