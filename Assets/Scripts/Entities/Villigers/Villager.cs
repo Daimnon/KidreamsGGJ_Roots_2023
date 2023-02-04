@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Villiger : Entity
+public class Villager : Entity
 {
     [SerializeField] private GameObject _graveDirt, _graveTomb;
     private Rigidbody2D _rb;
@@ -13,6 +13,26 @@ public class Villiger : Entity
     [SerializeField] private float _tombInstansiationOffsetY = 10f, _tombOffsetY = 3.25f;
 
     private const int _maxGraves = 5;
+
+    [SerializeField] private Grave _gravePrefab;
+
+    // TODO: projectiles (handle attack range in base class first?)
+    // TODO: Grave system (separate class, but will hold the Villagers
+    protected override void TransitionToAttacking(EntityState prevState)
+    {
+        base.TransitionToAttacking(prevState);
+    }
+
+    protected override void UpdateAttackingState()
+    {
+        base.UpdateAttackingState();
+    }
+
+    protected override void Kill()
+    {
+        // base will Destroy the object - do stuff before
+        base.Kill();
+    }
 
     private void Update()
     {
@@ -26,10 +46,10 @@ public class Villiger : Entity
     {
         _rb.gravityScale = 0;
         _currentGraveTomb.transform.position = new Vector3(_currentGraveDirt.transform.position.x, _currentGraveDirt.transform.position.y + _tombOffsetY, _currentGraveDirt.transform.position.z);
-        _currentGrave.EntityData = Data;
+        //_currentGrave.EntityData = Data;
 
-        if (GameManager.Instance.SavedGraves.Count < _maxGraves)
-            GameManager.Instance.SavedGraves.Add(_currentGrave);
+        if (GameManager.Instance.Engraved.Count < _maxGraves)
+            GameManager.Instance.Engraved.Add(this);
 
         Destroy(gameObject);
     }

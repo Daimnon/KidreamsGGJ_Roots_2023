@@ -35,11 +35,11 @@ public class CameraManager : MonoBehaviour
     
     private void FollowPlayer()
     {
-        if (!GameManager.Instance.CurrentPlayer)
+        if (!GameManager.Instance.PlayerController)
             return;
 
-        float playerX = GameManager.Instance.CurrentPlayer.transform.position.x;
-        float playerY = GameManager.Instance.CurrentPlayer.transform.position.y;
+        float playerX = GameManager.Instance.PlayerController.transform.position.x;
+        float playerY = GameManager.Instance.PlayerController.transform.position.y;
         float cameraZ = _mainCamTransform.position.z;
 
         Vector3 newCamPos = new Vector3(playerX, playerY, cameraZ);

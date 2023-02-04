@@ -2,5 +2,6 @@ using UnityEngine;
 
 public class Grave : MonoBehaviour
 {
-    public EntityData EntityData { get; set; }
+    private Villager _engravedVillager;
+    public Villager EngravedVillager => _engravedVillager;
 }

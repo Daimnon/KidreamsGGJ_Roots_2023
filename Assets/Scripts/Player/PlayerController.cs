@@ -4,52 +4,58 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using NaughtyAttributes;
+using UnityEngine.EventSystems;
+using System;
 
 public enum PlayerStates { Idle, Moving, Attacking, Biting, Eating, FailedBiting }
 
 public class PlayerController : MonoBehaviour
 {
+    // state machine decleration
     protected delegate void PlayerState();
     protected PlayerState _playerState;
-
-    [Header("Player Components")]
-    [SerializeField] protected PlayerControls _playerControls;
-    [SerializeField] protected SpriteRenderer _playerGraphics;
-    [SerializeField] private SpriteDirection _spriteDir;
-    [SerializeField] protected Rigidbody2D _rb;
-    [SerializeField] private bool _debugPlayerState;
-    [SerializeField] private BreatheMoveAnim _moveAnim;
-    public Rigidbody2D Rb => _rb;
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
     public PlayerData Data { get => _data; set => value = _data; }
 
-    [SerializeField] private int _engravedAmount;
+    private bool _isWeak;
+    public bool IsWeak => _isWeak;
 
     // TODO: Set kills/absorption absorbed entity when bite person / resurrect from grave
-    public EntityData AbsorbedEntity;
-    private readonly List<EntityData> _killedEntities = new();
-    private int _damageTaken; // separated from hp so we can calculate Absorbed enitty separately
+    [ShowNativeProperty] public int Hp => StatHelper.GetHp(_data, _damageTaken, _killedEntitiesData, AbsorbedEntity, _data.CommonData);
+    //[ShowNativeProperty] public int Damage => StatHelper.GetDamage(_data, _killedEntities, AbsorbedEntity, _data.CommonData);
+    [ShowNativeProperty] public int Speed => StatHelper.GeSpeed(_data, _killedEntitiesData, AbsorbedEntity, _data.CommonData);
+    [ShowNativeProperty] public int Vision => StatHelper.GetVision(_data, _killedEntitiesData, AbsorbedEntity, _data.CommonData);
     
+    private int _currentStrongValue => Hp + Speed + Vision;
+
+    public EntityData AbsorbedEntity;
+    private readonly List<EntityData> _killedEntitiesData = new();
+    private int _damageTaken; // separated from hp so we can calculate Absorbed enitty separately
+
     // TODO: Test (stats work + with absorbed entity)
-    [ShowNativeProperty] public int Hp => StatHelper.GetHp(_data, _damageTaken, _killedEntities, AbsorbedEntity, _data.CommonData);
-    [ShowNativeProperty] public int Damage => StatHelper.GetDamage(_data, _killedEntities, AbsorbedEntity, _data.CommonData);
-    [ShowNativeProperty] public int Speed => StatHelper.GeSpeed(_data, _killedEntities, AbsorbedEntity, _data.CommonData);
-    [ShowNativeProperty] public int Vision => StatHelper.GetVision(_data, _killedEntities, AbsorbedEntity, _data.CommonData);
-    public int EngravedAmount { get => _engravedAmount; set => value = _engravedAmount; }
+
+    [Header("Player Components")]
+    [SerializeField] protected PlayerControls _playerControls;
+    [SerializeField] protected SpriteRenderer _playerGraphics;
+    //[SerializeField] private SpriteDirection _spriteDir;
+    [SerializeField] protected Rigidbody2D _rb;
+    public Rigidbody2D Rb => _rb;
+
+    [SerializeField] private BreatheMoveAnim _moveAnim;
+    [SerializeField] private bool _debugPlayerState;
+    //[SerializeField] private SpriteDirection _spriteDir;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
 
     private Entity _lastPrey;
-    private float _moveToTargetDuration, _moveBackFromTargetDuration;
-    private Vector2 _lastAttackingPos, _lastTargetPos;
-    private bool _isWeak;
+    private Vector2 _lastAttackingOriginPos, _lastTargetPos;
+    private int _hpStatCounter = 0, _speedStatCounter = 0, _visionStatCounter = 0;
+    private float _moveToTargetDuration, _moveBackFromTargetDuration, _biteOffset;
 
-    private int _speedStatCounter = 0, _visionStatCounter = 0, _hpStatCounter = 0;
-
-    protected Vector2 _moveInput;
+    protected Vector2 _moveInput, _spriteDirection;
     protected InputAction _move, _bite;
 
     #region Monobehaviour Callbacks
@@ -68,12 +74,14 @@ public class PlayerController : MonoBehaviour
     }
     private void Start()
     {
-        GameManager.Instance.CurrentPlayer = gameObject;
-        GameManager.Instance.PlayerController = this;
+        LaterInitialize();
     }
     private void Update()
     {
         _playerState.Invoke();
+
+        if (_currentStrongValue >= _data.StrongValue)
+            _isWeak = false;
     }
     private void FixedUpdate()
     {
@@ -84,15 +92,49 @@ public class PlayerController : MonoBehaviour
         _move.Disable();
         _bite.Disable();
     }
+    private void OnValueChangedInMoveInput()
+    {
+        //if (DetectValueChangeInMoveInput())
+        //{
+        //    
+        //
+        //    
+        //    _biteOffset = _data.BiteOffset * _spriteDirection.x;
+        //}
+        
+        //if (DetectValueChangeInIsWeak())
+        //{
+        //    switch (IsWeak)
+        //    {
+        //        case true:
+        //            _playerGraphics.sprite = _data.WeakSprite;
+        //            _moveToTargetDuration = _data.MoveToTargetDurationWhileWeak;
+        //            _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileWeak;
+        //            break;
+        //        case false:
+        //            _playerGraphics.sprite = _data.StrongSprite;
+        //            _moveToTargetDuration = _data.MoveToTargetDurationWhileStrong;
+        //            _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileStrong;
+        //            break;
+        //    }
+        //}
+    }
     #endregion
 
     private void Initialize()
     {
         _playerControls = new PlayerControls();
+        _isWeak = _data.IsWeak;
+        _moveToTargetDuration = _data.MoveToTargetDurationWhileWeak;
+        _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileWeak;
+        _biteOffset = _data.BiteOffset;
+        UIManager.Instance.InitializePlayerUI();
         _playerState = Idle;
-        UIManager.Instance.UpdateBlood();
-        UIManager.Instance.UpdateGraves();
-        UIManager.Instance.UpdateHearts();
+    }
+    private void LaterInitialize()
+    {
+        GameManager.Instance.UnderworldOverlay.SetRegularMode();
+        GameManager.Instance.PlayerController = this;
     }
 
     #region FixedUpdate Methods
@@ -100,56 +142,68 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 direction = new(_moveInput.x, _moveInput.y);
         _rb.velocity = _data.CalculatedSpeed * Time.fixedDeltaTime * direction;
-        // Moved Sprite direction logic to SpriteDirectionFromVelocity for reuse (in Entity)
+
+        FlipSpriteToMoveDirection();
     }
     #endregion
 
     protected virtual void Bite(InputAction.CallbackContext biteContext)
     {
-        Vector2 direction = _spriteDir.Vector;
-        _isWeak = _playerGraphics.sprite == _data.WeakSprite;
+        //Vector2 direction = _spriteDir.Vector;
+        //_playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _data.BiteDistance, _biteLayer);
-        
-        Entity entity = null;
-        if (hit) entity = hit.transform.GetComponentInParent<Entity>();
-        if (entity != null)
+        _lastPrey = null;
+        _lastAttackingOriginPos = transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, _spriteDirection, _data.BiteDistance, _biteLayer);
+
+        if (hit)
         {
-            ChangeState(PlayerStates.Attacking);
-
-            _lastAttackingPos = transform.position;
             _lastPrey = hit.transform.GetComponentInParent<Entity>();
 
-            Vector2 pos = (Vector2)transform.position + direction * _data.BiteDistance;
-            float targetPosX = pos.x;
+            if (!_lastPrey)
+                return;
 
-            _lastTargetPos = new Vector3(targetPosX - _data.BiteOffset, hit.transform.position.y);
-            _moveToTargetDuration = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
-            _moveBackFromTargetDuration = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak :_data.MoveBackFromTargetDurationWhileStrong;
+            Vector2 pos = (Vector2)transform.position + _spriteDirection * _data.BiteDistance;
+            _lastTargetPos = new(pos.x, hit.transform.position.y);
 
-            entity.CaptureEntity();
+
+            //_moveToTargetDuration = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
+            //_moveBackFromTargetDuration = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak : _data.MoveBackFromTargetDurationWhileStrong;
+
+
+            ChangeState(PlayerStates.Attacking);
+            _lastPrey.CaptureEntity();
+
+            //bool isEntityAlive = ; // instakill
+            if (_lastPrey is Villager && GameManager.Instance.Engraved.Count < 5)
+                GameManager.Instance.Engraved.Add(_lastPrey as Villager);
+
+            if (!_lastPrey.TakeDamage(_lastPrey.Data.Hp))
+                _killedEntitiesData.Add(_lastPrey.Data);
             
-            var entityData = entity.Data;
-            var isEntityAlive = entity.TakeDamage(entity.Data.Hp +1); // instakill
-            if (!isEntityAlive) _killedEntities.Add(entityData);
+                
 
             //_absorbedEntites.Add(entity.Data);
 
-            transform.DOMove(_lastTargetPos, _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
+            transform.DOMove(_lastTargetPos + new Vector2(_data.BiteOffset, 0f), _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
 
             Debug.Log($"player {name} bite {hit.collider.gameObject.name}");
+
         }
         else
         {
-            ChangeState(PlayerStates.Attacking);
-            Vector2 originalPos = transform.position;
-            Vector2 pos = (Vector2) transform.position + direction * _data.BiteDistance;
-            float targetPosX = pos.x;
-            
-            float moveToTarget = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
-            float moveBackFromTarget = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
+            Vector2 pos = (Vector2)transform.position + _spriteDirection * _data.BiteDistance;
+            _lastTargetPos = new(pos.x, transform.position.y);
 
-            transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.FailedBiting));
+            ChangeState(PlayerStates.Attacking);
+            //Vector2 originalPos = transform.position;
+            //Vector2 pos = (Vector2) transform.position + _spriteDirection * _data.BiteDistance;
+            //float targetPosX = pos.x;
+            
+            //float moveToTarget = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
+            //float moveBackFromTarget = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
+
+            transform.DOMoveX(_lastTargetPos.x, _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.FailedBiting));
 
             //DOTween.Sequence().
             //    Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
@@ -213,13 +267,13 @@ public class PlayerController : MonoBehaviour
         else
             _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
 
-        if (_lastPrey is not Villiger)
+        if (_lastPrey is not Villager)
         {
-            transform.DOMove(_lastAttackingPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Eating));
+            transform.DOMove(_lastAttackingOriginPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Eating));
         }
-        else if (_lastPrey is Villiger)
+        else if (_lastPrey is Villager)
         {
-            transform.DOMove(_lastAttackingPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
+            transform.DOMove(_lastAttackingOriginPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
         }
     }
     protected void Eating()
@@ -239,7 +293,7 @@ public class PlayerController : MonoBehaviour
         else
             _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
 
-        transform.DOMove(_lastAttackingPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
+        transform.DOMove(_lastAttackingOriginPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
 
         //if (_playerGraphics.sprite != _data.WeakEatingAnimation[0] && _playerGraphics.sprite != _data.WeakEatingAnimation[1])
         //    _playerGraphics.sprite = _data.WeakEatingAnimation[0];
@@ -258,10 +312,24 @@ public class PlayerController : MonoBehaviour
         if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
             _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
 
-        transform.DOMoveX(_lastAttackingPos.x, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveFailedBite).
+        transform.DOMoveX(_lastAttackingOriginPos.x, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveFailedBite).
             OnComplete(() => ChangeState(PlayerStates.Idle));
     }
     #endregion
+
+    private void FlipSpriteToMoveDirection()
+    {
+        if (_moveInput.x < 0)
+        {
+            _spriteDirection = new(-Mathf.Abs(transform.localScale.x), 0);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else if (_moveInput.x > 0)
+        {
+            _spriteDirection = new(Mathf.Abs(transform.localScale.x), 0);
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+    }
 
     public void ChangeState(PlayerStates newState)
     {

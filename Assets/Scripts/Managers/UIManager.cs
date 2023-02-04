@@ -16,6 +16,12 @@ public class UIManager : MonoBehaviour
         _instance = this;
     }
 
+    public void InitializePlayerUI()
+    {
+        UpdateHearts();
+        UpdateGraves();
+        UpdateBlood();
+    }
     public void UpdateHearts()
     {
         for (int i = 0; i < _heartsParent.transform.childCount; i++)
@@ -34,7 +40,7 @@ public class UIManager : MonoBehaviour
         {
             GameObject gameObject = _gravesParent.transform.GetChild(i).gameObject;
 
-            if (GameManager.Instance.PlayerController.EngravedAmount <= i)
+            if (GameManager.Instance.Engraved.Count <= i)
                 gameObject.SetActive(false);
             else
                 gameObject.SetActive(true);
