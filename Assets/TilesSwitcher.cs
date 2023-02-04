@@ -9,7 +9,7 @@ public class TilesSwitcher : MonoBehaviour
     public int tileNumber = 0;
     private Tilemap tilemap;
     [SerializeField]
-    private TileBase newTile;
+    private TileBase[] UnderworldTiles;
     private GameManager gm;
 
     private void Awake()
@@ -19,7 +19,6 @@ public class TilesSwitcher : MonoBehaviour
     }
     private void Start()
     {
-        if(newTile != null)
         OnSwitchTiles();
     }
     private void OnSwitchTiles()
@@ -34,13 +33,18 @@ public class TilesSwitcher : MonoBehaviour
                 TileBase tile = tilemap.GetTile(tilePos);
                 if (tile != null)
                 {
-                    tilemap.SetTile(tilePos, newTile);
+                    tilemap.SetTile(tilePos, newTile());
                 }
                 else
                 {
                     Debug.Log("x:" + x + " y:" + y + " tile: (null)");
                 }
             }
+    }
+    // GET NEW TILES TO SPAWN FROM TILES LIST TO SPAWN
+    private TileBase newTile()
+    {
+        return null;
     }
 }
 
