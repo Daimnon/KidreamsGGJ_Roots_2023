@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 public enum GameStates { PlayerLoop, VampireLordLoop }
@@ -47,11 +49,15 @@ public class GameManager : MonoBehaviour
     private void VampireLordLoop()
     {
         if (_debugPlayerLoop) Debug.Log($"GameState is VampireLordLoop");
-        GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
-        PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
-        newPlayerController.Data = _nextPlayerData;
-        ChangeState(GameStates.PlayerLoop);
+    }
 
+    [Button("Test TransitionToUnderworld")]
+    public async void TransitionToUnderworld()
+    {
+        var underworldOverlay = GetComponent<UnderworldOverlay>();
+        await underworldOverlay.StartUnderworldAnim();
+        Debug.Log("Underworld anim done - Resurrecting player!");
+        ResurrectPlayer();   
     }
 
     public void ChangeState(GameStates newState)
@@ -63,7 +69,16 @@ public class GameManager : MonoBehaviour
                 break;
             case GameStates.VampireLordLoop:
                 _gameState = VampireLordLoop;
+                TransitionToUnderworld();
                 break;
         }
+    }
+
+    private void ResurrectPlayer()
+    {
+        GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
+        PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
+        newPlayerController.Data = _nextPlayerData;
+        ChangeState(GameStates.PlayerLoop);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
@@ -26,6 +27,8 @@ public class UnderworldOverlay : MonoBehaviour
     // private static readonly int PropGreyscaleBlend = Shader.PropertyToID("_GreyscaleBlend");
     private static readonly int PropNoiseBlend = Shader.PropertyToID("_NoiseBlend");
     private static readonly int PropColorTint = Shader.PropertyToID("_Color");
+
+    private TaskCompletionSource<bool> _tcs;
     
     private bool _wasInit;
 
@@ -39,7 +42,7 @@ public class UnderworldOverlay : MonoBehaviour
     }
 
     [Button("StartUnderworldAnim")]
-    public void StartUnderworldAnim()
+    public Task StartUnderworldAnim()
     {
         // Init states
         _underworldOverlayMaterial.SetColor(PropColorTint, _transition1Color);
@@ -48,17 +51,25 @@ public class UnderworldOverlay : MonoBehaviour
         
         // Blend to 1
         // Delay
-        // Noise down && Color 
+        // Noise down && Color
+        _tcs = new TaskCompletionSource<bool>();
+        
         DOTween.Sequence()
             .Append(_underworldOverlayMaterial.DOFloat(1f, PropBlend, _animDuration1))
             .AppendInterval(_midAnimDelay)
             .OnComplete(SecondPartAnims);
+
+        return _tcs.Task;
     }
 
     private void SecondPartAnims()
     {
         _underworldOverlayMaterial.DOColor(_underworldColor, PropColorTint, _animDuration2);
         _underworldOverlayMaterial.DOFloat(_noiseBlend2, PropNoiseBlend, _animDuration2)
-            .OnComplete(() => OnUnderworldAnimationComplete?.Invoke());
+            .OnComplete(() =>
+            {
+                _tcs.SetResult(true);
+                OnUnderworldAnimationComplete?.Invoke();
+            });
     }
 }
