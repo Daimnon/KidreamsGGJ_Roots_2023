@@ -13,12 +13,13 @@ public enum FaceDirection
 [RequireComponent(typeof(EntityDataHolder))]
 public partial class Entity : MonoBehaviour
 {
-    private enum EntityState
+    protected enum EntityState
     {
         Idle,
         ChasingPlayer,
         RunningFromPlayer,
         Attacking,
+        CapturedByPlayer,
     }
 
     private int _hp;
@@ -51,7 +52,6 @@ public partial class Entity : MonoBehaviour
             ? EntityState.ChasingPlayer
             : EntityState.RunningFromPlayer;
 
-    
     public static event Action<Entity> OnEntityDeath;
     
     private void Awake()
@@ -128,6 +128,9 @@ public partial class Entity : MonoBehaviour
 
         return false;
     }
+
+    public void CaptureEntity() => State = EntityState.CapturedByPlayer;
+    public void ReleaseEntity() => State = EntityState.Idle;
 
     private void Kill()
     {
