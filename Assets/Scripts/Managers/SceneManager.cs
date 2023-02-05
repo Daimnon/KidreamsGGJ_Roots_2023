@@ -5,8 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class SceneManager : MonoBehaviour
 {
-    public void ChangeToGameScene(int num)
+    public void ChangeToGameScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(num);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }
