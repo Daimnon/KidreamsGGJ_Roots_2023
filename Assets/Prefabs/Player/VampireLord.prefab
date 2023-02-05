@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ffd7c31b19629c458a9ea08bb5a9ac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
+  _data: {fileID: 11400000, guid: ac96470a72357474d881f8c9f1afe848, type: 2}
   AbsorbedEntity: {fileID: 0}
   _playerGraphics: {fileID: 1466416633104978725}
   _rb: {fileID: 1466416634592152737}
@@ -243,7 +243,7 @@ MonoBehaviour:
     m_Bits: 0
   _graveLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
 --- !u!50 &1466416634592152737
 Rigidbody2D:
   serializedVersion: 4
