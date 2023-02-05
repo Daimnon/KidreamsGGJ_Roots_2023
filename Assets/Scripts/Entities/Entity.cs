@@ -42,7 +42,7 @@ public partial class Entity : MonoBehaviour
     public EntityData Data { get; private set; }
 
     private PlayerController _cachedPlayer;
-    private bool _playerInSight;
+    private bool _playerInSight, _isAlive;
 
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
@@ -153,6 +153,7 @@ public partial class Entity : MonoBehaviour
 
     protected virtual void Kill()
     {
+        _isAlive = false;
         OnEntityDeath?.Invoke(this);
         Destroy(gameObject);
     }

@@ -228,9 +228,14 @@ public class PlayerController : MonoBehaviour
         _moveInput = Vector2.zero;
 
         if (!_lastPrey)
-            return;
+            ChangeState(PlayerStates.Idle);
 
         DoBiteAnimation();
+
+        _killedEntitiesData.Add(_lastPrey.Data);
+
+        if (_lastPrey)
+            _lastPrey.TakeDamage(_lastPrey.Data.Hp);
 
         if (_lastPrey is not Villager)
         {
@@ -243,9 +248,10 @@ public class PlayerController : MonoBehaviour
 
             transform.DOMove(_lastAttackingOriginPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
         }
-
-        if (!_lastPrey.TakeDamage(_lastPrey.Data.Hp))
-            _killedEntitiesData.Add(_lastPrey.Data);
+        else
+        {
+            ChangeState(PlayerStates.Idle);
+        }
     }
     protected void Eating()
     {
@@ -255,13 +261,15 @@ public class PlayerController : MonoBehaviour
         _moveInput = Vector2.zero;
 
         if (!_lastPrey)
-            return;
+            ChangeState(PlayerStates.Idle);
 
         DoEatingAnimation();
         _animationCounter++;
 
         if (_animationCounter == _animationLenghtInFrames)
         {
+            _animationCounter = 0;
+
             transform.DOMove(_lastAttackingOriginPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
         }
         else
