@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
         _vampireLordController.gameObject.SetActive(false);
 
         _underworldOverlay.SetRegularMode();
-        Debug.Log("Underworld anim done - Resurrecting player!");
+        Debug.Log("Underworld anim done");
 
         ResurrectPlayer();
         ChangeState(GameStates.PlayerLoop);

@@ -5296,6 +5296,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 717424481}
     - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
+      propertyPath: _debugPlayerLoop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 717424482}
@@ -5643,6 +5647,10 @@ PrefabInstance:
     - target: {fileID: 1466416634592152736, guid: 730b6277ff8cab44e8bb65a3ca77e60d, type: 3}
       propertyPath: m_Name
       value: VampireLord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1466416634592152736, guid: 730b6277ff8cab44e8bb65a3ca77e60d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1466416634592152739, guid: 730b6277ff8cab44e8bb65a3ca77e60d, type: 3}
       propertyPath: m_RootOrder

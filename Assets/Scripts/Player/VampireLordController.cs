@@ -43,6 +43,16 @@ public class VampireLordController : PlayerController
     }
     #endregion
 
+    protected override void Initialize()
+    {
+        _playerControls = new PlayerControls();
+        _playerState = Idle;
+    }
+    protected override void LaterInitialize()
+    {
+        // do nothing for now
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         _isTouchingGrave = collision.IsTouchingLayers(_graveLayer);

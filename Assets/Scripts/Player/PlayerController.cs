@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void Initialize()
+    protected virtual void Initialize()
     {
         _playerControls = new PlayerControls();
         _isWeak = _data.IsWeak;
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
         UIManager.Instance.InitializePlayerUI();
         _playerState = Idle;
     }
-    private void LaterInitialize()
+    protected virtual void LaterInitialize()
     {
         GameManager.Instance.UnderworldOverlay.SetRegularMode();
         GameManager.Instance.PlayerController = this;
