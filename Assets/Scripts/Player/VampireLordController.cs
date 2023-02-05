@@ -28,8 +28,7 @@ public class VampireLordController : PlayerController
     }
     private void Awake()
     {
-        _playerControls = new PlayerControls();
-        _playerState = Idle;
+        Initialize();
     }
     private void Update()
     {
