@@ -42,7 +42,8 @@ public partial class Entity : MonoBehaviour
     public EntityData Data { get; private set; }
 
     private PlayerController _cachedPlayer;
-    private bool _playerInSight;
+    private bool _playerInSight, _isAlive;
+    public bool IsAlive => _isAlive;
 
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
@@ -67,6 +68,7 @@ public partial class Entity : MonoBehaviour
         InitState();
         _hp = Data.Hp;
         GameManager.Instance.AllEntities.Add(this);
+        OnEntityDeath += GameManager.Instance.OnEntityDie;
     }
 
     private void OnValidate()
@@ -76,6 +78,11 @@ public partial class Entity : MonoBehaviour
         if (moveStaggerAnim == null) moveStaggerAnim = GetComponentInChildren<BreatheMoveAnim>();
         
         InitData();
+    }
+    private void OnDisable()
+    {
+        OnEntityDeath -= GameManager.Instance.OnEntityDie;
+        _navigation.OnReachedDestination -= OnNavigationReachedDestination;
     }
 
     private void InitData()
@@ -141,7 +148,7 @@ public partial class Entity : MonoBehaviour
 
         if (_hp <= 0)
         {
-            Kill();
+            Die();
             return false;
         }
 
@@ -151,10 +158,9 @@ public partial class Entity : MonoBehaviour
     public void CaptureEntity() => State = EntityState.CapturedByPlayer;
     public void ReleaseEntity() => State = EntityState.Idle;
 
-    protected virtual void Kill()
+    protected virtual void Die()
     {
         OnEntityDeath?.Invoke(this);
-        Destroy(gameObject);
     }
 
     private void UpdatePlayerInSight()
