@@ -10,7 +10,10 @@ public class VampireLordController : PlayerController
     [SerializeField] private LayerMask _graveLayer;
 
     private GraveTomb _currentGraveTomb;
-    private bool _isTouchingGrave = false;
+    public GraveTomb CurrentGraveTomb { get => _currentGraveTomb; set => _currentGraveTomb = value; }
+
+    [SerializeField] private bool _isTouchingGrave = false;
+    public bool IsTouchingGrave { get => _isTouchingGrave; set => _isTouchingGrave = value; }
 
 
     #region Monobehaviour Callbacks
@@ -51,14 +54,6 @@ public class VampireLordController : PlayerController
     protected override void LaterInitialize()
     {
         // do nothing for now
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        _isTouchingGrave = collision.IsTouchingLayers(_graveLayer);
-
-        if (_isTouchingGrave)
-            _currentGraveTomb = collision.GetComponent<GraveTomb>();
     }
 
     protected override void Bite(InputAction.CallbackContext biteContext)

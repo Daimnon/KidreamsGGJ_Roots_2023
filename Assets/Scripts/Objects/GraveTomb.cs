@@ -22,16 +22,23 @@ public class GraveTomb : MonoBehaviour
             _isEngraved = true;
         }
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        VampireLordController vampireLordController = collision.GetComponent<VampireLordController>();
+
+        vampireLordController.CurrentGraveTomb = this;
+        vampireLordController.IsTouchingGrave = true;
+    }
 
     private bool CheckGravePosInAir()
     {
         bool isGraveInAir = GameManager.Instance.NewGraveDirt.transform.position.y <= transform.position.y ? true : false;
         return isGraveInAir;
     }
-
     private void Engrave()
     {
         _rb.gravityScale = 0;
+        _rb.velocity = Vector3.zero;
         transform.position = GameManager.Instance.NewGraveDirt.transform.position + new Vector3(0f, _offsetFromDirtY, 0f);
         GameManager.Instance.Engraved.Add(_engravedVillagerData);
     }

@@ -40,7 +40,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaClip: 0
-    - _Blend: 0
+    - _Blend: 1
     - _CastShadows: 1
     - _Cull: 2
     - _Darken: 0.48
