@@ -12,6 +12,7 @@ public class GraveTomb : MonoBehaviour
     [SerializeField] private float _offsetFromDirtY = 1;
     [SerializeField] private bool _isEngraved = false;
     [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] private LayerMask _playerLayer;
 
     private void Update()
     {
@@ -24,6 +25,9 @@ public class GraveTomb : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!collision.IsTouchingLayers(_playerLayer))
+            return;
+
         VampireLordController vampireLordController = collision.GetComponent<VampireLordController>();
 
         vampireLordController.CurrentGraveTomb = this;

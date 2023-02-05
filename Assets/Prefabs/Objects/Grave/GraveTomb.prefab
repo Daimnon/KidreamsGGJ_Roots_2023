@@ -149,3 +149,6 @@ MonoBehaviour:
   _offsetFromDirtY: 1
   _isEngraved: 0
   _rb: {fileID: 4491050840513937852}
+  _playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
