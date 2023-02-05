@@ -46,17 +46,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c497a6361bf4f6645abf32638a8a6f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _newPlayerData: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
-  _nextPlayerData: {fileID: 11400000, guid: 233f53f4ab17fa74798d64f7c5c2547f, type: 2}
+  _bloodAmount: 25
+  _deathCount: 0
+  _graveDirt: {fileID: 5103932439226165397, guid: fd88900a6bdee4c46962ca668b8ded6b, type: 3}
+  _graveTomb: {fileID: 588759372161031256, guid: b89d12f023bf6a7458c7b24c9e462483, type: 3}
   _playerPrefab: {fileID: 1336632897603560555, guid: a8b34539a6372964c81e821966553517, type: 3}
-  _currentPlayer: {fileID: 0}
-  _vampireLord: {fileID: 0}
+  _currentVampireLord: {fileID: 0}
   _playerController: {fileID: 0}
+  _vampireLordController: {fileID: 0}
   _playerSpawn: {fileID: 0}
   _vampireLordSpawn: {fileID: 0}
-  _chosenGrave: {fileID: 0}
-  _savedGraves: []
-  _debugPlayerLoop: 0
+  _engraved: []
+  _chosenEngraved: {fileID: 0}
+  _allEntities: []
+  _underworldOverlay: {fileID: 1541899359}
+  _debugPlayerLoop: 1
 --- !u!114 &1541899359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,5 +95,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nutoriousPoints: 7
   spawnMilestones: 030000000500000007000000090000000b0000000d0000000f0000001200000014000000
-  entityToSpawn: {fileID: 5789018814652983916, guid: fca221702b504b54b8319424027718d4, type: 3}
+  entityToSpawn: {fileID: 1441523706504311932, guid: 8294c64e0af890345abc43e41e1c5b33, type: 3}
   mapManager: {fileID: 0}
