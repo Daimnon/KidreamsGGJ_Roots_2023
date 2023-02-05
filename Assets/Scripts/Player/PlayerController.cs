@@ -362,7 +362,6 @@ public class PlayerController : MonoBehaviour
     }
     public virtual void Die()
     {
-        Debug.Log("Player: Died!");
         InvokeDeath();
     }
     public bool TakeDamage(int damage)
