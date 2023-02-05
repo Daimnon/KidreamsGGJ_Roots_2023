@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
         if (_moveInput == Vector2.zero)
             ChangeState(PlayerStates.Idle);
     }
-    protected void Attacking()
+    private void Attacking()
     {
         if (_debugPlayerState)
             Debug.Log($"player state is Attacking");
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
             transform.DOMove(_lastTargetPos + new Vector2(_data.BiteOffset, 0f), _moveToTargetDuration).SetEase(_data.MoveToTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Biting));
         }
     }
-    protected void Biting()
+    private void Biting()
     {
         if (_debugPlayerState)
             Debug.Log($"player state is Biting");
@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviour
             ChangeState(PlayerStates.Idle);
         }
     }
-    protected void Eating()
+    private void Eating()
     {
         if (_debugPlayerState)
             Debug.Log($"player state is Eating");
@@ -253,7 +253,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
     }
-    protected void FailedBiting()
+    private void FailedBiting()
     {
         if (_debugPlayerState)
             Debug.Log($"player state tried to Bite and failed");
@@ -265,21 +265,6 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void FlipSpriteToMoveDirection()
-    {
-        if (_moveInput.x < 0)
-        {
-            _spriteDirection = new(-Mathf.Abs(transform.localScale.x), 0);
-            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
-        else if (_moveInput.x > 0)
-        {
-            _spriteDirection = new(Mathf.Abs(transform.localScale.x), 0);
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
-
-        _biteOffset = _data.BiteOffset * _spriteDirection.x;
-    }
     private void TryChangeWeakness()
     {
         if (_currentStrongValue >= _data.StrongValue)
@@ -301,14 +286,29 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
-    private void DoIdleAnimation()
+    protected void FlipSpriteToMoveDirection()
+    {
+        if (_moveInput.x < 0)
+        {
+            _spriteDirection = new(-Mathf.Abs(transform.localScale.x), 0);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else if (_moveInput.x > 0)
+        {
+            _spriteDirection = new(Mathf.Abs(transform.localScale.x), 0);
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+
+        _biteOffset = _data.BiteOffset * _spriteDirection.x;
+    }
+    protected void DoIdleAnimation()
     {
         TryChangeWeakness();
 
         if (_playerGraphics.sprite != _data.WeakSprite || _playerGraphics.sprite != _data.StrongSprite)
             _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
     }
-    private void DoMovingAnimation()
+    protected void DoMovingAnimation()
     {
         //if (_playerGraphics.sprite == _data.WeakSprite || _playerGraphics.sprite == _data.StrongSprite) //|| movingWeak || movingStrong
             //_playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;

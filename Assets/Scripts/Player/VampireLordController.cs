@@ -62,6 +62,6 @@ public class VampireLordController : PlayerController
 
     public override void Die()
     {
-        
+        Debug.Log("lol vampireLord died how? you lil hacker ;)");
     }
 }
