@@ -185,6 +185,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"player state is Idle");
 
         _moveInput = _move.ReadValue<Vector2>();
+        DoIdleAnimation();
 
         if (_lastPrey)
             _lastPrey = null;
@@ -198,8 +199,9 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"player state is Moving");
 
         _moveInput = _move.ReadValue<Vector2>();
+        DoMovingAnimation();
 
-        if(_moveInput == Vector2.zero)
+        if (_moveInput == Vector2.zero)
             ChangeState(PlayerStates.Idle);
     }
     protected void Attacking()
@@ -208,7 +210,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"player state is Attacking");
 
         _moveInput = Vector2.zero;
-
         DoAttackAnimation();
 
         if (!_lastPrey)
@@ -226,11 +227,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"player state is Biting");
 
         _moveInput = Vector2.zero;
+        DoBiteAnimation();
 
         if (!_lastPrey)
             ChangeState(PlayerStates.Idle);
 
-        DoBiteAnimation();
 
         _killedEntitiesData.Add(_lastPrey.Data);
 
@@ -259,11 +260,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"player state is Eating");
 
         _moveInput = Vector2.zero;
+        DoEatingAnimation();
 
         if (!_lastPrey)
             ChangeState(PlayerStates.Idle);
 
-        DoEatingAnimation();
         _animationCounter++;
 
         if (_animationCounter == _animationLenghtInFrames)
@@ -335,9 +336,21 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+    private void DoIdleAnimation()
+    {
+        TryChangeWeakness();
+
+        if (_playerGraphics.sprite != _data.WeakSprite || _playerGraphics.sprite != _data.StrongSprite)
+            _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
+    }
+    private void DoMovingAnimation()
+    {
+        //if (_playerGraphics.sprite == _data.WeakSprite || _playerGraphics.sprite == _data.StrongSprite) //|| movingWeak || movingStrong
+            //_playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
+    }
     private void DoAttackAnimation()
     {
-        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
+        if (_playerGraphics.sprite == _data.WeakSprite || _playerGraphics.sprite == _data.StrongSprite)
             _playerGraphics.sprite = _isWeak ? _data.WeakAttackingSprite : _data.StrongAttackingSprite;
     }
     private void DoBiteAnimation()
@@ -351,15 +364,6 @@ public class PlayerController : MonoBehaviour
             _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[1] : _data.StrongEatingAnimation[1];
         else
             _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
-    }
-    private void FinishAnimation()
-    {
-        if (_playerGraphics.sprite == _data.WeakEatingAnimation[0] || _playerGraphics.sprite == _data.StrongEatingAnimation[0] ||
-            _playerGraphics.sprite == _data.WeakEatingAnimation[1] || _playerGraphics.sprite == _data.StrongEatingAnimation[1] ||
-            _playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.WeakAttackingSprite)
-        {
-            TryChangeWeakness();
-        }
     }
     public void ChangeState(PlayerStates newState)
     {
