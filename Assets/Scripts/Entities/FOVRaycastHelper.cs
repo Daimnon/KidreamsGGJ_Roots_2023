@@ -19,13 +19,17 @@ public class FOVRaycastHelper<TTarget> where TTarget : Component
     
     public TTarget RayCastForPlayer(IEnumerable<Vector3> rayDirections, float distance)
     {
-        foreach (var rayDir in rayDirections)
+        foreach (Vector2 rayDir in rayDirections)
         {
-            var size = Physics2D.RaycastNonAlloc(_raycastOriginTrans.position, rayDir, _raycastResultsCache, distance, _layerMask);
-            if (size == 0) continue;
+            int size = Physics2D.RaycastNonAlloc(_raycastOriginTrans.position, rayDir, _raycastResultsCache, distance, _layerMask);
+
+            if (size == 0)
+                continue;
             
-            var player = SearchResults(_raycastResultsCache);
-            if (player != null) return player;
+            TTarget player = SearchResults(_raycastResultsCache);
+
+            if (player != null)
+                return player;
         }
 
         return null;
@@ -46,10 +50,10 @@ public class FOVRaycastHelper<TTarget> where TTarget : Component
     
     public IEnumerable<Vector3> GetRayDirections(Vector2 direction, float angleDegrees, int numRays)
     {
-        var deltaRot = Quaternion.AngleAxis(angleDegrees / numRays, Vector3.forward);
-        var curVec = Quaternion.AngleAxis(angleDegrees * 0.5f, Vector3.back) * direction;
+        Quaternion deltaRot = Quaternion.AngleAxis(angleDegrees / numRays, Vector3.forward);
+        Vector3 curVec = Quaternion.AngleAxis(angleDegrees * 0.5f, Vector3.back) * direction;
 
-        for (var i = 0; i < numRays; i++)
+        for (int i = 0; i < numRays; i++)
         {
             yield return curVec;
             curVec = deltaRot * curVec;

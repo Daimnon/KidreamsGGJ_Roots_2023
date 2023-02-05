@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(EntityDataHolder))]
 public class EntityNavigation : MonoBehaviour
@@ -23,6 +24,7 @@ public class EntityNavigation : MonoBehaviour
     private float distanceToNextTarget;
 
     [Header("Debug")]
+    [SerializeField] private bool _aiDebug = false;
     [SerializeField] private bool _showGizmos;
     [SerializeField] private Color _gizmoColor;
 
@@ -47,7 +49,9 @@ public class EntityNavigation : MonoBehaviour
     
     public void SetState(Transform playerTransform, NavigationMode navState)
     {
-        Debug.Log($"EntityNavigation ({name}) SetState: {navState} (player: {playerTransform})", gameObject);
+        if (_aiDebug)
+            Debug.Log($"EntityNavigation ({name}) SetState: {navState} (player: {playerTransform})", gameObject);
+
         if (playerTransform == null && navState == NavigationMode.MoveToPlayer)
         {
             Debug.LogError("Player is null");

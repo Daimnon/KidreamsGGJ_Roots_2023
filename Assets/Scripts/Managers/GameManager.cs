@@ -65,11 +65,13 @@ public class GameManager : MonoBehaviour
 
     private void PlayerLoop()
     {
-        if (_debugPlayerLoop) Debug.Log($"GameState is PlayerLoop");
+        if (_debugPlayerLoop)
+            Debug.Log($"GameState is PlayerLoop");
     }
     private void VampireLordLoop()
     {
-        if (_debugPlayerLoop) Debug.Log($"GameState is VampireLordLoop");
+        if (_debugPlayerLoop)
+            Debug.Log($"GameState is VampireLordLoop");
     }
 
     [Button("Test TransitionToUnderworld")]

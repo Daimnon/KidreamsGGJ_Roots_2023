@@ -135,7 +135,10 @@ public partial class Entity : MonoBehaviour
     public bool TakeDamage(int damage)
     {
         _hp -= damage;
-        if (_debugLogState) Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}", gameObject);
+
+        if (_entityDebug)
+            Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}", gameObject);
+
         if (_hp <= 0)
         {
             Kill();
@@ -157,9 +160,12 @@ public partial class Entity : MonoBehaviour
     private void UpdatePlayerInSight()
     {
         _cachedPlayer = RayCastForPlayer();
-        var player = _cachedPlayer;
-        var foundPlayer = player != null;
+
+        PlayerController player = _cachedPlayer;
+        bool foundPlayer = player != null;
+
         if (player) _cachedPlayer = player;
+
         if (foundPlayer && !_playerInSight)
         {
             OnPlayerFound();
@@ -174,18 +180,20 @@ public partial class Entity : MonoBehaviour
     
     private PlayerController RayCastForPlayer()
     {
-        var rayDirections = GetRayDirections();
+        IEnumerable<Vector3> rayDirections = GetRayDirections();
         return _fovRaycaster.RayCastForPlayer(rayDirections, Data.ViewDistance);
     }
 
     private void OnPlayerFound()
     {
-        if (_debugLogState) Debug.Log(LogStr("Found player!"), gameObject);
+        if (_entityDebug)
+            Debug.Log(LogStr("Found player!"), gameObject);
     }
 
     private void OnPlayerLost()
     {
-       if (_debugLogState) Debug.Log(LogStr("Where player?!"), gameObject);
+        if (_entityDebug)
+            Debug.Log(LogStr("Where player?!"), gameObject);
     }
 
     private IEnumerable<Vector3> GetRayDirections() =>

@@ -14,6 +14,7 @@ public class MapManager : MonoBehaviour
     
     [SerializeField] private Transform _randomPlacesParent;
     [SerializeField] private Transform _villagerSpawnParent;
+    [SerializeField] private bool _mapDebug = false;
 
     private Transform[] _randomPlaces;
     private Transform[] _villagerSpawns;
@@ -62,7 +63,8 @@ public class MapManager : MonoBehaviour
         // var playerChaseVec = entityPos - playerTransformPosition;
         // Debug.Log($"Chosen point: EntityPos: {entityPos}, PlayerPos: {playerTransformPosition}, entityToTargetVec: {entityToTargetVec}, playerChaseVec: {playerChaseVec}. Dot: {Vector2.Dot(entityToTargetVec, playerChaseVec)}");
 
-        Debug.Log($"$Chosen Runaway pos: {chosen} Last: {lastDestination}");
+        if (_mapDebug)
+            Debug.Log($"$Chosen Runaway pos: {chosen} Last: {lastDestination}");
         return chosen;
     }
 }
