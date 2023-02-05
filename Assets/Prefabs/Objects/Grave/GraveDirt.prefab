@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5103932439226165395}
   - component: {fileID: 5103932439226165396}
   m_Layer: 0
-  m_Name: Grave Dirt
+  m_Name: GraveDirt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

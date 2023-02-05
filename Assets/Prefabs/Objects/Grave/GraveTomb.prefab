@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 588759372161031257}
   - component: {fileID: 4491050840513937852}
   m_Layer: 0
-  m_Name: Grave Tomb
+  m_Name: GraveTomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

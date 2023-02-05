@@ -9,7 +9,7 @@ public class VampireLordController : PlayerController
 {
     [SerializeField] private LayerMask _graveLayer;
 
-    private Grave _currentGrave;
+    private GraveTomb _currentGraveTomb;
     private bool _isTouchingGrave = false;
 
 
@@ -58,14 +58,14 @@ public class VampireLordController : PlayerController
         _isTouchingGrave = collision.IsTouchingLayers(_graveLayer);
 
         if (_isTouchingGrave)
-            _currentGrave = collision.GetComponent<Grave>();
+            _currentGraveTomb = collision.GetComponent<GraveTomb>();
     }
 
     protected override void Bite(InputAction.CallbackContext biteContext)
     {
         if (_isTouchingGrave)
         {
-            GameManager.Instance.ChosenEngraved = _currentGrave.EngravedVillager;
+            GameManager.Instance.ChosenEngraved = _currentGraveTomb.EngravedVillagerData;
             GameManager.Instance.InvokeResurrectPlayer();
         }
     }

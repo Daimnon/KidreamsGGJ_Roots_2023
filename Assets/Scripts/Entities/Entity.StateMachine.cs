@@ -151,7 +151,7 @@ public partial class Entity
     }
 
 
-    private void OnNavigationReachedDestination() // Currently only for random pos / runaway (not reached player)
+    protected void OnNavigationReachedDestination() // Currently only for random pos / runaway (not reached player)
     {
         if (State == EntityState.RunningFromPlayer && !_playerInSight)
         {

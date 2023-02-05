@@ -219,9 +219,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (_lastPrey is Villager)
         {
-            if (GameManager.Instance.Engraved.Count < 5)
-                GameManager.Instance.Engraved.Add(_lastPrey as Villager);
-
             transform.DOMove(_lastAttackingOriginPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
         }
         else

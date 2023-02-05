@@ -217,7 +217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524080, guid: a6b05994060fdc44592175e4a0e034b4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524083, guid: a6b05994060fdc44592175e4a0e034b4, type: 3}
       propertyPath: _debugLogState
@@ -746,13 +746,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4072776322433191099, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
+      propertyPath: _showGizmos
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524080, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
       propertyPath: m_Name
       value: Villiger_PrefabBase
       objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524080, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7908934567445524083, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
+      propertyPath: _entityDebug
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524087, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
       propertyPath: m_RootOrder
@@ -760,11 +768,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524087, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.467646
+      value: 2.6981306
       objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524087, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 26.82793
+      value: -0.6522629
       objectReference: {fileID: 0}
     - target: {fileID: 7908934567445524087, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4973,6 +4981,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1263507428 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3718276855973573513, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
+  m_PrefabInstance: {fileID: 721203141}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1263507429 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1702726805096549525, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
+  m_PrefabInstance: {fileID: 721203141}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e125d7e1ad094a369ce82d3c7dc8ec04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1413937848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5007,6 +5031,53 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 3
   m_ColliderType: 1
+--- !u!1 &1425597213 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7908934567445524080, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
+  m_PrefabInstance: {fileID: 721203141}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1425597219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425597213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2f9a2a39f152449b06e5a05d85ef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anim: {fileID: 1507198777}
+  moveStaggerAnim: {fileID: 1263507429}
+  _playerRaycastMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _spriteDir: {fileID: 1507198775}
+  _showGizmos: 1
+  _debugLogState: 0
+  _testRayColor: {r: 0, g: 0, b: 0, a: 0}
+  _startNavMode: 0
+  _entityDebug: 0
+  _villigerGraphics: {fileID: 1263507428}
+  _tombInstansiationOffsetY: 10
+  _tombOffsetY: 3.25
+--- !u!114 &1507198775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7784816403080054844, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
+  m_PrefabInstance: {fileID: 721203141}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32dd5eb557db4999ba49909e4789374f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &1507198777 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5309676484215440696, guid: 1ea150485dd98274da73ff40989f8db7, type: 3}
+  m_PrefabInstance: {fileID: 721203141}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1576275019 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2961922638528620701, guid: 62bf6dde8b7d8c74e980342a499f9d9e, type: 3}
@@ -5283,6 +5354,18 @@ PrefabInstance:
       propertyPath: mapManager
       value: 
       objectReference: {fileID: 1082377774}
+    - target: {fileID: 1554731876, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
+      propertyPath: entityToSpawn
+      value: 
+      objectReference: {fileID: 1441523706504311932, guid: 8294c64e0af890345abc43e41e1c5b33, type: 3}
+    - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
+      propertyPath: _graveDirt
+      value: 
+      objectReference: {fileID: 5103932439226165397, guid: fd88900a6bdee4c46962ca668b8ded6b, type: 3}
+    - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
+      propertyPath: _graveTomb
+      value: 
+      objectReference: {fileID: 588759372161031256, guid: b89d12f023bf6a7458c7b24c9e462483, type: 3}
     - target: {fileID: 5707917979217978604, guid: d41874195af117a4f94caf75669fcfc9, type: 3}
       propertyPath: _playerSpawn
       value: 

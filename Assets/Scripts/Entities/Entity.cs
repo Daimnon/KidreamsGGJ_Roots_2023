@@ -23,14 +23,14 @@ public partial class Entity : MonoBehaviour
         CapturedByPlayer,
     }
 
-    private int _hp;
+    protected int _hp;
     
-    [SerializeField] private Animator _anim;
-    [SerializeField] private BreatheMoveAnim moveStaggerAnim;
+    [SerializeField] protected Animator _anim;
+    [SerializeField] protected BreatheMoveAnim moveStaggerAnim;
     
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
-    [SerializeField] private SpriteDirection _spriteDir;
+    [SerializeField] protected SpriteDirection _spriteDir;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
@@ -38,7 +38,7 @@ public partial class Entity : MonoBehaviour
     [SerializeField] private Color _testRayColor;
 
     [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
-    private EntityNavigation _navigation;
+    protected EntityNavigation _navigation;
     public EntityData Data { get; private set; }
 
     private PlayerController _cachedPlayer;
@@ -85,7 +85,7 @@ public partial class Entity : MonoBehaviour
         _navigation.OnReachedDestination -= OnNavigationReachedDestination;
     }
 
-    private void InitData()
+    protected void InitData()
     {
         Data = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
@@ -106,7 +106,7 @@ public partial class Entity : MonoBehaviour
             InitState();
         }
     }
-    private void InitState()
+    protected void InitState()
     {
         moveStaggerAnim.enabled = false;
         
@@ -158,7 +158,7 @@ public partial class Entity : MonoBehaviour
     public void CaptureEntity() => State = EntityState.CapturedByPlayer;
     public void ReleaseEntity() => State = EntityState.Idle;
 
-    protected virtual void Die()
+    protected void Die()
     {
         OnEntityDeath?.Invoke(this);
     }

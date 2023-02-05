@@ -137,7 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6144957634684898836}
   - component: {fileID: 6144957634684898833}
-  - component: {fileID: 6144957634684898832}
+  - component: {fileID: 6725894245680917328}
   - component: {fileID: 655535320}
   - component: {fileID: 655535319}
   m_Layer: 8
@@ -175,8 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c361cabd2ca467bb114af2ba04fcb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Data>k__BackingField: {fileID: 0}
---- !u!114 &6144957634684898832
+  <Data>k__BackingField: {fileID: 11400000, guid: da2d203f04d010942b3ce856a5330270, type: 2}
+--- !u!114 &6725894245680917328
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6144957634684898835}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 649d5bf940794d142b539788ab50ffb5, type: 3}
+  m_Script: {fileID: 11500000, guid: faa2f9a2a39f152449b06e5a05d85ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 8154517945007613275}
@@ -196,8 +196,13 @@ MonoBehaviour:
   _spriteDir: {fileID: 6092333702798026847}
   _showGizmos: 1
   _debugLogState: 0
-  _testRayColor: {r: 1, g: 0, b: 0.53783464, a: 1}
+  _testRayColor: {r: 1, g: 0, b: 0.5372549, a: 0}
   _startNavMode: 1
+  _entityDebug: 0
+  _dataHolder: {fileID: 6144957634684898833}
+  _villigerGraphics: {fileID: 800674697070924778}
+  _tombInstansiationOffsetY: 10
+  _tombOffsetY: 3.25
 --- !u!114 &655535320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,6 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 655535319}
   _playerTransform: {fileID: 0}
+  _aiDebug: 0
   _showGizmos: 1
   _gizmoColor: {r: 0, g: 0.14433026, b: 1, a: 1}
 --- !u!195 &655535319

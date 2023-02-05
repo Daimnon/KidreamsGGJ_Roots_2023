@@ -18,12 +18,22 @@ public class GameManager : MonoBehaviour
 
     public event Action OnResurrectPlayer;
 
+    private float _tombInstansiationOffsetY = Screen.height;
+
+    public GameObject NewGraveDirt { get; set; }
+
+    private Dictionary<GameObject, GameObject> _allGraves; 
+
     // win/lose condition: blood empty = perma-death, blood full = vampireLord resurrection, value = 0-100.
     [SerializeField] private int _bloodAmount = 25;
     public int BloodAmount => _bloodAmount;
 
     [SerializeField] private int _deathCount = 0;
     public int DeathCount { get => _deathCount; set => _deathCount = value; }
+
+    [SerializeField] private GameObject _graveDirt, _graveTomb;
+    public GameObject GraveDirt => _graveDirt;
+    public GameObject GraveTomb => _graveTomb;
 
     [SerializeField] private GameObject _playerPrefab, _currentVampireLord;
     public GameObject PlayerPrefab => _playerPrefab;
@@ -39,11 +49,11 @@ public class GameManager : MonoBehaviour
     public Transform PlayerSpawn => _playerSpawn;
     public Transform VampireLordSpawn => _vampireLordSpawn;
 
-    [SerializeField] private List<Villager> _engraved;
-    public List<Villager> Engraved { get => _engraved; set => _engraved = value ; }
+    [SerializeField] private List<EntityData> _engraved;
+    public List<EntityData> Engraved { get => _engraved; set => _engraved = value ; }
 
-    [SerializeField] private Villager _chosenEngraved;
-    public Villager ChosenEngraved { get => _chosenEngraved; set => _chosenEngraved = value; }
+    [SerializeField] private EntityData _chosenEngraved;
+    public EntityData ChosenEngraved { get => _chosenEngraved; set => _chosenEngraved = value; }
 
     [SerializeField] private List<Entity> _allEntities;
     public List<Entity> AllEntities { get => _allEntities; set => _allEntities = value; }
@@ -56,8 +66,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        _engraved = new();
         _allEntities = new();
+        _allGraves = new();
+        _engraved = new();
         _vampireLordController = _currentVampireLord.GetComponent<VampireLordController>();
         _underworldOverlay.SetRegularMode();
         OnResurrectPlayer += TransitionToOverworld;
@@ -144,6 +155,12 @@ public class GameManager : MonoBehaviour
     {
         if (entity)
         {
+            if (entity is Villager)
+            {
+                CreateGrave(entity as Villager);
+                Debug.Log($"{entity.Data.Name} grave created");
+            }
+
             Debug.Log($"{entity.Data.Name} died");
             Destroy(entity.gameObject);
         }
@@ -152,7 +169,15 @@ public class GameManager : MonoBehaviour
     {
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
-        newPlayerController.AbsorbedEntity = _chosenEngraved.Data;
+        newPlayerController.AbsorbedEntity = _chosenEngraved;
         ChangeState(GameStates.PlayerLoop);
+    }
+    public void CreateGrave(Villager villager)
+    {
+        NewGraveDirt = Instantiate(_graveDirt, villager.transform.position, Quaternion.identity);
+        GameObject newGraveTomb = Instantiate(_graveTomb, new Vector3(_graveDirt.transform.position.x, _graveDirt.transform.position.y + _tombInstansiationOffsetY), Quaternion.identity);
+
+        newGraveTomb.GetComponent<GraveTomb>().EngravedVillagerData = villager.Data;
+        _allGraves.Add(NewGraveDirt, newGraveTomb);
     }
 }
