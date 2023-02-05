@@ -76,11 +76,17 @@ public class GameManager : MonoBehaviour
     {
         if (_debugPlayerLoop)
             Debug.Log($"GameState is PlayerLoop");
+
+        if (!CameraManager.Instance.IsFollowingPlayer())
+            CameraManager.Instance.ChangeState(CameraStates.FollowPlayer);
     }
     private void VampireLordLoop()
     {
         if (_debugPlayerLoop)
             Debug.Log($"GameState is VampireLordLoop");
+
+        if (CameraManager.Instance.IsFollowingPlayer())
+            CameraManager.Instance.ChangeState(CameraStates.FollowVampireLord);
     }
 
     [Button("Test TransitionToUnderworld")]
@@ -108,6 +114,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Underworld anim done - Resurrecting player!");
 
         ResurrectPlayer();
+        ChangeState(GameStates.PlayerLoop);
     }
 
     public void ChangeState(GameStates newState)

@@ -369,6 +369,8 @@ public class PlayerController : MonoBehaviour
         bool isAlive;
         _damageTaken += damage;
 
+        UIManager.Instance.UpdateHearts();
+
         //Debug.Log($"Player.TakeDamage({damage}). Hp is now {Hp}");
         if (Hp <= 0)
         {
