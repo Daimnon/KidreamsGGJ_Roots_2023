@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.TextCore.Text;
 
 public enum GameStates { PlayerLoop, VampireLordLoop }
 
@@ -14,54 +16,88 @@ public class GameManager : MonoBehaviour
     private delegate void GameState();
     private GameState _gameState;
 
-    [SerializeField] private PlayerData _newPlayerData, _nextPlayerData;
-    [SerializeField] private GameObject _playerPrefab, _currentPlayer, _vampireLord;
-    [SerializeField] private PlayerController _playerController;
-    [SerializeField] private Transform _playerSpawn, _vampireLordSpawn;
-    [SerializeField] private Grave _chosenGrave;
-    [SerializeField] private List<Grave> _savedGraves;
-    [SerializeField] private bool _debugPlayerLoop;
+    public event Action OnResurrectPlayer;
 
-    public List<Entity> AllEntities { get; set; }
+    private float _tombInstansiationOffsetY = Screen.height;
 
-    public Grave ChosenGrave { get => _chosenGrave; set => value = _chosenGrave; }
-    public List<Grave> SavedGraves { get => _savedGraves; set => value = _savedGraves; }
+    public GameObject NewGraveDirt { get; set; }
 
-    public PlayerData NewPlayerData => _newPlayerData;
-    public PlayerData NextPlayerData { get => _nextPlayerData; set => value = _nextPlayerData; }
+    private Dictionary<GameObject, GameObject> _allGraves; 
 
+    // win/lose condition: blood empty = perma-death, blood full = vampireLord resurrection, value = 0-100.
+    [SerializeField] private int _bloodAmount = 25;
+    public int BloodAmount => _bloodAmount;
+
+    [SerializeField] private int _deathCount = 0;
+    public int DeathCount { get => _deathCount; set => _deathCount = value; }
+
+    [SerializeField] private GameObject _graveDirt, _graveTomb;
+    public GameObject GraveDirt => _graveDirt;
+    public GameObject GraveTomb => _graveTomb;
+
+    [SerializeField] private GameObject _playerPrefab, _currentVampireLord;
     public GameObject PlayerPrefab => _playerPrefab;
-    public GameObject VampireLord => _vampireLord;
-    public GameObject CurrentPlayer { get => _currentPlayer; set => value = _currentPlayer; }
+    public GameObject CurrentVampireLord => _currentVampireLord;
 
-    public PlayerController PlayerController { get => _playerController; set => value = _playerController; }
+    [SerializeField] private PlayerController _playerController;
+    public PlayerController PlayerController { get => _playerController; set => _playerController = value; }
+    
+    [SerializeField] private VampireLordController _vampireLordController;
+    public VampireLordController VampireLordController => _vampireLordController;
 
-    public Transform PlayerSpawn { get => _playerSpawn; set => value = _playerSpawn; }
+    [SerializeField] private Transform _playerSpawn, _vampireLordSpawn;
+    public Transform PlayerSpawn => _playerSpawn;
     public Transform VampireLordSpawn => _vampireLordSpawn;
 
-    private UnderworldOverlay _underworldOverlay;
+    [SerializeField] private List<EntityData> _engraved;
+    public List<EntityData> Engraved { get => _engraved; set => _engraved = value ; }
 
+    [SerializeField] private EntityData _chosenEngraved;
+    public EntityData ChosenEngraved { get => _chosenEngraved; set => _chosenEngraved = value; }
+
+    [SerializeField] private List<Entity> _allEntities;
+    public List<Entity> AllEntities { get => _allEntities; set => _allEntities = value; }
+
+    [SerializeField] private UnderworldOverlay _underworldOverlay;
+    public UnderworldOverlay UnderworldOverlay => _underworldOverlay;
+
+    [SerializeField] private bool _debugPlayerLoop = false;
 
     private void Awake()
     {
         _instance = this;
-        _gameState = PlayerLoop;
-        _underworldOverlay = GetComponent<UnderworldOverlay>();
+        _allEntities = new();
+        _allGraves = new();
+        _engraved = new();
+        _vampireLordController = _currentVampireLord.GetComponent<VampireLordController>();
         _underworldOverlay.SetRegularMode();
-        AllEntities = new();
+        OnResurrectPlayer += TransitionToOverworld;
+        _gameState = PlayerLoop;
     }
     private void Update()
     {
         _gameState.Invoke();
     }
+    private void OnDisable()
+    {
+        OnResurrectPlayer -= TransitionToOverworld;
+    }
 
     private void PlayerLoop()
     {
-        if (_debugPlayerLoop) Debug.Log($"GameState is PlayerLoop");
+        if (_debugPlayerLoop)
+            Debug.Log($"GameState is PlayerLoop");
+
+        if (!CameraManager.Instance.IsFollowingPlayer())
+            CameraManager.Instance.ChangeState(CameraStates.FollowPlayer);
     }
     private void VampireLordLoop()
     {
-        if (_debugPlayerLoop) Debug.Log($"GameState is VampireLordLoop");
+        if (_debugPlayerLoop)
+            Debug.Log($"GameState is VampireLordLoop");
+
+        if (CameraManager.Instance.IsFollowingPlayer())
+            CameraManager.Instance.ChangeState(CameraStates.FollowVampireLord);
     }
 
     [Button("Test TransitionToUnderworld")]
@@ -75,21 +111,27 @@ public class GameManager : MonoBehaviour
 
         AllEntities.Clear();
 
-        await _underworldOverlay.StartUnderworldAnim();
-        Debug.Log("Underworld anim done - Resurrecting player!");
+        if (!CameraManager.Instance.IsPlayingSounds)
+        {
+            CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._moveToUnderworld);
+            CameraManager.Instance._cameraAudioSource.Play();
+        }
 
-        VampireLord.SetActive(true);
-        //ResurrectPlayer();
+        await _underworldOverlay.StartUnderworldAnim();
+
+        _vampireLordController.gameObject.SetActive(true);
+        ChangeState(GameStates.VampireLordLoop);
     }
 
     public void TransitionToOverworld()
     {
-        VampireLord.SetActive(false);
+        _vampireLordController.gameObject.SetActive(false);
 
         _underworldOverlay.SetRegularMode();
-        Debug.Log("Underworld anim done - Resurrecting player!");
+        Debug.Log("Underworld anim done");
 
         ResurrectPlayer();
+        ChangeState(GameStates.PlayerLoop);
     }
 
     public void ChangeState(GameStates newState)
@@ -101,16 +143,82 @@ public class GameManager : MonoBehaviour
                 break;
             case GameStates.VampireLordLoop:
                 _gameState = VampireLordLoop;
-                TransitionToUnderworld();
                 break;
         }
     }
 
+    public void OnPlayerDie()
+    {
+        Debug.Log($"player died");
+        TransitionToUnderworld();
+        Destroy(PlayerController.gameObject);
+    }
+    public void InvokeResurrectPlayer()
+    {
+        OnResurrectPlayer?.Invoke();
+    }
+    public void OnEntityDie(Entity entity)
+    {
+        if (entity)
+        {
+            if (entity is Villager)
+            {
+                if (!CameraManager.Instance.IsPlayingSounds)
+                {
+                    CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._villigerDeath);
+                    CameraManager.Instance._cameraAudioSource.Play();
+                }
+                CreateGrave(entity as Villager);
+                Debug.Log($"{entity.Data.Name} grave created");
+            }
+
+            switch (entity.Type)
+            {
+                case EntityKind.Mouse:
+                    if (!CameraManager.Instance.IsPlayingSounds)
+                    {
+                        CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._mouseDeath);
+                        CameraManager.Instance._cameraAudioSource.Play();
+                    }
+                    break;
+                case EntityKind.Rabbit:
+                    if (!CameraManager.Instance.IsPlayingSounds)
+                    {
+                        CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._rabbitDeath);
+                        CameraManager.Instance._cameraAudioSource.Play();
+                    }
+                    break;
+                case EntityKind.Boar:
+                    if (!CameraManager.Instance.IsPlayingSounds)
+                    {
+                        CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._boarDeath);
+                        CameraManager.Instance._cameraAudioSource.Play();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            
+
+            Debug.Log($"{entity.Data.Name} died");
+            Destroy(entity.gameObject);
+        }
+    }
     private void ResurrectPlayer()
     {
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
-        newPlayerController.AbsorbedEntity = _chosenGrave.EntityData;
+        newPlayerController.AbsorbedEntity = _chosenEngraved;
         ChangeState(GameStates.PlayerLoop);
+    }
+    public void CreateGrave(Villager villager)
+    {
+        NewGraveDirt = Instantiate(_graveDirt, villager.transform.position, Quaternion.identity);
+        GameObject newGraveTombGO = Instantiate(_graveTomb, new Vector3(_graveDirt.transform.position.x, _graveDirt.transform.position.y + _tombInstansiationOffsetY), Quaternion.identity);
+
+        GraveTomb newGraveTomb = newGraveTombGO.GetComponent<GraveTomb>();
+        newGraveTomb.EngravedVillagerData = villager.Data;
+
+        _allGraves.Add(NewGraveDirt, newGraveTombGO);
     }
 }

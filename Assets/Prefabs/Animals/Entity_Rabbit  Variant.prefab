@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Speed
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Height
@@ -125,6 +125,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6144957634684898836, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6725894245680917328, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
+      propertyPath: Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9104120784747632204, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}

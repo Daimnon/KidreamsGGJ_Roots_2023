@@ -13,12 +13,23 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   commonData: {fileID: 11400000, guid: 48531bcafa595164eab40db7ff4760f8, type: 2}
-  _maxHp: 3
+  _maxHp: 10
   _damage: 10
   _speed: 2
   _vision: 1
   _attackRange: 3
+  absorbedStats: 
   <Name>k__BackingField: Player
+  _isWeak: 1
+  _biteDistance: 3
+  _biteOffset: 1
+  _biteTime: 0.5
+  _biteSpeedWhileWeak: 0.75
+  _biteSpeedWhileStrong: 1
+  _moveToTargetDurationWhileWeak: 1.25
+  _moveToTargetDurationWhileStrong: 1
+  _moveBackFromTargetDurationWhileWeak: 0.7
+  _moveBackFromTargetDurationWhileStrong: 0.5
   _weakSprite: {fileID: 3286163911610860551, guid: 1d8ff7984ff38424b8c4bf7fac2feced, type: 3}
   _strongSprite: {fileID: 3286163911610860551, guid: bd6f80194f7c7db45b8ce0c077f1f5e2, type: 3}
   _weakAttackingSprite: {fileID: 3286163911610860551, guid: 6e85ca840bfcbb44aabdf973142e708c, type: 3}
@@ -29,15 +40,63 @@ MonoBehaviour:
   _strongEatingAnimation:
   - {fileID: 3286163911610860551, guid: 8f1649d2b8da76c4bbfd0bf06fdeaa2b, type: 3}
   - {fileID: 3286163911610860551, guid: fc6d4a96d40ee3e469e7b29d578d3945, type: 3}
-  _biteDistance: 3
-  _biteOffset: 1
-  _moveToTargetDurationWhileStrong: 1
-  _moveBackFromTargetDurationWhileStrong: 0.5
-  _moveToTargetDurationWhileWeak: 1.25
-  _moveBackFromTargetDurationWhileWeak: 0.7
-  _biteSpeedWhileStrong: 1
-  _biteSpeedWhileWeak: 0.75
-  _biteTime: 0.5
+  _moveToTargetCurveFailedBite:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 2.726084
+      outSlope: 2.726084
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.048317414
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0.007044268
+      outSlope: 0.007044268
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.06628579
+      outWeight: 0.10461724
+    - serializedVersion: 3
+      time: 0.85
+      value: 1
+      inSlope: 0.0058578798
+      outSlope: 0.0058578798
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17332304
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _moveBackFromTargetCurveFailedBite:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 4.379033
+      outSlope: 4.379033
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.08214655
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _moveToTargetCurveBiteSuccess:
     serializedVersion: 2
     m_Curve:
@@ -100,63 +159,6 @@ MonoBehaviour:
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _moveToTargetCurveFailedBite:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.5
-      inSlope: 2.726084
-      outSlope: 2.726084
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.048317414
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0.007044268
-      outSlope: 0.007044268
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.06628579
-      outWeight: 0.10461724
-    - serializedVersion: 3
-      time: 0.85
-      value: 1
-      inSlope: 0.0058578798
-      outSlope: 0.0058578798
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.17332304
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _moveBackFromTargetCurveFailedBite:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 4.379033
-      outSlope: 4.379033
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.08214655
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

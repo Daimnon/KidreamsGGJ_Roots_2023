@@ -9,8 +9,11 @@ public class VampireLordController : PlayerController
 {
     [SerializeField] private LayerMask _graveLayer;
 
-    private Grave _currentGrave;
-    private bool _isTouchingGrave = false;
+    private GraveTomb _currentGraveTomb;
+    public GraveTomb CurrentGraveTomb { get => _currentGraveTomb; set => _currentGraveTomb = value; }
+
+    [SerializeField] private bool _isTouchingGrave = false;
+    public bool IsTouchingGrave { get => _isTouchingGrave; set => _isTouchingGrave = value; }
 
 
     #region Monobehaviour Callbacks
@@ -25,8 +28,7 @@ public class VampireLordController : PlayerController
     }
     private void Awake()
     {
-        _playerState = Idle;
-        _playerControls = new PlayerControls();
+        Initialize();
     }
     private void Update()
     {
@@ -43,25 +45,36 @@ public class VampireLordController : PlayerController
     }
     #endregion
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void Initialize()
     {
-        _isTouchingGrave = collision.IsTouchingLayers(_graveLayer);
-
-        if (_isTouchingGrave)
-            _currentGrave = collision.GetComponent<Grave>();
+        _playerControls = new PlayerControls();
+        _playerState = Idle;
+    }
+    protected override void LaterInitialize()
+    {
+        // do nothing for now
     }
 
     protected override void Bite(InputAction.CallbackContext biteContext)
-    {
-        if (_isTouchingGrave)
+    { 
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, transform.localScale, 0, _spriteDirection, _graveLayer);
+
+        if (hit)
         {
-            GameManager.Instance.ChosenGrave = _currentGrave;
-            GameManager.Instance.TransitionToOverworld();
+            //_currentGraveTomb.EngravedVillagerData = 
+            //GameManager.Instance.ChosenEngraved = hit.transform.GetComponent<GraveTomb>().EngravedVillagerData;
+            GameManager.Instance.InvokeResurrectPlayer();
         }
     }
 
-    public override void Kill()
+    public override void Die()
     {
-        
+        Debug.Log("lol vampireLord died how? you lil hacker ;)");
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawCube(transform.position, Data.BiteDistance * _spriteDirection);
     }
 }

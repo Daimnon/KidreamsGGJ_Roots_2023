@@ -3,6 +3,8 @@ using UnityEngine;
 
 public partial class Entity
 {
+    [SerializeField] private bool _entityDebug = false;
+
     private EntityState State
     {
         get => _state;
@@ -37,7 +39,8 @@ public partial class Entity
 
     protected virtual void TransitionToIdle(EntityState prevState)
     {
-        if (_debugLogState) Debug.Log(LogStr(nameof(TransitionToIdle)), gameObject);
+        if (_entityDebug)
+            Debug.Log(LogStr(nameof(TransitionToIdle)), gameObject);
         
         _navigation.enabled = true;
         _navigation.SetState(CachedPlayerTransform, EntityNavigation.NavigationMode.MoveRandomly);
@@ -47,7 +50,8 @@ public partial class Entity
 
     protected virtual void TransitionToChasing(EntityState prevState)
     {
-        Debug.Log(LogStr(nameof(TransitionToChasing)));
+        if (_entityDebug)
+            Debug.Log(LogStr(nameof(TransitionToChasing)));
         
         _navigation.enabled = true;
         _navigation.SetState(CachedPlayerTransform, EntityNavigation.NavigationMode.MoveToPlayer);
@@ -58,7 +62,8 @@ public partial class Entity
 
     protected virtual void TransitionToRunning(EntityState prevState)
     {
-        Debug.Log(LogStr(nameof(TransitionToRunning)));
+        if (_entityDebug)
+            Debug.Log(LogStr(nameof(TransitionToRunning)));
         
         _navigation.enabled = true;
         _navigation.SetState(CachedPlayerTransform, EntityNavigation.NavigationMode.RunFromPlayer);
@@ -69,7 +74,8 @@ public partial class Entity
 
     protected virtual void TransitionToAttacking(EntityState prevState)
     {
-        Debug.Log(LogStr(nameof(TransitionToAttacking)));
+        if (_entityDebug)
+            Debug.Log(LogStr(nameof(TransitionToAttacking)));
         
         _navigation.enabled = false;
         
@@ -82,7 +88,8 @@ public partial class Entity
     
     protected virtual void TransitionToCaptured(EntityState prevState)
     {
-        Debug.Log(LogStr(nameof(TransitionToCaptured)));
+        if (_entityDebug)
+            Debug.Log(LogStr(nameof(TransitionToCaptured)));
         _navigation.enabled = false;
         
         moveStaggerAnim.enabled = false;
@@ -144,7 +151,7 @@ public partial class Entity
     }
 
 
-    private void OnNavigationReachedDestination() // Currently only for random pos / runaway (not reached player)
+    protected void OnNavigationReachedDestination() // Currently only for random pos / runaway (not reached player)
     {
         if (State == EntityState.RunningFromPlayer && !_playerInSight)
         {

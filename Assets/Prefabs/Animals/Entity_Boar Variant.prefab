@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Speed
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 655535319, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_Height
@@ -126,6 +126,10 @@ PrefabInstance:
     - target: {fileID: 6144957634684898836, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6725894245680917328, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}
+      propertyPath: Type
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29797eeba4e804047a25c9de93e7fbcf, type: 3}

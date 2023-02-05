@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CameraStates { FollowPlayer, FollowVampireLord }
+
 public class CameraManager : MonoBehaviour
 {
     private static CameraManager _instance;
@@ -10,6 +12,7 @@ public class CameraManager : MonoBehaviour
     private delegate void CameraState();
     private CameraState _cameraState;
 
+
     [SerializeField] private Camera _mainCam;
     public Camera MainCam => _mainCam;
 
@@ -17,6 +20,10 @@ public class CameraManager : MonoBehaviour
     public Transform MainCamTransform => _mainCamTransform;
 
     [SerializeField] private float _size = 14f;
+
+    public AudioSource _cameraAudioSource;
+    public AudioClip _graveEmerge, _heartBeat, _moveToUnderworld, _bite, _mouseDeath, _rabbitDeath, _boarDeath, _villigerDeath;
+    public bool IsPlayingSounds => _cameraAudioSource.isPlaying;
 
     private void Awake()
     {
@@ -32,13 +39,14 @@ public class CameraManager : MonoBehaviour
     {
         _cameraState.Invoke();
     }
+    
     private void FollowPlayer()
     {
-        if (!GameManager.Instance.CurrentPlayer)
+        if (!GameManager.Instance.PlayerController)
             return;
 
-        float playerX = GameManager.Instance.CurrentPlayer.transform.position.x;
-        float playerY = GameManager.Instance.CurrentPlayer.transform.position.y;
+        float playerX = GameManager.Instance.PlayerController.transform.position.x;
+        float playerY = GameManager.Instance.PlayerController.transform.position.y;
         float cameraZ = _mainCamTransform.position.z;
 
         Vector3 newCamPos = new Vector3(playerX, playerY, cameraZ);
@@ -46,6 +54,37 @@ public class CameraManager : MonoBehaviour
     }
     private void FollowVampireLord()
     {
+        if (!GameManager.Instance.VampireLordController)
+            return;
 
+        float playerX = GameManager.Instance.VampireLordController.transform.position.x;
+        float playerY = GameManager.Instance.VampireLordController.transform.position.y;
+        float cameraZ = _mainCamTransform.position.z;
+
+        Vector3 newCamPos = new Vector3(playerX, playerY, cameraZ);
+        _mainCamTransform.position = newCamPos;
+    }
+    public void ChangeState(CameraStates newState)
+    {
+        switch (newState)
+        {
+            case CameraStates.FollowPlayer:
+                _cameraState = FollowPlayer;
+                break;
+            case CameraStates.FollowVampireLord:
+                _cameraState = FollowVampireLord;
+                break;
+        }
+    }
+    public bool IsFollowingPlayer()
+    {
+        if (_cameraState == FollowPlayer)
+            return true;
+        else
+            return false;
+    }
+    public void ChangeAudioSource(AudioClip ac)
+    {
+        _cameraAudioSource.clip = ac;
     }
 }

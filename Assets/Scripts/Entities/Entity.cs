@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data.Common;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -10,6 +10,8 @@ public enum FaceDirection
     Left,
     Right,
 }
+
+public enum EntityKind { Mouse, Rabbit, Boar }
 
 [RequireComponent(typeof(EntityDataHolder))]
 public partial class Entity : MonoBehaviour
@@ -23,14 +25,15 @@ public partial class Entity : MonoBehaviour
         CapturedByPlayer,
     }
 
-    private int _hp;
-    
-    [SerializeField] private Animator _anim;
-    [SerializeField] private BreatheMoveAnim moveStaggerAnim;
+    protected int _hp;
+
+    public EntityKind Type;
+    [SerializeField] protected Animator _anim;
+    [SerializeField] protected BreatheMoveAnim moveStaggerAnim;
     
     [Header("Raycasting")]
     [SerializeField] private LayerMask _playerRaycastMask;
-    [SerializeField] private SpriteDirection _spriteDir;
+    [SerializeField] protected SpriteDirection _spriteDir;
 
     [Header("Test/Debug")]
     [SerializeField] private bool _showGizmos;
@@ -38,16 +41,18 @@ public partial class Entity : MonoBehaviour
     [SerializeField] private Color _testRayColor;
 
     [SerializeField] private EntityNavigation.NavigationMode _startNavMode;
-    private EntityNavigation _navigation;
+    protected EntityNavigation _navigation;
     public EntityData Data { get; private set; }
 
-    private readonly RaycastHit2D[] _raycastResultsCache = new RaycastHit2D[100];
     private PlayerController _cachedPlayer;
-    private bool _playerInSight;
+    private bool _playerInSight, _isAlive;
+    public bool IsAlive => _isAlive;
 
     [ShowNonSerializedField] private EntityState _state;
     private Action _updateAction;
     private Transform CachedPlayerTransform => _cachedPlayer ? _cachedPlayer.transform : null;
+
+    private FOVRaycastHelper<PlayerController> _fovRaycaster;
     
     private EntityState PlayerSeenState =>
         Data.Damage > 0
@@ -66,6 +71,7 @@ public partial class Entity : MonoBehaviour
         InitState();
         _hp = Data.Hp;
         GameManager.Instance.AllEntities.Add(this);
+        OnEntityDeath += GameManager.Instance.OnEntityDie;
     }
 
     private void OnValidate()
@@ -76,12 +82,18 @@ public partial class Entity : MonoBehaviour
         
         InitData();
     }
+    private void OnDisable()
+    {
+        OnEntityDeath -= GameManager.Instance.OnEntityDie;
+        _navigation.OnReachedDestination -= OnNavigationReachedDestination;
+    }
 
-    private void InitData()
+    protected void InitData()
     {
         Data = GetComponent<EntityDataHolder>().Data;
         _navigation = GetComponent<EntityNavigation>();
         _updateAction = UpdateIdleState;
+        _fovRaycaster = new FOVRaycastHelper<PlayerController>(transform, _playerRaycastMask);
         _navigation.OnReachedDestination += OnNavigationReachedDestination;
 
         if (Application.isPlaying)
@@ -97,7 +109,7 @@ public partial class Entity : MonoBehaviour
             InitState();
         }
     }
-    private void InitState()
+    protected void InitState()
     {
         moveStaggerAnim.enabled = false;
         
@@ -133,10 +145,13 @@ public partial class Entity : MonoBehaviour
     public bool TakeDamage(int damage)
     {
         _hp -= damage;
-        if (_debugLogState) Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}", gameObject);
+
+        if (_entityDebug)
+            Debug.Log($"Entity *({name}) TakeDamage({damage}). Hp is now {_hp}", gameObject);
+
         if (_hp <= 0)
         {
-            Kill();
+            Die();
             return false;
         }
 
@@ -146,17 +161,20 @@ public partial class Entity : MonoBehaviour
     public void CaptureEntity() => State = EntityState.CapturedByPlayer;
     public void ReleaseEntity() => State = EntityState.Idle;
 
-    protected virtual void Kill()
+    protected void Die()
     {
         OnEntityDeath?.Invoke(this);
-        Destroy(gameObject);
     }
 
     private void UpdatePlayerInSight()
     {
-        var player = RayCastForPlayer();
-        var foundPlayer = player != null;
+        _cachedPlayer = RayCastForPlayer();
+
+        PlayerController player = _cachedPlayer;
+        bool foundPlayer = player != null;
+
         if (player) _cachedPlayer = player;
+
         if (foundPlayer && !_playerInSight)
         {
             OnPlayerFound();
@@ -168,58 +186,29 @@ public partial class Entity : MonoBehaviour
 
         _playerInSight = foundPlayer;
     }
+    
+    private PlayerController RayCastForPlayer()
+    {
+        IEnumerable<Vector3> rayDirections = GetRayDirections();
+        return _fovRaycaster.RayCastForPlayer(rayDirections, Data.ViewDistance);
+    }
 
     private void OnPlayerFound()
     {
-        if (_debugLogState) Debug.Log(LogStr("Found player!"), gameObject);
+        if (_entityDebug)
+            Debug.Log(LogStr("Found player!"), gameObject);
     }
 
     private void OnPlayerLost()
     {
-       if (_debugLogState) Debug.Log(LogStr("Where player?!"), gameObject);
-    }
-
-    private PlayerController RayCastForPlayer()
-    {
-        foreach (var rayDir in GetRayDirections())
-        {
-            var size = Physics2D.RaycastNonAlloc(transform.position, rayDir, _raycastResultsCache, Data.ViewDistance, _playerRaycastMask);
-            if (size == 0) continue;
-            
-            var player = SearchPlayerInResults(_raycastResultsCache);
-            if (player != null) return player;
-        }
-
-        return null;
-    }
-
-    private PlayerController SearchPlayerInResults(RaycastHit2D[] results)
-    {
-        if (results == null || results.Length == 0) return null;
-        return results
-            .Select(res =>
-            {
-                if (_cachedPlayer && _cachedPlayer.gameObject == res.transform.gameObject)
-                    return _cachedPlayer;
-                return res.transform.GetComponent<PlayerController>();
-            })
-            .FirstOrDefault();
+        if (_entityDebug)
+            Debug.Log(LogStr("Where player?!"), gameObject);
     }
 
     private IEnumerable<Vector3> GetRayDirections() =>
-        GetRayDirections(_spriteDir.Vector, Data.ViewFOVAngle, Data.NumRays);
+        _fovRaycaster.GetRayDirections(_spriteDir.Vector, Data.ViewFOVAngle, Data.NumRays);
 
-    private static IEnumerable<Vector3> GetRayDirections(Vector2 direction, float angleDegrees, int numRays)
-    {
-        var deltaRot = Quaternion.AngleAxis(angleDegrees / numRays, Vector3.forward);
-        var curVec = Quaternion.AngleAxis(angleDegrees * 0.5f, Vector3.back) * direction;
 
-        for (var i = 0; i < numRays; i++)
-        {
-            yield return curVec;
-            curVec = deltaRot * curVec;
-        }
-    }
 
     private string LogStr(string msg) => $"{nameof(Entity)}: {msg}";
 
