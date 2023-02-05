@@ -175,9 +175,11 @@ public class GameManager : MonoBehaviour
     public void CreateGrave(Villager villager)
     {
         NewGraveDirt = Instantiate(_graveDirt, villager.transform.position, Quaternion.identity);
-        GameObject newGraveTomb = Instantiate(_graveTomb, new Vector3(_graveDirt.transform.position.x, _graveDirt.transform.position.y + _tombInstansiationOffsetY), Quaternion.identity);
+        GameObject newGraveTombGO = Instantiate(_graveTomb, new Vector3(_graveDirt.transform.position.x, _graveDirt.transform.position.y + _tombInstansiationOffsetY), Quaternion.identity);
 
-        newGraveTomb.GetComponent<GraveTomb>().EngravedVillagerData = villager.Data;
-        _allGraves.Add(NewGraveDirt, newGraveTomb);
+        GraveTomb newGraveTomb = newGraveTombGO.GetComponent<GraveTomb>();
+        newGraveTomb.EngravedVillagerData = villager.Data;
+
+        _allGraves.Add(NewGraveDirt, newGraveTombGO);
     }
 }

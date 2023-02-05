@@ -9,7 +9,7 @@ public class GraveTomb : MonoBehaviour
 
     private const int _maxGraves = 5;
 
-    [SerializeField] private float _offsetFromDirtY;
+    [SerializeField] private float _offsetFromDirtY = 1;
     [SerializeField] private bool _isEngraved = false;
     [SerializeField] private Rigidbody2D _rb;
 
@@ -25,7 +25,7 @@ public class GraveTomb : MonoBehaviour
 
     private bool CheckGravePosInAir()
     {
-        bool isGraveInAir = transform.position.y >= GameManager.Instance.NewGraveDirt.transform.position.y ? true : false;
+        bool isGraveInAir = GameManager.Instance.NewGraveDirt.transform.position.y <= transform.position.y ? true : false;
         return isGraveInAir;
     }
 

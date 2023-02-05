@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     private Entity _lastPrey;
     private Vector2 _lastAttackingOriginPos, _lastTargetPos;
-    private int _hpStatCounter = 0, _speedStatCounter = 0, _visionStatCounter = 0, _animationCounter = 0, _animationLenghtInFrames = 3;
+    private int _hpStatCounter = 0, _speedStatCounter = 0, _visionStatCounter = 0, _animationCounter = 0, _animationLenghtInFrames = 3; //_killCounterTest = 0;
     private float _moveToTargetDuration, _moveBackFromTargetDuration, _biteOffset;
 
     protected Vector2 _moveInput, _spriteDirection;
@@ -159,6 +159,7 @@ public class PlayerController : MonoBehaviour
         if (_debugPlayerState)
             Debug.Log($"player state is Idle");
 
+        //_killCounterTest = 0;
         _moveInput = _move.ReadValue<Vector2>();
         DoIdleAnimation();
 
@@ -207,11 +208,11 @@ public class PlayerController : MonoBehaviour
         if (!_lastPrey)
             ChangeState(PlayerStates.Idle);
 
-
-        _killedEntitiesData.Add(_lastPrey.Data);
-
-        if (_lastPrey)
+        if (_lastPrey/* && _killCounterTest == 0*/)
+        {
             _lastPrey.TakeDamage(_lastPrey.Data.Hp);
+            //_killCounterTest++;
+        }
 
         if (_lastPrey is not Villager)
         {
