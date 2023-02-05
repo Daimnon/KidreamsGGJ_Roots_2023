@@ -56,10 +56,13 @@ public class VampireLordController : PlayerController
     }
 
     protected override void Bite(InputAction.CallbackContext biteContext)
-    {
-        if (_isTouchingGrave)
+    { 
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, transform.localScale, 0, _spriteDirection, _graveLayer);
+
+        if (hit)
         {
-            GameManager.Instance.ChosenEngraved = _currentGraveTomb.EngravedVillagerData;
+            //_currentGraveTomb.EngravedVillagerData = 
+            //GameManager.Instance.ChosenEngraved = hit.transform.GetComponent<GraveTomb>().EngravedVillagerData;
             GameManager.Instance.InvokeResurrectPlayer();
         }
     }
@@ -67,5 +70,11 @@ public class VampireLordController : PlayerController
     public override void Die()
     {
         Debug.Log("lol vampireLord died how? you lil hacker ;)");
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawCube(transform.position, Data.BiteDistance * _spriteDirection);
     }
 }

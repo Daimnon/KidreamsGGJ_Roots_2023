@@ -5652,6 +5652,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 492421373784651300, guid: 730b6277ff8cab44e8bb65a3ca77e60d, type: 3}
+      propertyPath: _biteLayer.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1466416634592152736, guid: 730b6277ff8cab44e8bb65a3ca77e60d, type: 3}
       propertyPath: m_Name
       value: VampireLord
