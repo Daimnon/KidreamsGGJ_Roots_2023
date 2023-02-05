@@ -20,6 +20,7 @@ public class UnderworldOverlay : MonoBehaviour
     [SerializeField] private Color _underworldColor;
     [SerializeField] private float _noiseBlend2;
     [SerializeField] private float _animDuration2;
+    public static Action<UnderworldOverlay> OneUnderWorldAnimationStart; 
 
     private static readonly int PropBlend = Shader.PropertyToID("_Blend");
     
@@ -32,19 +33,22 @@ public class UnderworldOverlay : MonoBehaviour
     
     private bool _wasInit;
 
-    public event Action OnUnderworldAnimationComplete;
+    public static event Action OnUnderworldAnimationComplete;
     
 
     [Button("SetRegularMode")]
     public void SetRegularMode()
     {
+
         _underworldOverlayMaterial.SetFloat(PropBlend, 0f);
     }
 
     [Button("StartUnderworldAnim")]
     public Task StartUnderworldAnim()
     {
+
         // Init states
+        OneUnderWorldAnimationStart?.Invoke(this);
         _underworldOverlayMaterial.SetColor(PropColorTint, _transition1Color);
         _underworldOverlayMaterial.SetFloat(PropBlend, 0f);
         _underworldOverlayMaterial.SetFloat(PropNoiseBlend, _noiseBlend1);
