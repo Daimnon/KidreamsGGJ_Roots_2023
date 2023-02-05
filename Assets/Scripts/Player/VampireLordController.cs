@@ -60,7 +60,7 @@ public class VampireLordController : PlayerController
         }
     }
 
-    public override void Kill()
+    public override void Die()
     {
         
     }

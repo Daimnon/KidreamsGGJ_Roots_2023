@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
-    public PlayerData Data { get => _data; set => value = _data; }
+    public PlayerData Data { get => _data; set => _data = value; }
 
     private bool _isWeak;
     public bool IsWeak => _isWeak;
@@ -80,8 +80,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerState.Invoke();
 
-        if (_currentStrongValue >= _data.StrongValue)
-            _isWeak = false;
+        
     }
     private void FixedUpdate()
     {
@@ -91,33 +90,6 @@ public class PlayerController : MonoBehaviour
     {
         _move.Disable();
         _bite.Disable();
-    }
-    private void OnValueChangedInMoveInput()
-    {
-        //if (DetectValueChangeInMoveInput())
-        //{
-        //    
-        //
-        //    
-        //    _biteOffset = _data.BiteOffset * _spriteDirection.x;
-        //}
-        
-        //if (DetectValueChangeInIsWeak())
-        //{
-        //    switch (IsWeak)
-        //    {
-        //        case true:
-        //            _playerGraphics.sprite = _data.WeakSprite;
-        //            _moveToTargetDuration = _data.MoveToTargetDurationWhileWeak;
-        //            _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileWeak;
-        //            break;
-        //        case false:
-        //            _playerGraphics.sprite = _data.StrongSprite;
-        //            _moveToTargetDuration = _data.MoveToTargetDurationWhileStrong;
-        //            _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileStrong;
-        //            break;
-        //    }
-        //}
     }
     #endregion
 
@@ -172,7 +144,8 @@ public class PlayerController : MonoBehaviour
 
 
             ChangeState(PlayerStates.Attacking);
-            _lastPrey.CaptureEntity();
+
+            //_lastPrey.CaptureEntity();
 
             //bool isEntityAlive = ; // instakill
             if (_lastPrey is Villager && GameManager.Instance.Engraved.Count < 5)
@@ -180,8 +153,6 @@ public class PlayerController : MonoBehaviour
 
             if (!_lastPrey.TakeDamage(_lastPrey.Data.Hp))
                 _killedEntitiesData.Add(_lastPrey.Data);
-            
-                
 
             //_absorbedEntites.Add(entity.Data);
 
@@ -217,27 +188,26 @@ public class PlayerController : MonoBehaviour
     #region States
     protected void Idle()
     {
-        if (_debugPlayerState) Debug.Log($"player state is Idle");
+        if (_debugPlayerState)
+            Debug.Log($"player state is Idle");
 
         _moveInput = _move.ReadValue<Vector2>();
-        _lastPrey = null;
 
-        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
-            _playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
+        if (_lastPrey)
+            _lastPrey = null;
 
         if (_moveInput != Vector2.zero)
             ChangeState(PlayerStates.Moving);
     }
     protected void Moving()
     {
-        if (_debugPlayerState) Debug.Log($"player state is Moving");
+        if (_debugPlayerState)
+            Debug.Log($"player state is Moving");
 
         _moveInput = _move.ReadValue<Vector2>();
 
-        var hasInput = _moveInput != Vector2.zero;
-        if (!hasInput)
+        if(_moveInput == Vector2.zero)
             ChangeState(PlayerStates.Idle);
-        _moveAnim.enabled = hasInput;
     }
     protected void Attacking()
     {
@@ -245,10 +215,7 @@ public class PlayerController : MonoBehaviour
 
         _moveInput = Vector2.zero;
 
-        if (_playerGraphics.sprite != _data.WeakAttackingSprite && _playerGraphics.sprite != _data.StrongAttackingSprite)
-            _playerGraphics.sprite = _isWeak ? _data.WeakAttackingSprite : _data.StrongAttackingSprite;
 
-        ChangeState(PlayerStates.Biting);
     }
     protected void Biting()
     {
@@ -258,14 +225,6 @@ public class PlayerController : MonoBehaviour
 
         if (!_lastPrey)
             return;
-
-        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
-            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
-
-        if (_playerGraphics.sprite == _data.WeakEatingAnimation[0] || _playerGraphics.sprite == _data.StrongEatingAnimation[0])
-            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[1] : _data.StrongEatingAnimation[1];
-        else
-            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
 
         if (_lastPrey is not Villager)
         {
@@ -284,14 +243,6 @@ public class PlayerController : MonoBehaviour
 
         if (!_lastPrey)
             return;
-
-        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
-            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
-
-        if (_playerGraphics.sprite == _data.WeakEatingAnimation[0] || _playerGraphics.sprite == _data.StrongEatingAnimation[0])
-            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[1] : _data.StrongEatingAnimation[1];
-        else
-            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
 
         transform.DOMove(_lastAttackingOriginPos, _moveBackFromTargetDuration).SetEase(_data.MoveBackFromTargetCurveBiteSuccess).OnComplete(() => ChangeState(PlayerStates.Idle));
 
@@ -329,8 +280,51 @@ public class PlayerController : MonoBehaviour
             _spriteDirection = new(Mathf.Abs(transform.localScale.x), 0);
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
-    }
 
+        _biteOffset = _data.BiteOffset * _spriteDirection.x;
+    }
+    private void TryChangeWeakness()
+    {
+        if (_currentStrongValue >= _data.StrongValue)
+            _isWeak = false;
+        else
+            _isWeak = true;
+
+        switch (IsWeak)
+        {
+            case true:
+                _playerGraphics.sprite = _data.WeakSprite;
+                _moveToTargetDuration = _data.MoveToTargetDurationWhileWeak;
+                _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileWeak;
+                break;
+            case false:
+                _playerGraphics.sprite = _data.StrongSprite;
+                _moveToTargetDuration = _data.MoveToTargetDurationWhileStrong;
+                _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileStrong;
+                break;
+        }
+    }
+    private void TryStartEatingAnimation()
+    {
+        if (_playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.StrongAttackingSprite)
+            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
+    }
+    private void DoEatingAnimation()
+    {
+        if (_playerGraphics.sprite == _data.WeakEatingAnimation[0] || _playerGraphics.sprite == _data.StrongEatingAnimation[0])
+            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[1] : _data.StrongEatingAnimation[1];
+        else
+            _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
+    }
+    private void FinishAnimation()
+    {
+        if (_playerGraphics.sprite == _data.WeakEatingAnimation[0] || _playerGraphics.sprite == _data.StrongEatingAnimation[0] ||
+            _playerGraphics.sprite == _data.WeakEatingAnimation[1] || _playerGraphics.sprite == _data.StrongEatingAnimation[1] ||
+            _playerGraphics.sprite == _data.WeakAttackingSprite || _playerGraphics.sprite == _data.WeakAttackingSprite)
+        {
+            TryChangeWeakness();
+        }
+    }
     public void ChangeState(PlayerStates newState)
     {
         switch (newState)
@@ -356,7 +350,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public virtual void Kill()
+    public virtual void Die()
     {
         Debug.Log("Player: Died!");
         GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
@@ -368,11 +362,11 @@ public class PlayerController : MonoBehaviour
         bool isAlive;
         _damageTaken += damage;
 
-        Debug.Log($"Player.TakeDamage({damage}). Hp is now {Hp}");
+        //Debug.Log($"Player.TakeDamage({damage}). Hp is now {Hp}");
         if (Hp <= 0)
         {
             isAlive = true;
-            Kill();
+            Die();
             return isAlive;
         }
 

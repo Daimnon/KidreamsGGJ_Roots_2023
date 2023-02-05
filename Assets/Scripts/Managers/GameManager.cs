@@ -18,12 +18,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _bloodAmount = 25;
     public int BloodAmount => _bloodAmount;
 
+    [SerializeField] private int _deathCount = 0;
+    public int DeathCount { get => _deathCount; set => _deathCount = value; }
+
     [SerializeField] private GameObject _playerPrefab, _currentVampireLord;
     public GameObject PlayerPrefab => _playerPrefab;
     public GameObject CurrentVampireLord => _currentVampireLord;
 
     [SerializeField] private PlayerController _playerController;
-    public PlayerController PlayerController { get => _playerController; set => value = _playerController; }
+    public PlayerController PlayerController { get => _playerController; set => _playerController = value; }
     
     [SerializeField] private VampireLordController _vampireLordController;
     public VampireLordController VampireLordController => _vampireLordController;
@@ -33,13 +36,13 @@ public class GameManager : MonoBehaviour
     public Transform VampireLordSpawn => _vampireLordSpawn;
 
     [SerializeField] private List<Villager> _engraved;
-    public List<Villager> Engraved { get => _engraved; set => value = _engraved; }
+    public List<Villager> Engraved { get => _engraved; set => _engraved = value ; }
 
     [SerializeField] private Villager _chosenEngraved;
-    public Villager ChosenEngraved { get => _chosenEngraved; set => value = _chosenEngraved; }
+    public Villager ChosenEngraved { get => _chosenEngraved; set => _chosenEngraved = value; }
 
     [SerializeField] private List<Entity> _allEntities;
-    public List<Entity> AllEntities { get => _allEntities; set => value = _allEntities; }
+    public List<Entity> AllEntities { get => _allEntities; set => _allEntities = value; }
 
     [SerializeField] private UnderworldOverlay _underworldOverlay;
     public UnderworldOverlay UnderworldOverlay => _underworldOverlay;
