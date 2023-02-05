@@ -28,10 +28,10 @@ public class Villager : Entity
         base.UpdateAttackingState();
     }
 
-    protected override void Kill()
+    protected override void Die()
     {
         // base will Destroy the object - do stuff before
-        base.Kill();
+        base.Die();
     }
 
     private void Update()

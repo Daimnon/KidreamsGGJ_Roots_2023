@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.TextCore.Text;
 
 public enum GameStates { PlayerLoop, VampireLordLoop }
 
@@ -13,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     private delegate void GameState();
     private GameState _gameState;
+
+    public event Action OnResurrectPlayer;
 
     // win/lose condition: blood empty = perma-death, blood full = vampireLord resurrection, value = 0-100.
     [SerializeField] private int _bloodAmount = 25;
@@ -56,11 +60,16 @@ public class GameManager : MonoBehaviour
         _allEntities = new();
         _vampireLordController = _currentVampireLord.GetComponent<VampireLordController>();
         _underworldOverlay.SetRegularMode();
+        OnResurrectPlayer += TransitionToOverworld;
         _gameState = PlayerLoop;
     }
     private void Update()
     {
         _gameState.Invoke();
+    }
+    private void OnDisable()
+    {
+        OnResurrectPlayer -= TransitionToOverworld;
     }
 
     private void PlayerLoop()
@@ -86,10 +95,9 @@ public class GameManager : MonoBehaviour
         AllEntities.Clear();
 
         await _underworldOverlay.StartUnderworldAnim();
-        Debug.Log("Underworld anim done - Resurrecting player!");
 
         _vampireLordController.gameObject.SetActive(true);
-        //ResurrectPlayer();
+        ChangeState(GameStates.VampireLordLoop);
     }
 
     public void TransitionToOverworld()
@@ -111,20 +119,33 @@ public class GameManager : MonoBehaviour
                 break;
             case GameStates.VampireLordLoop:
                 _gameState = VampireLordLoop;
-                TransitionToUnderworld();
                 break;
         }
     }
 
+    public void OnPlayerDie()
+    {
+        Debug.Log($"player died");
+        TransitionToUnderworld();
+        Destroy(PlayerController.gameObject);
+    }
+    public void InvokeResurrectPlayer()
+    {
+        OnResurrectPlayer?.Invoke();
+    }
+    public void OnEntityDie(Entity entity)
+    {
+        if (entity)
+        {
+            Debug.Log($"{entity.Data.Name} died");
+            Destroy(entity.gameObject);
+        }
+    }
     private void ResurrectPlayer()
     {
         GameObject newPlayer = Instantiate(_playerPrefab, _playerSpawn);
         PlayerController newPlayerController = newPlayer.GetComponent<PlayerController>();
         newPlayerController.AbsorbedEntity = _chosenEngraved.Data;
         ChangeState(GameStates.PlayerLoop);
-    }
-    public void Test()
-    {
-
     }
 }

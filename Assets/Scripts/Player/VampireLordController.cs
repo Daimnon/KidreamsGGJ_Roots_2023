@@ -25,8 +25,8 @@ public class VampireLordController : PlayerController
     }
     private void Awake()
     {
-        _playerState = Idle;
         _playerControls = new PlayerControls();
+        _playerState = Idle;
     }
     private void Update()
     {
@@ -56,7 +56,7 @@ public class VampireLordController : PlayerController
         if (_isTouchingGrave)
         {
             GameManager.Instance.ChosenEngraved = _currentGrave.EngravedVillager;
-            GameManager.Instance.TransitionToOverworld();
+            GameManager.Instance.InvokeResurrectPlayer();
         }
     }
 

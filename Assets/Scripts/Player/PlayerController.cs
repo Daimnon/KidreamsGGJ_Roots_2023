@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     protected delegate void PlayerState();
     protected PlayerState _playerState;
 
+    public event Action OnDeath;
+
     [Header("Player Data")]
     [SerializeField, Expandable] private PlayerData _data;
     public PlayerData Data { get => _data; set => _data = value; }
@@ -39,13 +41,11 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] protected PlayerControls _playerControls;
     [SerializeField] protected SpriteRenderer _playerGraphics;
-    //[SerializeField] private SpriteDirection _spriteDir;
     [SerializeField] protected Rigidbody2D _rb;
     public Rigidbody2D Rb => _rb;
 
-    [SerializeField] private BreatheMoveAnim _moveAnim;
+    //[SerializeField] private BreatheMoveAnim _moveAnim;
     [SerializeField] private bool _debugPlayerState;
-    //[SerializeField] private SpriteDirection _spriteDir;
 
     [Header("World Data")]
     [SerializeField] private LayerMask _biteLayer;
@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
     {
         _move.Disable();
         _bite.Disable();
+        OnDeath -= GameManager.Instance.OnPlayerDie;
     }
     #endregion
 
@@ -107,6 +108,7 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.UnderworldOverlay.SetRegularMode();
         GameManager.Instance.PlayerController = this;
+        OnDeath += GameManager.Instance.OnPlayerDie;
     }
 
     #region FixedUpdate Methods
@@ -121,10 +123,6 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Bite(InputAction.CallbackContext biteContext)
     {
-        //Vector2 direction = _spriteDir.Vector;
-        //_playerGraphics.sprite = _isWeak ? _data.WeakSprite : _data.StrongSprite;
-
-        _lastPrey = null;
         _lastAttackingOriginPos = transform.position;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, _spriteDirection, _data.BiteDistance, _biteLayer);
@@ -139,18 +137,8 @@ public class PlayerController : MonoBehaviour
             Vector2 pos = (Vector2)transform.position + _spriteDirection * _data.BiteDistance;
             _lastTargetPos = new(pos.x, hit.transform.position.y);
 
-
-            //_moveToTargetDuration = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
-            //_moveBackFromTargetDuration = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak : _data.MoveBackFromTargetDurationWhileStrong;
-
-
             ChangeState(PlayerStates.Attacking);
 
-            //_lastPrey.CaptureEntity();
-
-            //bool isEntityAlive = ; // instakill
-
-            //_absorbedEntites.Add(entity.Data);
             Debug.Log($"player {name} bite {hit.transform.root.name}");
 
         }
@@ -160,19 +148,6 @@ public class PlayerController : MonoBehaviour
             _lastTargetPos = new(pos.x, transform.position.y);
 
             ChangeState(PlayerStates.Attacking);
-            //Vector2 originalPos = transform.position;
-            //Vector2 pos = (Vector2) transform.position + _spriteDirection * _data.BiteDistance;
-            //float targetPosX = pos.x;
-            
-            //float moveToTarget = _isWeak ? _data.MoveToTargetDurationWhileWeak : _data.MoveToTargetDurationWhileStrong;
-            //float moveBackFromTarget = _isWeak ? _data.MoveBackFromTargetDurationWhileWeak / 2 : _data.MoveBackFromTargetDurationWhileStrong / 2;
-
-            
-
-            //DOTween.Sequence().
-            //    Append(transform.DOMoveX(targetPosX, moveToTarget).SetEase(_data.MoveToTargetCurveFailedBite)).
-            //    Append(transform.DOMoveX(originalPos.x, moveBackFromTarget).SetEase(_data.MoveBackFromTargetCurveFailedBite)).
-            //    OnComplete(() => ChangeState(PlayerStates.Idle));
 
             Debug.Log($"player {name} didn't bite");
         }
@@ -277,16 +252,6 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        
-
-        //if (_playerGraphics.sprite != _data.WeakEatingAnimation[0] && _playerGraphics.sprite != _data.WeakEatingAnimation[1])
-        //    _playerGraphics.sprite = _data.WeakEatingAnimation[0];
-        //else if (_playerGraphics.sprite != _data.WeakEatingAnimation[0] && _playerGraphics.sprite != _data.WeakEatingAnimation[1])
-        //
-        //
-
-        //_lastTargetPos = null;
-        //_lastAttackingPos = null;
     }
     protected void FailedBiting()
     {
@@ -365,6 +330,7 @@ public class PlayerController : MonoBehaviour
         else
             _playerGraphics.sprite = _isWeak ? _data.WeakEatingAnimation[0] : _data.StrongEatingAnimation[0];
     }
+
     public void ChangeState(PlayerStates newState)
     {
         switch (newState)
@@ -390,13 +356,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void InvokeDeath()
+    {
+        OnDeath?.Invoke();
+    }
     public virtual void Die()
     {
         Debug.Log("Player: Died!");
-        GameManager.Instance.ChangeState(GameStates.VampireLordLoop);
-        Destroy(gameObject);
+        InvokeDeath();
     }
-
     public bool TakeDamage(int damage)
     {
         bool isAlive;
@@ -411,7 +379,6 @@ public class PlayerController : MonoBehaviour
         }
 
         isAlive = false;
-
         return isAlive;
     }
 
