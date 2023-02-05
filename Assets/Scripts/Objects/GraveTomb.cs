@@ -41,6 +41,12 @@ public class GraveTomb : MonoBehaviour
     }
     private void Engrave()
     {
+        if (!CameraManager.Instance.IsPlayingSounds)
+        {
+            CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._graveEmerge);
+            CameraManager.Instance._cameraAudioSource.Play();
+        }
+
         _rb.gravityScale = 0;
         _rb.velocity = Vector3.zero;
         transform.position = GameManager.Instance.NewGraveDirt.transform.position + new Vector3(0f, _offsetFromDirtY, 0f);

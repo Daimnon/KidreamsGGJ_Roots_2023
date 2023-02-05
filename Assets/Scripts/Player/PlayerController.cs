@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     protected Vector2 _moveInput, _spriteDirection;
     protected InputAction _move, _bite;
+    protected bool _isPlayingSound => CameraManager.Instance._cameraAudioSource.isPlaying;
 
     #region Monobehaviour Callbacks
     private void OnEnable()
@@ -79,8 +80,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _playerState.Invoke();
-
-        
     }
     private void FixedUpdate()
     {
@@ -101,13 +100,14 @@ public class PlayerController : MonoBehaviour
         _moveToTargetDuration = _data.MoveToTargetDurationWhileWeak;
         _moveBackFromTargetDuration = _data.MoveBackFromTargetDurationWhileWeak;
         _biteOffset = _data.BiteOffset;
-        UIManager.Instance.InitializePlayerUI();
+        
         _playerState = Idle;
     }
     protected virtual void LaterInitialize()
     {
-        GameManager.Instance.UnderworldOverlay.SetRegularMode();
         GameManager.Instance.PlayerController = this;
+        UIManager.Instance.InitializePlayerUI(this);
+        GameManager.Instance.UnderworldOverlay.SetRegularMode();
         OnDeath += GameManager.Instance.OnPlayerDie;
     }
 
@@ -210,6 +210,12 @@ public class PlayerController : MonoBehaviour
 
         if (_lastPrey/* && _killCounterTest == 0*/)
         {
+            if (!CameraManager.Instance.IsPlayingSounds)
+            {
+                CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._bite);
+                CameraManager.Instance._cameraAudioSource.Play();
+            }
+            
             _lastPrey.TakeDamage(_lastPrey.Data.Hp);
             //_killCounterTest++;
         }

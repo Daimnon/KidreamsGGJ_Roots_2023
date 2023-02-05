@@ -12,6 +12,7 @@ public class CameraManager : MonoBehaviour
     private delegate void CameraState();
     private CameraState _cameraState;
 
+
     [SerializeField] private Camera _mainCam;
     public Camera MainCam => _mainCam;
 
@@ -19,6 +20,10 @@ public class CameraManager : MonoBehaviour
     public Transform MainCamTransform => _mainCamTransform;
 
     [SerializeField] private float _size = 14f;
+
+    public AudioSource _cameraAudioSource;
+    public AudioClip _graveEmerge, _heartBeat, _moveToUnderworld, _bite, _mouseDeath, _rabbitDeath, _boarDeath, _villigerDeath;
+    public bool IsPlayingSounds => _cameraAudioSource.isPlaying;
 
     private void Awake()
     {
@@ -77,5 +82,9 @@ public class CameraManager : MonoBehaviour
             return true;
         else
             return false;
+    }
+    public void ChangeAudioSource(AudioClip ac)
+    {
+        _cameraAudioSource.clip = ac;
     }
 }

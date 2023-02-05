@@ -11,6 +11,8 @@ public enum FaceDirection
     Right,
 }
 
+public enum EntityKind { Mouse, Rabbit, Boar }
+
 [RequireComponent(typeof(EntityDataHolder))]
 public partial class Entity : MonoBehaviour
 {
@@ -24,7 +26,8 @@ public partial class Entity : MonoBehaviour
     }
 
     protected int _hp;
-    
+
+    public EntityKind Type;
     [SerializeField] protected Animator _anim;
     [SerializeField] protected BreatheMoveAnim moveStaggerAnim;
     

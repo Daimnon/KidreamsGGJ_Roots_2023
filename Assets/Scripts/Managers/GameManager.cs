@@ -111,6 +111,12 @@ public class GameManager : MonoBehaviour
 
         AllEntities.Clear();
 
+        if (!CameraManager.Instance.IsPlayingSounds)
+        {
+            CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._moveToUnderworld);
+            CameraManager.Instance._cameraAudioSource.Play();
+        }
+
         await _underworldOverlay.StartUnderworldAnim();
 
         _vampireLordController.gameObject.SetActive(true);
@@ -157,9 +163,42 @@ public class GameManager : MonoBehaviour
         {
             if (entity is Villager)
             {
+                if (!CameraManager.Instance.IsPlayingSounds)
+                {
+                    CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._villigerDeath);
+                    CameraManager.Instance._cameraAudioSource.Play();
+                }
                 CreateGrave(entity as Villager);
                 Debug.Log($"{entity.Data.Name} grave created");
             }
+
+            switch (entity.Type)
+            {
+                case EntityKind.Mouse:
+                    if (!CameraManager.Instance.IsPlayingSounds)
+                    {
+                        CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._mouseDeath);
+                        CameraManager.Instance._cameraAudioSource.Play();
+                    }
+                    break;
+                case EntityKind.Rabbit:
+                    if (!CameraManager.Instance.IsPlayingSounds)
+                    {
+                        CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._rabbitDeath);
+                        CameraManager.Instance._cameraAudioSource.Play();
+                    }
+                    break;
+                case EntityKind.Boar:
+                    if (!CameraManager.Instance.IsPlayingSounds)
+                    {
+                        CameraManager.Instance.ChangeAudioSource(CameraManager.Instance._boarDeath);
+                        CameraManager.Instance._cameraAudioSource.Play();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            
 
             Debug.Log($"{entity.Data.Name} died");
             Destroy(entity.gameObject);
