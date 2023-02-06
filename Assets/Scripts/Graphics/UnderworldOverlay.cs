@@ -21,12 +21,13 @@ public class UnderworldOverlay : MonoBehaviour
     [SerializeField] private float _noiseBlend2;
     [SerializeField] private float _animDuration2;
 
-    private static readonly int PropBlend = Shader.PropertyToID("_Blend");
+    private static readonly int PropBlend = Shader.PropertyToID("_UnderWorld_Blend");
     
     // greyscale constant
-    // private static readonly int PropGreyscaleBlend = Shader.PropertyToID("_GreyscaleBlend");
-    private static readonly int PropNoiseBlend = Shader.PropertyToID("_NoiseBlend");
-    private static readonly int PropColorTint = Shader.PropertyToID("_Color");
+    // private static readonly int PropGreyscaleBlend = Shader.PropertyToID("_UnderWorld_GreyscaleBlend");
+    // private static readonly int PropGreyscaleBlend = Shader.PropertyToID("_UnderWorld_NoiseChangeSpeed");
+    private static readonly int PropNoiseBlend = Shader.PropertyToID("_UnderWorld_NoiseBlend");
+    private static readonly int PropColorTint = Shader.PropertyToID("_UnderWorld_Color");
 
     private TaskCompletionSource<bool> _tcs;
     
